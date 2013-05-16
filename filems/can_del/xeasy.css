@@ -1,0 +1,48 @@
+a:link {color: #0000ff; text-decoration: underline}
+a:active {color: #0000ff; text-decoration: none}
+a:visited {color: #0000ff; text-decoration: underline}
+a:hover {color: #FF0000;top: 1.5px; left: 1.5px;; text-decoration: none; position: relative; clip:  rect(   )}
+body {SCROLLBAR-FACE-COLOR: #d6deef; SCROLLBAR-HIGHLIGHT-COLOR: #bbcbee; SCROLLBAR-SHADOW-COLOR: #bbcbee; SCROLLBAR-3DLIGHT-COLOR: #ffffff; SCROLLBAR-ARROW-COLOR: #bbcbee; SCROLLBAR-TRACK-COLOR: #ffffff; SCROLLBAR-DARKSHADOW-COLOR: #ffffff; TEXT-DECORATION: none
+font-family: "Verdana", "Arial", "Helvetica", "sans-serif"; font-size: 14px; color: #333333;background-color: #FFFFFF; text-decoration: none}
+td {font-family: "Verdana", "Arial", "Helvetica", "sans-serif"; font-size: 14px; border-collapse: collapse; color: #333333; table-layout:fixed;word-break :break-all;; text-decoration: none}
+li {color: #333333; list-style-type: square; list-style-image: url('x.gif'); text-decoration: none}
+ul {color: #666666; list-style-type: square; text-decoration: none}
+ol {color: #333333; text-decoration: none}
+.mytext {
+        font-family: "Verdana", "Arial", "Helvetica", "sans-serif";
+        font-size: 14px;
+        text-decoration: none;
+}
+a.mytext:link {color: #333333; text-decoration: none}
+a.mytext:visited {color: #666666; text-decoration: none}
+a.mytext:active {color: #333333; text-decoration: none}
+a.mytext:hover {color: #666666; text-decoration: none; clip:       rect(   ); position: relative; left: 1.5px; top: 1.5px}
+table        {border-collapse:collapse}
+.cau { color:333366 }
+select {FONT-SIZE: 11pt; color: #000000; background-color: #FFFFFF; border: 1px #CCCCCC double;}
+.title {
+        font-family: "Verdana", "Arial", "Helvetica", "sans-serif";
+        font-size: 18px;
+        font-weight: bold;
+
+}
+textarea {BORDER-RIGHT: #b4b4b4 1px double; BORDER-TOP: #b4b4b4 1px double;
+BORDER-LEFT: #b4b4b4 1px double; COLOR: #336699; BORDER-BOTTOM: #b4b4b4 1px double}
+OPTION    {FONT-SIZE: 11pt; BACKGROUND-COLOR: #ffffff}
+.table_out{border-style:double; border-width:3; padding:1; border-collapse: collapse}
+.bigdate
+{
+FONT-WEIGHT: bold;
+MARGIN-BOTTOM: 10px;
+FONT-SIZE: 28px;
+COLOR: #CF0000;
+FONT-FAMILY: palatino, georgia, times new roman, serif
+}
+.date
+{
+FONT-WEIGHT: bold;
+MARGIN-BOTTOM: 10px;
+FONT-SIZE: 18px;
+COLOR: #1F66A7;
+FONT-FAMILY: palatino, georgia, times new roman, serif
+}

@@ -1,0 +1,9 @@
+<?php
+session_start();
+unset($_SESSION["number"]);
+unset($_SESSION["teacher_id"]);
+session_destroy();
+header("location:index.php");
+include("connect_db.php");
+mysql_close($link);
+?>

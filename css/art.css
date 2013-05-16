@@ -1,0 +1,14 @@
+@charset "utf-8";
+/* CSS Document */
+
+.point{
+	cursor:pointer;
+}
+
+.select{
+	cursor:pointer;
+}
+
+.select:hover{
+	background:url(../images/instrument/delete.png);
+}

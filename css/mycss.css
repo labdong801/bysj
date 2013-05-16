@@ -1,0 +1,17 @@
+@charset "utf-8";
+/* CSS Document */
+
+.grade_hide{
+	display:none;
+}
+
+
+#hide_menu{
+	cursor:pointer;
+}
+
+
+.high_grade{
+	cursor:pointer;
+	display:none;
+}
