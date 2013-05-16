@@ -8,7 +8,7 @@ if($HTTP_HOST=="127.0.0.1:80"){
 }
 $db_server  =  "localhost";
 $db_name   =  "bysj";
-$TABLE = "BYSJ_";
+$TABLE = "bysj_";
 $YEAR_C = "2013";
 $YEAR_S = "2010";
 $READONLY = true; //½ûÖ¹ÐÞ¸Ä³É¼¨
