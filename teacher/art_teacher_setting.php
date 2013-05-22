@@ -20,9 +20,9 @@ $teacher_id = $com_id;
 <td align="left">
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	<?php
-	echo "<a href=".$PHP_SELF."?select_year=".$YEAR_C."><font color=blue><u>查看".$YEAR_C."届(本届)选题</u></font></a>";
-	echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   查看往届选题：";
-	for($i=$YEAR_S;$i<$YEAR_C;$i++) echo "<a href=".$PHP_SELF."?select_year=".$i."><font color=blue><u>".$i."届</u></font></a> ";
+	echo "<a href=".$PHP_SELF."?select_year=".$YEAR_C."><font color=blue><u>查看".$YEAR_C."年(本届)选题</u></font></a>";
+	echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   查看往年情况：";
+	for($i=$YEAR_S;$i<$YEAR_C;$i++) echo "<a href=".$PHP_SELF."?select_year=".$i."><font color=blue><u>".$i."年</u></font></a> ";
 	if($select_year<$YEAR_S||$select_year>$YEAR_C) $select_year = $YEAR_C;
 	?>
 	&nbsp;<br>&nbsp;<br>
@@ -33,6 +33,23 @@ $teacher_id = $com_id;
 </tr>
 
 <?php
+ //设置所选年份
+ if($_GET['select_year']) 
+ {
+ 	$art_select_year = $_GET['select_year'];
+ }
+ else
+ {
+ 	$art_select_year = date("Y",mktime(0,0,0,date("m")-8,1,date("Y"))); //
+ 	/*
+ 	 * 本学期年份 （当前年份减8个月）
+ 	 * eg:
+ 	 * 现在是 2013年6月 ，属于2012学年第二个期。所以 $art_select_year = 2012
+ 	 * 现在是2013年9月，属于2013年第一学期。所以$art_select_year =2013
+ 	 * */
+ }
+ 
+ 
 /*找出所有专业*/
 $sql="SELECT * FROM  `".$TABLE."major`";
 $search = mysql_query($sql);
@@ -40,7 +57,7 @@ while($row = mysql_fetch_array($search))
 	$class[] = array("id"=>$row["id"],"name"=>$row["name"]);
 
 
-$sql = "SELECT * FROM  `".$TABLE."teacher_information` LIMIT 0 , 10";
+$sql = "SELECT * FROM  `".$TABLE."teacher_information` ";
 $search = mysql_query($sql);
 if(mysql_num_rows($search))
 {
