@@ -36,11 +36,11 @@ $teacher_id = $com_id;
  //设置所选年份
  if($_GET['select_year']) 
  {
- 	$art_select_year = $_GET['select_year'];
+ 	$year = $_GET['select_year'];
  }
  else
  {
- 	$art_select_year = date("Y",mktime(0,0,0,date("m")-8,1,date("Y"))); //
+ 	$year = date("Y",mktime(0,0,0,date("m")-8,1,date("Y"))); //
  	/*
  	 * 本学期年份 （当前年份减8个月）
  	 * eg:
