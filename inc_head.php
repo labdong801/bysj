@@ -43,14 +43,14 @@ if($YM_PT=="") $YM_PT = "选题系统";
 if($_GET["y"])
 	$year=$_GET["y"];
 else
-	$year= date("Y",mktime(0,0,0,date("m")-8,1,date("Y"))); 
+	$year= date("Y",mktime(0,0,0,date("m")-8,1,date("Y")));
 	/*
  	 * 本学期年份 （当前年份减8个月）
  	 * eg:
  	 * 现在是 2013年6月 ，属于2012学年第二个期。所以 $art_select_year = 2012
  	 * 现在是2013年9月，属于2013年第一学期。所以$art_select_year =2013
  	 * */
-	
+
 
 
 if($PHP_SELF != "/bysj/index.php"){
@@ -365,6 +365,7 @@ if($YM_DH){
    echo "<td height=31 width=148 valign=top>";
    if($YM_PT=="答辩系统")   @include("navigation2.php");
    else if($YM_PT=="全局设定") @include("art_setting_navigation.php");
+   else if($YM_PT=="教师任务下达") @include("art_setting_task_navigation.php");
    else    @include("navigation.php");
 
    echo "</td>";
