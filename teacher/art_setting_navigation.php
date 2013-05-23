@@ -8,16 +8,16 @@ if($com_auth>=40){
 <td align=left bgColor=#5a6e8f height=28><font color=#FFFFFF>&nbsp;→&nbsp;时间设置</font></td>
 </tr>
 <tr>
-<td><a href="#">乐器选修时间设置</a></td>
+<td><a href="art_grade1_set_date.php">乐器选修时间设置</a></td>
 </tr>
 <tr>
-<td><a href="#">钢琴、声乐时间设置</a></td>
+<td><a href="art_grade2_set_date.php">钢琴、声乐时间设置</a></td>
 </tr>
 <tr>
-<td><a href="#">主修方向时间设置</a></td>
+<td><a href="art_grade3_set_date.php">主修方向时间设置</a></td>
 </tr>
 <tr>
-<td><a href="#">毕业设计时间设置</a></td>
+<td><a href="art_grade4_set_date.php">毕业设计时间设置</a></td>
 </tr>
 
 <tr>
