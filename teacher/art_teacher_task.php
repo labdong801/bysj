@@ -14,7 +14,56 @@ $YM_QX = 90; //管理员权限
 include($baseDIR."/bysj/inc_head.php");
 $teacher_id = $com_id;
 
+$choice="";
  ?>
+ <?php
+if($_GET['Choice'])
+{
+
+   $choice=$_GET['Choice'];
+	if($choice=='1')
+	 {
+	 	$Class="大一任务下达";
+	 }
+	 else if($choice==2)
+	 {
+	 	$Class="大二任务下达";
+	 }
+	  else if($choice==3)
+	 {
+	 	$Class="大三任务下达";
+	 }
+	  else if($choice==4)
+	 {
+	 	$Class="大四任务下达";
+	 }
+}
+if($_GET['Choice_1'])
+{
+
+   $choice=$_GET['Choice_2'];
+	if($choice=='1')
+	 {
+	 	$Class="大一任务下达";
+	 }
+	 else if($choice==2)
+	 {
+	 	$Class="大二任务下达";
+	 }
+	  else if($choice==3)
+	 {
+	 	$Class="大三任务下达";
+	 }
+	  else if($choice==4)
+	 {
+	 	$Class="大四任务下达";
+	 }
+}
+else
+{
+	$Class="未选择年级";
+}
+?>
 <script language="JavaScript" src="/bysj/images/My97DatePicker/WdatePicker.js" defer="defer"></script>
 <script language="javascript">
 function is_empty(){
@@ -65,12 +114,18 @@ function is_empty(){
 	if($select_year<$YEAR_S||$select_year>$YEAR_C) $select_year = $YEAR_C;
 	?>
 	&nbsp;<br>&nbsp;<br>
+
+
 <table width="800" border="1" align="center" bordercolor=#000000  cellpadding="3">
+<?php
+ if($choice !="")
+ {
+ ?>
+
 <tr align="center" bgColor=#5a6e8f  height=38>
 
-<td><font color=#FFFFFF size=+1>指导老师任务下达</font></td>
+<td width="20%"><font color=#FFFFFF ><?PHP echo $Class?></font></td><td><font color=#FFFFFF size=+1>指导老师任务下达</font></td>
 </tr>
-
 <?php
  //设置所选年份
  if($_GET['select_year'])
@@ -87,9 +142,18 @@ function is_empty(){
  	 * 现在是2013年9月，属于2013年第一学期。所以$art_select_year =2013
  	 * */
  }
-
 ?>
 
+ <?php
+ } else
+ {
+ 	?>
+ <tr align="center" bgColor=#5a6e8f  height=38>
+<td><font color=#FFFFFF size=+1>请选择你的操作</font></td>
+</tr>
+ <?php
+ }
+?>
 
 </table>
 <br>
@@ -98,6 +162,10 @@ function is_empty(){
 
 <tr>
 <td >
+<?php
+ if($choice!="")
+ {
+?>
 <form name="taskform" method="post"  action="<?php $PHP_SELF?>" onsubmit="return is_empty();">
 <table  width="800" border="1" align="center" bordercolor=#000000  cellpadding="3">
 <tr>
@@ -130,6 +198,10 @@ function is_empty(){
 </tr>
 </table>
 </form>
+<?php
+ }
+?>
+
 </td>
 </tr>
 </table>
@@ -138,7 +210,7 @@ function is_empty(){
 if($_POST['submit'])
 {
 
-	$sql="insert into ".$ART_TABLE."teacher_task(title,content,start_time,end_time,teacher)"."values('$_POST[title]','$_POST[content]','$_POST[start_time]','$_POST[end_time]','$teacher_id')";
+	$sql="insert into ".$ART_TABLE."teacher_task(title,content,start_time,end_time,teacher,class)"."values('$_POST[title]','$_POST[content]','$_POST[start_time]','$_POST[end_time]','$teacher_id','$choice')";
 	if(mysql_query($sql))
 	{
 		echo "<script>alert('设置成功')</script>";
