@@ -1,10 +1,26 @@
-<?php
 
-?>
 
 <table width="800" border="1" align="center" bordercolor=#000000  cellpadding="3">
 <tr align="center" bgColor=#5a6e8f  height=38>
+<?php
+if($_GET[edit_id])
+{
+	?>
+<td><font color=#FFFFFF size=+1>任务修改</font></td>
+
+	<?
+} else if($_GET['Choice']){
+	?>
 <td width="15%"><font color=#FFFFFF ><?PHP echo $Class?></font></td><td><font color=#FFFFFF size=+1>指导老师任务下达</font></td>
+
+	<?php
+} else if($_GET['content_id'])
+{
+	?>
+	<td><font color=#FFFFFF size=+1>任务详情</font></td>
+	<?
+}
+?>
 </tr>
 </table>
 <br>
@@ -43,6 +59,16 @@ if(!$_GET['content_id'])
 </td>
 </tr>
 	<?
+  }
+  else
+  {
+  	?>
+<tr>
+<td colspan="2">
+<input type="button" value="返回" onclick="javascript:history.back(1)">
+</td>
+</tr>
+  	<?
   }
 ?>
 

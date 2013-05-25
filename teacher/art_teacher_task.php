@@ -234,13 +234,15 @@ function is_empty(){
 <td >
 
 <?php
+
 if($_GET['Choice'] || $_GET['edit_id'] ||$_GET['content_id'])
-{   if($_GET['edit_id'])
+{    //编辑
+	 if($_GET['edit_id'])
 	{
 		$result=mysql_query("select * from ".$ART_TABLE."teacher_task where id='$_GET[edit_id]'");
 		$row=mysql_fetch_array($result);
 
-	}
+	}//查看内容
 	 if($_GET['content_id'] )
 	{
 		$result=mysql_query("select * from ".$ART_TABLE."teacher_task where id='$_GET[content_id]'");
@@ -252,9 +254,15 @@ if($_GET['Choice'] || $_GET['edit_id'] ||$_GET['content_id'])
 		$end_time=$row['end_time'];
 	@include "art_set_task.php";
 }
-else if($_GET['Choice_2'] || $_GET['Choice_3'])
+//任务一览表
+else if($_GET['Choice_2'])
 {
-$Page_size=2;
+$Page_size=6;
+if($page==0)
+{
+	$page=1;
+}
+$offset=$Page_size*($page-1);
 $result=mysql_query("select * from ".$ART_TABLE."teacher_task where teacher='$teacher_id' && class='$choice'");
 //echo "select * from ".$ART_TABLE."teacher_task where teacher='$teacher_id' && class='$choice'";
 //计算总数
@@ -262,10 +270,7 @@ $count = mysql_num_rows($result);
 $page_count = ceil($count/$Page_size);
 $pages=$page_count;
 
-if($page==0)
-{
-	$page=1;
-}
+//分页初始化
 ?>
 
 <table width="800" border="1" align="center" bordercolor=#000000  cellpadding="3">
@@ -280,19 +285,8 @@ if($page==0)
 <?php
 
 
-if(empty($_POST['page'])|| $_POST['page']<0)
-{
-	$page=1;
-}
-else
-{
-	$page=$_POST['page'];
-}
-
-$Page_size=2;
-$offset=$Page_size*($page-1);
-
 $sql = "select * from ".$ART_TABLE."teacher_task where  teacher='$teacher_id' && class='$_GET[Choice_2]' order by id desc  limit $offset,$Page_size";
+
 $result=mysql_query($sql);
 
 if($result)
@@ -319,23 +313,12 @@ if($result)
 </table>
 </div>
 <?
-
-
+//分页导航
 $key="<div align=\"center\">";
 $key.="<span>共 $pages  页</span>";
 $key.="<span style='margin-left:20px;'>第 <span id='page'>1</span>  页</span>";
-
 $key.="<span style='margin-left:20px;'><a href='#'id='pre' onclick=\"javascript: pass2('$teacher_id','$choice');\">上一页</a></span>";
-
-if($page>=$pages)
-{
-	$page=$pages-1;
-	$key.="<span style='margin-left:20px;'>下一页</span>";
-}
-else
-{
-  $key.="<span style='margin-left:20px;'><a href='#' id='next1' onclick=\"javascript: pass($pages,'$teacher_id','$choice');\">下一页</a></span>";
-}
+$key.="<span style='margin-left:20px;'><a href='#' id='next1' onclick=\"javascript: pass($pages,'$teacher_id','$choice');\">下一页</a></span>";
 $key.="</div>";
 ?>
 
@@ -352,6 +335,7 @@ echo $key;
 <?php
 if($_POST['submit'])
 {
+	//任务设置
    if($_GET['Choice'])
    {
 	$sql="insert into ".$ART_TABLE."teacher_task(title,content,start_time,end_time,teacher,class)"."values('$_POST[title]','$_POST[content]','$_POST[start_time]','$_POST[end_time]','$teacher_id','$choice')";
@@ -364,6 +348,7 @@ if($_POST['submit'])
 		echo "<script>alert('设置失败');history.back(1);</script>";
 	}
    }
+   //编辑
    else if($_GET['edit_id'])
    {
    	$sql="UPDATE $f SET $key_value WHERE $where";
@@ -382,24 +367,14 @@ if($_POST['submit'])
 
 
 <?php
-if($_GET['edit_i1d'])
+//删除
+if($_GET['del_id'])
 {
-   $s="DELETE FROM ".$ART_TABLE." teacher_task where id='$_GET[del_id]'";
+	$s="DELETE FROM ".$ART_TABLE."teacher_task where id='$_GET[del_id]'";
+
 	if(mysql_query($s))
 	{
-		echo "<script>alert('删除成功');location.href='art_teacher_task.php';</script>";
-	}
-	else
-	{
-		echo "<script>alert('删除失败');</script>";
-	}
-}
-else if($_GET['del_i1d'])
-{
-	$s="DELETE FROM ".$ART_TABLE." teacher_task where id='$_GET[del_id]'";
-	if(mysql_query($s))
-	{
-		echo "<script>alert('删除成功');location.href='art_teacher_task.php';</script>";
+		echo "<script>alert('删除成功');history.go(-1);</script>";
 	}
 	else
 	{

@@ -16,7 +16,7 @@ else
 {
 	$page=$_POST['page'];
 }
-$Page_size=2;
+$Page_size=6;
 $offset=$Page_size*($page-1);
 $sql = "select * from ".$ART_TABLE."teacher_task where  teacher='$_POST[teacher]' && class='$_POST[Class]'  order by id desc  limit $offset,$Page_size ";
 $result=mysql_query($sql);
