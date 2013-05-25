@@ -1,5 +1,4 @@
 <table width="148" border="1" cellpadding="3" bordercolor=#000000>
-
 <?
 if($com_auth>=40){
 ?>

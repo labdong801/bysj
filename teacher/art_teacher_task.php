@@ -1,3 +1,4 @@
+
 <?php
 $self= $PHP_SELF;//文件相对地址
 
@@ -14,8 +15,79 @@ $YM_QX = 90; //管理员权限
 include($baseDIR."/bysj/inc_head.php");
 $teacher_id = $com_id;
 
-$choice="";
+
+$choice="";//导航条选择
+$Class=""//相应字符
  ?>
+
+
+
+
+<script type="text/javascript" src="../js/jquery-1.7.1.js"></script>
+<script type="text/javascript">
+var i=1;
+var teacher;
+var cls
+function pass(max,th,choice)
+{
+
+   i++;
+   teacher=th;
+   cls=choice;
+  if(i>max)
+  {
+  	i=max;
+  }
+}
+
+function pass2(th,choice)
+{
+	i--;
+	if(i<1)
+	{
+		i=1;
+	}
+	teacher=th;
+	cls=choice;
+}
+
+
+
+$(document).ready(function(){
+
+   $("#next1").click(function(){
+        document.getElementById("page").innerHTML=i;
+
+           $("#replace").fadeOut(100,function(){
+        	$("#replace").fadeIn(1000);
+        });
+
+   		$.post("task_list.php",{page:i,teacher:teacher,Class:cls},function(data){
+        $("#replace").html(data);
+     });
+
+
+
+   	});
+
+   $("#pre").click(function(){
+        document.getElementById("page").innerHTML=i;
+        $("#replace").fadeOut(100,function(){
+        $("#replace").fadeIn(1000);
+        });
+
+   		$.post("task_list.php",{page:i,teacher:teacher,Class:cls},function(data){
+        $("#replace").html(data);
+     });
+
+   	});
+
+
+});
+</script>
+
+
+
  <?php
 if($_GET['Choice'])
 {
@@ -38,31 +110,53 @@ if($_GET['Choice'])
 	 	$Class="大四任务下达";
 	 }
 }
-if($_GET['Choice_1'])
+ else if($_GET['Choice_2'])
 {
 
    $choice=$_GET['Choice_2'];
 	if($choice=='1')
 	 {
-	 	$Class="大一任务下达";
+	 	$Class="大一一览表";
 	 }
 	 else if($choice==2)
 	 {
-	 	$Class="大二任务下达";
+	 	$Class="大二一览表";
 	 }
 	  else if($choice==3)
 	 {
-	 	$Class="大三任务下达";
+	 	$Class="大三一览表";
 	 }
 	  else if($choice==4)
 	 {
-	 	$Class="大四任务下达";
+	 	$Class="大四一览表";
 	 }
+}
+else if($_GET['Choice_3'])
+{
+	  $choice=$_GET['Choice_3'];
+	if($choice=='1')
+	 {
+	 	$Class="大一汇总";
+	 }
+	 else if($choice==2)
+	 {
+	 	$Class="大二汇总";
+	 }
+	  else if($choice==3)
+	 {
+	 	$Class="大三汇总";
+	 }
+	  else if($choice==4)
+	 {
+	 	$Class="大四汇总";
+	 }
+
 }
 else
 {
 	$Class="未选择年级";
 }
+
 ?>
 <script language="JavaScript" src="/bysj/images/My97DatePicker/WdatePicker.js" defer="defer"></script>
 <script language="javascript">
@@ -103,29 +197,6 @@ function is_empty(){
 </script>
 
 
-<table width="100%" align="center">
-<tr class="align_top">
-<td align="left">
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	<?php
-	echo "<a href=".$PHP_SELF."?select_year=".$YEAR_C."><font color=blue><u>查看".$YEAR_C."年(本届)选题</u></font></a>";
-	echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   查看往年情况：";
-	for($i=$YEAR_S;$i<$YEAR_C;$i++) echo "<a href=".$PHP_SELF."?select_year=".$i."><font color=blue><u>".$i."年</u></font></a> ";
-	if($select_year<$YEAR_S||$select_year>$YEAR_C) $select_year = $YEAR_C;
-	?>
-	&nbsp;<br>&nbsp;<br>
-
-
-<table width="800" border="1" align="center" bordercolor=#000000  cellpadding="3">
-<?php
- if($choice !="")
- {
- ?>
-
-<tr align="center" bgColor=#5a6e8f  height=38>
-
-<td width="20%"><font color=#FFFFFF ><?PHP echo $Class?></font></td><td><font color=#FFFFFF size=+1>指导老师任务下达</font></td>
-</tr>
 <?php
  //设置所选年份
  if($_GET['select_year'])
@@ -143,64 +214,125 @@ function is_empty(){
  	 * */
  }
 ?>
+<table width="100%" align="center">
+<tr class="align_top">
+<td align="left">
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<?php
+	echo "<a href=".$PHP_SELF."?select_year=".$YEAR_C."><font color=blue><u>查看".$YEAR_C."年(本届)选题</u></font></a>";
+	echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   查看往年情况：";
+	for($i=$YEAR_S;$i<$YEAR_C;$i++) echo "<a href=".$PHP_SELF."?select_year=".$i."><font color=blue><u>".$i."年</u></font></a> ";
+	if($select_year<$YEAR_S||$select_year>$YEAR_C) $select_year = $YEAR_C;
+	?>
+	&nbsp;<br>&nbsp;<br>
 
- <?php
- } else
- {
- 	?>
- <tr align="center" bgColor=#5a6e8f  height=38>
-<td><font color=#FFFFFF size=+1>请选择你的操作</font></td>
-</tr>
- <?php
- }
-?>
-
-</table>
 <br>
 </td>
 </tr>
 
 <tr>
 <td >
+
 <?php
- if($choice!="")
- {
+if($_GET['Choice'])
+{
+	@include "set_task.php";
+}
+else if($_GET['Choice_2'] || $_GET['Choice_3'])
+{
+$Page_size=2;
+$result=mysql_query("select * from ".$ART_TABLE."teacher_task where teacher='$teacher_id' && class='$choice'");
+//echo "select * from ".$ART_TABLE."teacher_task where teacher='$teacher_id' && class='$choice'";
+//计算总数
+$count = mysql_num_rows($result);
+$page_count = ceil($count/$Page_size);
+$pages=$page_count;
+
+if($page==0)
+{
+	$page=1;
+}
 ?>
-<form name="taskform" method="post"  action="<?php $PHP_SELF?>" onsubmit="return is_empty();">
+
+<table width="800" border="1" align="center" bordercolor=#000000  cellpadding="3">
+<tr align="center" bgColor=#5a6e8f  height=38>
+<td width="100%"><font color=#FFFFFF ><?PHP echo $Class?></font></td>
+</tr>
+</table>
+<br>
+<div id="replace">
 <table  width="800" border="1" align="center" bordercolor=#000000  cellpadding="3">
-<tr>
-<td>任务标题:</td><td><input type="text" name="title"></td>
-</tr>
-
-<tr>
-<td>任务内容:</td><td><textarea name="content" rows="6"cols="80"></textarea></td>
-</tr>
-
-<tr>
-<td>任务时间:</td>
-<td>
-<table width="100%" border="0">
-<tr>
-<td>起始时间:<input type="text" name="start_time"  onclick="WdatePicker()" onchange="checkInputDate(this)" class="Wdate"></td>
-</tr>
-<tr>
-<td>截止时间:<input type="text" name="end_time"  onclick="WdatePicker()" onchange="checkInputDate(this)" class="Wdate"></td>
-</tr>
-</table>
-</td>
-</tr>
-
-<tr>
-<td colspan="2">
-<input type="submit" value="提交" name="submit">
-<input type="reset" value="重设" name="reset">
-</td>
-</tr>
-</table>
-</form>
+<tr><td style="font-size:16px;">任务标题</td><td style="font-size:16px;">任务时间</td><td colspan="2" style="font-size:16px;">用户操作</td></tr>
 <?php
+
+
+if(empty($_POST['page'])|| $_POST['page']<0)
+{
+	$page=1;
+}
+else
+{
+	$page=$_POST['page'];
+}
+
+$Page_size=2;
+$offset=$Page_size*($page-1);
+
+$sql = "select * from ".$ART_TABLE."teacher_task where  teacher='$teacher_id' && class='$_GET[Choice_2]' order by id desc  limit $offset,$Page_size";
+$result=mysql_query($sql);
+
+if($result)
+ {
+   while($row=mysql_fetch_array($result))
+   {
+
+   	?>
+  <tr>
+  <td width="30%"><a href="?id=<?php echo $row[id]?>"><?php echo $row[title];?></a></td>
+  <td width="60%"><?php echo $row['start_time']."----".$row['end_time']?></td>
+  <td width="5%"><a href="?edit_id=<?php echo $row[id]?>">编辑</a></td>
+  <td width="5%"><a href="?del_id=<?php echo $row[id]?>">删除</a></td>
+  </tr>
+   	<?
+   }
+ }
+ else{
+ 	echo "fail";
+ 	?>
+ 	<?
  }
 ?>
+</table>
+</div>
+<?
+
+if($_SESSION['page']="")
+{
+	$_SESSION['page']=1;
+}
+$key="<div align=\"center\">";
+$key.="<span>共 $pages  页</span>";
+$key.="<span style='margin-left:20px;'>第 <span id='page'>1</span>  页</span>";
+
+$key.="<span style='margin-left:20px;'><a href='#'id='pre' onclick=\"javascript: pass2('$teacher_id','$choice');\">上一页</a></span>";
+
+if($page>=$pages)
+{
+	$page=$pages-1;
+	$key.="<span style='margin-left:20px;'>下一页</span>";
+}
+else
+{
+  $key.="<span style='margin-left:20px;'><a href='#' id='next1' onclick=\"javascript: pass($pages,'$teacher_id','$choice');\">下一页</a></span>";
+}
+$key.="</div>";
+?>
+
+<?
+echo $key;
+}
+?>
+
 
 </td>
 </tr>
@@ -222,7 +354,37 @@ if($_POST['submit'])
 
 }
 ?>
+
+
+<?php
+if($_GET['edit_i1d'])
+{
+   $s="DELETE FROM ".$ART_TABLE." teacher_task where id='$_GET[del_id]'";
+	if(mysql_query($s))
+	{
+		echo "<script>alert('删除成功');location.href='art_teacher_task.php';</script>";
+	}
+	else
+	{
+		echo "<script>alert('删除失败');</script>";
+	}
+}
+else if($_GET['del_i1d'])
+{
+	$s="DELETE FROM ".$ART_TABLE." teacher_task where id='$_GET[del_id]'";
+	if(mysql_query($s))
+	{
+		echo "<script>alert('删除成功');location.href='art_teacher_task.php';</script>";
+	}
+	else
+	{
+		echo "<script>alert('删除失败');</script>";
+	}
+}
+?>
 <?php
  @include($baseDIR."/bysj/inc_foot.php");
 ?>
+
+
 
