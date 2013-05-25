@@ -62,7 +62,7 @@ $(document).ready(function(){
         	$("#replace").fadeIn(1000);
         });
 
-   		$.post("task_list.php",{page:i,teacher:teacher,Class:cls},function(data){
+   		$.post("art_task_list.php",{page:i,teacher:teacher,Class:cls},function(data){
         $("#replace").html(data);
      });
 
@@ -76,7 +76,7 @@ $(document).ready(function(){
         $("#replace").fadeIn(1000);
         });
 
-   		$.post("task_list.php",{page:i,teacher:teacher,Class:cls},function(data){
+   		$.post("art_task_list.php",{page:i,teacher:teacher,Class:cls},function(data){
         $("#replace").html(data);
      });
 
@@ -234,9 +234,23 @@ function is_empty(){
 <td >
 
 <?php
-if($_GET['Choice'])
-{
-	@include "set_task.php";
+if($_GET['Choice'] || $_GET['edit_id'] ||$_GET['content_id'])
+{   if($_GET['edit_id'])
+	{
+		$result=mysql_query("select * from ".$ART_TABLE."teacher_task where id='$_GET[edit_id]'");
+		$row=mysql_fetch_array($result);
+
+	}
+	 if($_GET['content_id'] )
+	{
+		$result=mysql_query("select * from ".$ART_TABLE."teacher_task where id='$_GET[content_id]'");
+		$row=mysql_fetch_array($result);
+	}
+		$title=$row['title'];
+		$content=$row['content'];
+		$start_time=$row['start_time'];
+		$end_time=$row['end_time'];
+	@include "art_set_task.php";
 }
 else if($_GET['Choice_2'] || $_GET['Choice_3'])
 {
@@ -288,7 +302,7 @@ if($result)
 
    	?>
   <tr>
-  <td width="30%"><a href="?id=<?php echo $row[id]?>"><?php echo $row[title];?></a></td>
+  <td width="30%"><a href="?content_id=<?php echo $row[id]?>"><?php echo $row[title];?></a></td>
   <td width="60%"><?php echo $row['start_time']."----".$row['end_time']?></td>
   <td width="5%"><a href="?edit_id=<?php echo $row[id]?>">编辑</a></td>
   <td width="5%"><a href="?del_id=<?php echo $row[id]?>">删除</a></td>
@@ -306,10 +320,7 @@ if($result)
 </div>
 <?
 
-if($_SESSION['page']="")
-{
-	$_SESSION['page']=1;
-}
+
 $key="<div align=\"center\">";
 $key.="<span>共 $pages  页</span>";
 $key.="<span style='margin-left:20px;'>第 <span id='page'>1</span>  页</span>";
@@ -341,7 +352,8 @@ echo $key;
 <?php
 if($_POST['submit'])
 {
-
+   if($_GET['Choice'])
+   {
 	$sql="insert into ".$ART_TABLE."teacher_task(title,content,start_time,end_time,teacher,class)"."values('$_POST[title]','$_POST[content]','$_POST[start_time]','$_POST[end_time]','$teacher_id','$choice')";
 	if(mysql_query($sql))
 	{
@@ -351,7 +363,20 @@ if($_POST['submit'])
 	{
 		echo "<script>alert('设置失败');history.back(1);</script>";
 	}
-
+   }
+   else if($_GET['edit_id'])
+   {
+   	$sql="UPDATE $f SET $key_value WHERE $where";
+   	$sql="update ".$ART_TABLE."teacher_task set title='$_POST[title]',content='$_POST[content]',start_time='$_POST[start_time]',end_time='$_POST[end_time]' where id='$_GET[edit_id]'";
+	if(mysql_query($sql))
+	{
+		echo "<script>alert('更新成功');history.go(-2);</script>";
+	}
+	 else
+	{
+		echo "<script>alert('更新失败');history.back(1);</script>";
+	}
+   }
 }
 ?>
 
