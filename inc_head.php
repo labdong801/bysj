@@ -366,6 +366,7 @@ if($YM_DH){
    if($YM_PT=="答辩系统")   @include("navigation2.php");
    else if($YM_PT=="全局设定") @include("art_setting_navigation.php");
    else if($YM_PT=="教师任务下达") @include("art_setting_task_navigation.php");
+   else if($YM_PT=="任务查询")  @include("art_student_task_navigation.php");
    else    @include("navigation.php");
 
    echo "</td>";

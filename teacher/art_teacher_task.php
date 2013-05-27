@@ -17,7 +17,9 @@ $teacher_id = $com_id;
 
 
 $choice="";//导航条选择
-$Class=""//相应字符
+$Class="";//相应字符
+
+
  ?>
 
 
@@ -83,9 +85,43 @@ $(document).ready(function(){
    	});
 
 
+////////////
+  $('#lab1:radio').each(function(){
+     if(this.checked)
+     {
+     	 var a= document.getElementById("lab1").value;
+        $.post("art_ybcl.php",{value:a},function(data){
+        $("#pro_id").html(data);
+     });
+     }
+
+    });
+
+  $("#lab1").click(function(){
+     var a= document.getElementById("lab1").value;
+     $.post("art_ybcl.php",{value:a},function(data){
+        $("#pro_id").html(data);
+     });
+  });
+
+    $("#lab2").click(function(){
+     var a= document.getElementById("lab2").value;
+     $.post("art_ybcl.php",{value:a},function(data){
+        $("#pro_id").html(data);
+     });
+  });
+
+
+    $("#submit").click(function(){
+   	 var val=$('input:radio[name=RadioGroup2]:checked').val();
+   	 if(val==null)
+   	 {
+   	 	alert("请选择你的课程");
+   	 	return false;
+   	 }
+   });
 });
 </script>
-
 
 
  <?php
@@ -93,19 +129,20 @@ if($_GET['Choice'])
 {
 
    $choice=$_GET['Choice'];
-	if($choice=='1')
+   $_SESSION[years]=$_GET['Choice'];
+	if($choice==$arr_grade[0])
 	 {
 	 	$Class="大一任务下达";
 	 }
-	 else if($choice==2)
+	 else if($choice==$arr_grade[1])
 	 {
 	 	$Class="大二任务下达";
 	 }
-	  else if($choice==3)
+	  else if($choice==$arr_grade[2])
 	 {
 	 	$Class="大三任务下达";
 	 }
-	  else if($choice==4)
+	  else if($choice==$arr_grade[3])
 	 {
 	 	$Class="大四任务下达";
 	 }
@@ -114,19 +151,19 @@ if($_GET['Choice'])
 {
 
    $choice=$_GET['Choice_2'];
-	if($choice=='1')
+	if($choice==$arr_grade[0])
 	 {
 	 	$Class="大一一览表";
 	 }
-	 else if($choice==2)
+	 else if($choice==$arr_grade[1])
 	 {
 	 	$Class="大二一览表";
 	 }
-	  else if($choice==3)
+	  else if($choice==$arr_grade[2])
 	 {
 	 	$Class="大三一览表";
 	 }
-	  else if($choice==4)
+	  else if($choice==$arr_grade[3])
 	 {
 	 	$Class="大四一览表";
 	 }
@@ -134,19 +171,19 @@ if($_GET['Choice'])
 else if($_GET['Choice_3'])
 {
 	  $choice=$_GET['Choice_3'];
-	if($choice=='1')
+	if($choice==$arr_grade[0])
 	 {
 	 	$Class="大一汇总";
 	 }
-	 else if($choice==2)
+	 else if($choice==$arr_grade[1])
 	 {
 	 	$Class="大二汇总";
 	 }
-	  else if($choice==3)
+	  else if($choice==$arr_grade[2])
 	 {
 	 	$Class="大三汇总";
 	 }
-	  else if($choice==4)
+	  else if($choice==$arr_grade[3])
 	 {
 	 	$Class="大四汇总";
 	 }
@@ -157,10 +194,17 @@ else
 	$Class="未选择年级";
 }
 
+
 ?>
+
 <script language="JavaScript" src="/bysj/images/My97DatePicker/WdatePicker.js" defer="defer"></script>
 <script language="javascript">
 function is_empty(){
+	var result=false;
+
+
+
+
 	if(taskform.title.value=="")
 	{
 		alert("教师提交任务标题不能为空");
@@ -193,8 +237,16 @@ function is_empty(){
 	return false;
   }
 
+
+
+
+
+
 }
 </script>
+
+
+
 
 
 <?php
@@ -235,23 +287,34 @@ function is_empty(){
 
 <?php
 
+$SQL="SELECT * FROM ".$ART_TABLE."teacher_task LEFT JOIN ".$ART_TABLE."major ON ".$ART_TABLE."teacher_task.major_id=".$ART_TABLE."major.id where ".$ART_TABLE."teacher_task.teacher='$teacher_id' && ".$ART_TABLE."teacher_task.year='$choice'";
+
+$SQL2="SELECT * FROM ".$ART_TABLE."teacher_task LEFT JOIN ".$ART_TABLE."major ON ".$ART_TABLE."teacher_task.major_id=".$ART_TABLE."major.id where ".$ART_TABLE."teacher_task.task_id='$_GET[edit_id]'";
+$SQL3="SELECT * FROM ".$ART_TABLE."teacher_task LEFT JOIN ".$ART_TABLE."major ON ".$ART_TABLE."teacher_task.major_id=".$ART_TABLE."major.id where ".$ART_TABLE."teacher_task.task_id='$_GET[content_id]'";
+//echo $SQL3;
 if($_GET['Choice'] || $_GET['edit_id'] ||$_GET['content_id'])
 {    //编辑
 	 if($_GET['edit_id'])
 	{
-		$result=mysql_query("select * from ".$ART_TABLE."teacher_task where id='$_GET[edit_id]'");
+		//$result=mysql_query("select * from ".$ART_TABLE."teacher_task where id='$_GET[edit_id]'");
+		$result=mysql_query($SQL2);
 		$row=mysql_fetch_array($result);
 
 	}//查看内容
 	 if($_GET['content_id'] )
 	{
-		$result=mysql_query("select * from ".$ART_TABLE."teacher_task where id='$_GET[content_id]'");
+		//$result=mysql_query("select * from ".$ART_TABLE."teacher_task where id='$_GET[content_id]'");
+		$result=mysql_query($SQL3);
 		$row=mysql_fetch_array($result);
 	}
 		$title=$row['title'];
 		$content=$row['content'];
 		$start_time=$row['start_time'];
 		$end_time=$row['end_time'];
+		$ZY=$row['class'];
+
+		$pro_id=$row['major_id'];
+		//echo $pro_id;
 	@include "art_set_task.php";
 }
 //任务一览表
@@ -263,8 +326,13 @@ if($page==0)
 	$page=1;
 }
 $offset=$Page_size*($page-1);
-$result=mysql_query("select * from ".$ART_TABLE."teacher_task where teacher='$teacher_id' && class='$choice'");
-//echo "select * from ".$ART_TABLE."teacher_task where teacher='$teacher_id' && class='$choice'";
+
+//$sql2="SELECT * FROM ".$ART_TABLE."teacher_task LEFT JOIN ".$ART_TABLE."major ON ".$ART_TABLE."teacher_task.major_id=".$ART_TABLE."major.id where ".$ART_TABLE."teacher_task.teacher='$teacher_id' && ".$ART_TABLE."teacher_task.year='$choice'";
+
+
+
+//$result=mysql_query("select * from ".$ART_TABLE."teacher_task where teacher='$teacher_id' && year='$choice'");
+$result=mysql_query($SQL);
 //计算总数
 $count = mysql_num_rows($result);
 $page_count = ceil($count/$Page_size);
@@ -281,13 +349,12 @@ $pages=$page_count;
 <br>
 <div id="replace">
 <table  width="800" border="1" align="center" bordercolor=#000000  cellpadding="3">
-<tr><td style="font-size:16px;">任务标题</td><td style="font-size:16px;">任务时间</td><td colspan="2" style="font-size:16px;">用户操作</td></tr>
+<tr><td style="font-size:16px;">任务标题</td><td style="font-size:16px;">任务时间</td><td align="center">课程名称</td><td colspan="2" style="font-size:16px;">用户操作</td></tr>
 <?php
 
-
-$sql = "select * from ".$ART_TABLE."teacher_task where  teacher='$teacher_id' && class='$_GET[Choice_2]' order by id desc  limit $offset,$Page_size";
-
-$result=mysql_query($sql);
+//$sql1="SELECT * FROM ".$ART_TABLE."teacher_task LEFT JOIN ".$ART_TABLE."major ON ".$ART_TABLE."teacher_task.major_id=".$ART_TABLE."major.id where ".$ART_TABLE."teacher_task.teacher='$teacher_id' && ".$ART_TABLE."teacher_task.year='$choice' order by ".$ART_TABLE."teacher_task.id desc limit $offset,$Page_size";
+$sql1=$SQL." order by ".$ART_TABLE."teacher_task.task_id desc limit $offset,$Page_size ";
+$result=mysql_query($sql1);
 
 if($result)
  {
@@ -296,10 +363,11 @@ if($result)
 
    	?>
   <tr>
-  <td width="30%"><a href="?content_id=<?php echo $row[id]?>"><?php echo $row[title];?></a></td>
+  <td width="20%"><a href="?content_id=<?php echo $row[task_id]?>"><?php echo $row[title];?></a></td>
   <td width="60%"><?php echo $row['start_time']."----".$row['end_time']?></td>
-  <td width="5%"><a href="?edit_id=<?php echo $row[id]?>">编辑</a></td>
-  <td width="5%"><a href="?del_id=<?php echo $row[id]?>">删除</a></td>
+  <td width="10%" align="center"><?php echo $row['name']?></td>
+  <td width="5%"><a href="?edit_id=<?php echo $row[task_id]?>">编辑</a></td>
+  <td width="5%"><a href="?del_id=<?php echo $row[task_id]?>">删除</a></td>
   </tr>
    	<?
    }
@@ -333,12 +401,14 @@ echo $key;
 </table>
 
 <?php
-if($_POST['submit'])
+if($_POST['submit'] ||$_POST['submit1'])
 {
 	//任务设置
    if($_GET['Choice'])
    {
-	$sql="insert into ".$ART_TABLE."teacher_task(title,content,start_time,end_time,teacher,class)"."values('$_POST[title]','$_POST[content]','$_POST[start_time]','$_POST[end_time]','$teacher_id','$choice')";
+
+	$sql="insert into ".$ART_TABLE."teacher_task(title,content,start_time,end_time,teacher,year,class,major_id)"."values('$_POST[title]','$_POST[content]','$_POST[start_time]','$_POST[end_time]','$teacher_id','$choice','$_POST[RadioGroup1]','$_POST[RadioGroup2]')";
+
 	if(mysql_query($sql))
 	{
 		echo "<script>alert('设置成功')</script>";
@@ -347,12 +417,14 @@ if($_POST['submit'])
 	{
 		echo "<script>alert('设置失败');history.back(1);</script>";
 	}
+
    }
    //编辑
    else if($_GET['edit_id'])
    {
-   	$sql="UPDATE $f SET $key_value WHERE $where";
-   	$sql="update ".$ART_TABLE."teacher_task set title='$_POST[title]',content='$_POST[content]',start_time='$_POST[start_time]',end_time='$_POST[end_time]' where id='$_GET[edit_id]'";
+
+   	$sql="update ".$ART_TABLE."teacher_task set title='$_POST[title]',content='$_POST[content]',start_time='$_POST[start_time]',end_time='$_POST[end_time]' where task_id='$_GET[edit_id]'";
+
 	if(mysql_query($sql))
 	{
 		echo "<script>alert('更新成功');history.go(-2);</script>";
@@ -370,7 +442,7 @@ if($_POST['submit'])
 //删除
 if($_GET['del_id'])
 {
-	$s="DELETE FROM ".$ART_TABLE."teacher_task where id='$_GET[del_id]'";
+	$s="DELETE FROM ".$ART_TABLE."teacher_task where task_id='$_GET[del_id]'";
 
 	if(mysql_query($s))
 	{
