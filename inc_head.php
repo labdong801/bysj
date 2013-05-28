@@ -107,7 +107,7 @@ if($PHP_SELF != "/bysj/index.php"){
              $_SESSION['com_auth'] = $tmp_fetch["authority"];  //权限
              $_SESSION['com_pro'] = $tmp_fetch["his_pro"];  //专业中文名
 	         $_SESSION['com_pro_num'] = $tmp_fetch["his_pro_id"];  //专业id,我没获取
-			 $_SESSION['grade']       = (date("Y",mktime(0,0,0,date("m")-8,1,date("Y")))-intval(substr($com_id,0,2))-2000)+1;; //年级
+			 $_SESSION['grade']       = (date("Y",mktime(0,0,0,date("m")-8,1,date("Y")))-intval(substr($_SESSION['com_id'],0,2))-2000)+1;; //年级
 
 	         /*好麻烦啊，大概是判断专业分组之类的
              if($his_type!="student"){

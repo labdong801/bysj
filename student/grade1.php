@@ -10,6 +10,22 @@ $YM_DH = 1; //需要导航条
 $YM_QX = 1; //本页访问需要权限：普通学生
 include($baseDIR."/bysj/inc_head.php");
 
+ //设置所选年份
+ if($_GET['select_year']) 
+ {
+ 	$year = $_GET['select_year'];
+ }
+ else
+ {
+ 	$year = date("Y",mktime(0,0,0,date("m")-8,1,date("Y"))); //
+ 	/*
+ 	 * 本学期年份 （当前年份减8个月）
+ 	 * eg:
+ 	 * 现在是 2013年6月 ，属于2012学年第二个期。所以 $art_select_year = 2012
+ 	 * 现在是2013年9月，属于2013年第一学期。所以$art_select_year =2013
+ 	 * */
+ }
+
 $number = $com_id;
  ?>
 <script  type="text/javascript" src="upload_db.js"></script>
@@ -164,7 +180,7 @@ $query = mysql_query($sql);
 $currrows = mysql_num_rows($query);
 if($currrows == 0) //需要插入
 {
-	$sql = "INSERT INTO  `".$ART_TABLE."instrument_student_select` (`id` ,`student_number` )VALUES (NULL ,  '".$com_online."');";
+	$sql = "INSERT INTO  `".$ART_TABLE."instrument_student_select` (`id` ,`student_number`,`year` )VALUES (NULL ,  '".$com_online."','".$year."');";
 	mysql_query($sql);
 	$result[1] = 0;
 	$result[2] = 0;

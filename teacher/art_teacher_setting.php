@@ -51,7 +51,7 @@ $teacher_id = $com_id;
  
  
 /*找出所有专业*/
-$sql="SELECT * FROM  `".$TABLE."major`";
+$sql="SELECT * FROM  `".$TABLE."major` WHERE h_level = 19";
 $search = mysql_query($sql);
 while($row = mysql_fetch_array($search))
 	$class[] = array("id"=>$row["id"],"name"=>$row["name"]);
