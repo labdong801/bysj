@@ -15,7 +15,7 @@ if($com_auth>=1){
 <td><a href="art_student_task.php?sel=3">未上交作业</a></td>
 </tr>
 <tr>
-<td><a href="art_student_task.php?sel=4">我的作业</a></td>
+<td><a href="art_student_task.php?sel=4">已上交作业作业</a></td>
 </tr>
 
 

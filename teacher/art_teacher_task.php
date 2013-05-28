@@ -296,14 +296,14 @@ if($_GET['Choice'] || $_GET['edit_id'] ||$_GET['content_id'])
 {    //编辑
 	 if($_GET['edit_id'])
 	{
-		//$result=mysql_query("select * from ".$ART_TABLE."teacher_task where id='$_GET[edit_id]'");
+
 		$result=mysql_query($SQL2);
 		$row=mysql_fetch_array($result);
 
 	}//查看内容
 	 if($_GET['content_id'] )
 	{
-		//$result=mysql_query("select * from ".$ART_TABLE."teacher_task where id='$_GET[content_id]'");
+
 		$result=mysql_query($SQL3);
 		$row=mysql_fetch_array($result);
 	}
@@ -327,11 +327,8 @@ if($page==0)
 }
 $offset=$Page_size*($page-1);
 
-//$sql2="SELECT * FROM ".$ART_TABLE."teacher_task LEFT JOIN ".$ART_TABLE."major ON ".$ART_TABLE."teacher_task.major_id=".$ART_TABLE."major.id where ".$ART_TABLE."teacher_task.teacher='$teacher_id' && ".$ART_TABLE."teacher_task.year='$choice'";
 
 
-
-//$result=mysql_query("select * from ".$ART_TABLE."teacher_task where teacher='$teacher_id' && year='$choice'");
 $result=mysql_query($SQL);
 //计算总数
 $count = mysql_num_rows($result);
@@ -409,9 +406,26 @@ if($_POST['submit'] ||$_POST['submit1'])
 
 	$sql="insert into ".$ART_TABLE."teacher_task(title,content,start_time,end_time,teacher,year,class,major_id)"."values('$_POST[title]','$_POST[content]','$_POST[start_time]','$_POST[end_time]','$teacher_id','$choice','$_POST[RadioGroup1]','$_POST[RadioGroup2]')";
 
-	if(mysql_query($sql))
+     $result=mysql_query($sql);
+
+     $id=mysql_insert_id();
+	if($result)
 	{
+		echo $id;
+		//获取添加后的id;
+		$sql2="insert into ".$ART_TABLE."student_task(classes,major_id,teacher_id,year,task_id)"."values('$_POST[RadioGroup1]','$_POST[RadioGroup2]','$teacher_id','$choice','$id')";
+		echo $sql2;
+		if(mysql_query($sql2))
+		{
+
 		echo "<script>alert('设置成功')</script>";
+		}
+		else
+		{
+			$s="DELETE FROM ".$ART_TABLE."teacher_task where task_id='$id'";
+			mysql_query($s);
+			echo "<script>alert('设置失败');history.back(1);</script>";
+		}
 	}
 	 else
 	{
