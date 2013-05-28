@@ -47,6 +47,12 @@ html { filter:progid:DXImageTransform.Microsoft.BasicImage(grayscale=1); }
 <font size=+1>
 
 <?php
+
+
+
+?>
+
+<?php
 if($_SESSION['com_id']) //检查是否登录
  {
 	 $teacher_id = $_SESSION['com_id'];
@@ -81,7 +87,11 @@ if($_SESSION['com_id']) //检查是否登录
 		{
 			$volunteer = "second";
 			//将已经选好的锁定
-			$sql = "UPDATE  `".$ART_TABLE."instrument_student_select` SET  `lock` =  '1' WHERE  `lock` = 0 AND teacher = '".$teacher_id."' AND `year` = '".$year."' ";
+			$sql = "UPDATE  `".$ART_TABLE."instrument_student_select` 
+			LEFT JOIN ".$TABLE."student_sheet ON ".$ART_TABLE."instrument_student_select.student_number = ".$TABLE."student_sheet.number
+			LEFT JOIN ".$TABLE."major ON ".$TABLE."student_sheet.profession = ".$TABLE."major.name 
+			SET  `lock` =  '1' WHERE  `lock` = 0 AND teacher = '".$teacher_id."' AND ".$ART_TABLE."instrument_student_select.year = '".$year."' AND ".$TABLE."major.id='".$major."' AND `first` = `finally` ";
+			
 			//echo $sql;
 			mysql_query($sql);
 		}
@@ -89,7 +99,10 @@ if($_SESSION['com_id']) //检查是否登录
 		{
 			$volunteer = "third";
 			//将已经选好的锁定
-			$sql = "UPDATE  `".$ART_TABLE."instrument_student_select` SET  `lock` =  '1' WHERE  `lock` = 0 AND teacher = '".$teacher_id."' AND `year` = '".$year."'  ";
+			$sql = "UPDATE  `".$ART_TABLE."instrument_student_select` 
+			LEFT JOIN ".$TABLE."student_sheet ON ".$ART_TABLE."instrument_student_select.student_number = ".$TABLE."student_sheet.number
+			LEFT JOIN ".$TABLE."major ON ".$TABLE."student_sheet.profession = ".$TABLE."major.name 
+			SET  `lock` =  '1' WHERE  `lock` = 0 AND teacher = '".$teacher_id."' AND ".$ART_TABLE."instrument_student_select.year = '".$year."' AND ".$TABLE."major.id='".$major."' AND `second` = `finally` ";
 			mysql_query($sql);
 		}
 	}
