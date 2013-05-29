@@ -53,6 +53,23 @@ if($com_auth>=40){
 <td align=left bgColor=#5a6e8f height=28><font color=#FFFFFF>&nbsp;→&nbsp;任务验收汇总</font></td>
 </tr>
 <tr>
+<td><a href="art_teacher_task.php?Choice_3=<?php echo $arr_grade[0] ?>">大一验收汇总</a></td>
+</tr>
+<tr>
+<td><a href="art_teacher_task.php?Choice_3=<?php echo $arr_grade[1] ?>">大二验收汇总</a></td>
+</tr>
+<tr>
+<td><a href="art_teacher_task.php?Choice_3=<?php echo $arr_grade[2] ?>">大三验收汇总</a></td>
+</tr>
+<tr>
+<td><a href="art_teacher_task.php?Choice_3=<?php echo $arr_grade[3] ?>">大四验收汇总</a></td>
+</tr>
+
+
+<tr>
+<td align=left bgColor=#5a6e8f height=28><font color=#FFFFFF>&nbsp;→&nbsp;历史任务</font></td>
+</tr>
+<tr>
 <td><a href="art_teacher_task.php?Choice_3=<?php echo $arr_grade[0] ?>">大一汇总</a></td>
 </tr>
 <tr>

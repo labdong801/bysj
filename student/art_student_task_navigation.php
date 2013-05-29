@@ -2,23 +2,39 @@
 <?
 if($com_auth>=1){
 ?>
+
 <tr>
 <td align=left bgColor=#5a6e8f height=28><font color=#FFFFFF>&nbsp;→&nbsp;学生任务</font></td>
 </tr>
 <tr>
-<td><a href="art_student_task.php?sel=1">近期作业</a></td>
+<td><a href="art_student_task.php?sel=1">近期任务</a></td>
 </tr>
 <tr>
-<td><a href="art_student_task.php?sel=2">作业上交</a></td>
+<td><a href="art_student_task.php?sel=2">任务上交</a></td>
 </tr>
 <tr>
-<td><a href="art_student_task.php?sel=3">未上交作业</a></td>
+<td><a href="art_student_task.php?sel=3">未交任务</a></td>
 </tr>
 <tr>
-<td><a href="art_student_task.php?sel=4">已上交作业作业</a></td>
+<td><a href="art_student_task.php?sel=4">已交任务</a></td>
 </tr>
 
 
+<tr>
+<td align=left bgColor=#5a6e8f height=28><font color=#FFFFFF>&nbsp;→&nbsp;过去任务查询</font></td>
+</tr>
+<tr>
+<td><a href="art_student_task.php?grade=1">大一任务查询</a></td>
+</tr>
+<tr>
+<td><a href="art_student_task.php?grade=2">大二任务查询</a></td>
+</tr>
+<tr>
+<td><a href="art_student_task.php?grade=3">大三任务查询</a></td>
+</tr>
+<tr>
+<td><a href="art_student_task.php?grade=4">大四任务查询</a></td>
+</tr>
 <?
 }
 ?>

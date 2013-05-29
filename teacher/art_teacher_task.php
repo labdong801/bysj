@@ -123,8 +123,12 @@ $(document).ready(function(){
 });
 </script>
 
-
  <?php
+$SQL="SELECT * FROM ".$ART_TABLE."teacher_task LEFT JOIN ".$ART_TABLE."major ON ".$ART_TABLE."teacher_task.major_id=".$ART_TABLE."major.id where ".$ART_TABLE."teacher_task.teacher_task='$teacher_id' ";
+
+$SQL2="SELECT * FROM ".$ART_TABLE."teacher_task LEFT JOIN ".$ART_TABLE."major ON ".$ART_TABLE."teacher_task.major_id=".$ART_TABLE."major.id where ".$ART_TABLE."teacher_task.task_id='$_GET[edit_id]'";
+$SQL3="SELECT * FROM ".$ART_TABLE."teacher_task LEFT JOIN ".$ART_TABLE."major ON ".$ART_TABLE."teacher_task.major_id=".$ART_TABLE."major.id where ".$ART_TABLE."teacher_task.task_id='$_GET[content_id]'";
+
 if($_GET['Choice'])
 {
 
@@ -146,6 +150,7 @@ if($_GET['Choice'])
 	 {
 	 	$Class="大四任务下达";
 	 }
+
 }
  else if($_GET['Choice_2'])
 {
@@ -167,6 +172,7 @@ if($_GET['Choice'])
 	 {
 	 	$Class="大四一览表";
 	 }
+	 $SQL.="&& ".$ART_TABLE."teacher_task.year_task='$choice'";
 }
 else if($_GET['Choice_3'])
 {
@@ -187,13 +193,19 @@ else if($_GET['Choice_3'])
 	 {
 	 	$Class="大四汇总";
 	 }
-
+}
+else if($_GET['edit_id'])
+{
+	$SQL.=" && ".$ART_TABLE."teacher_task.task_id='$_GET[edit_id]'";
+}
+else if($_GET['content_id'])
+{
+	$SQL.=" && ".$ART_TABLE."teacher_task.task_id='$_GET[content_id]'";
 }
 else
 {
 	$Class="未选择年级";
 }
-
 
 ?>
 
@@ -201,10 +213,6 @@ else
 <script language="javascript">
 function is_empty(){
 	var result=false;
-
-
-
-
 	if(taskform.title.value=="")
 	{
 		alert("教师提交任务标题不能为空");
@@ -237,16 +245,8 @@ function is_empty(){
 	return false;
   }
 
-
-
-
-
-
 }
 </script>
-
-
-
 
 
 <?php
@@ -287,32 +287,17 @@ function is_empty(){
 
 <?php
 
-$SQL="SELECT * FROM ".$ART_TABLE."teacher_task LEFT JOIN ".$ART_TABLE."major ON ".$ART_TABLE."teacher_task.major_id=".$ART_TABLE."major.id where ".$ART_TABLE."teacher_task.teacher='$teacher_id' && ".$ART_TABLE."teacher_task.year='$choice'";
-
-$SQL2="SELECT * FROM ".$ART_TABLE."teacher_task LEFT JOIN ".$ART_TABLE."major ON ".$ART_TABLE."teacher_task.major_id=".$ART_TABLE."major.id where ".$ART_TABLE."teacher_task.task_id='$_GET[edit_id]'";
-$SQL3="SELECT * FROM ".$ART_TABLE."teacher_task LEFT JOIN ".$ART_TABLE."major ON ".$ART_TABLE."teacher_task.major_id=".$ART_TABLE."major.id where ".$ART_TABLE."teacher_task.task_id='$_GET[content_id]'";
 //echo $SQL3;
 if($_GET['Choice'] || $_GET['edit_id'] ||$_GET['content_id'])
-{    //编辑
-	 if($_GET['edit_id'])
-	{
-
-		$result=mysql_query($SQL2);
+{
+		$result=mysql_query($SQL);
 		$row=mysql_fetch_array($result);
 
-	}//查看内容
-	 if($_GET['content_id'] )
-	{
-
-		$result=mysql_query($SQL3);
-		$row=mysql_fetch_array($result);
-	}
 		$title=$row['title'];
 		$content=$row['content'];
 		$start_time=$row['start_time'];
 		$end_time=$row['end_time'];
 		$ZY=$row['class'];
-
 		$pro_id=$row['major_id'];
 		//echo $pro_id;
 	@include "art_set_task.php";
@@ -326,9 +311,6 @@ if($page==0)
 	$page=1;
 }
 $offset=$Page_size*($page-1);
-
-
-
 $result=mysql_query($SQL);
 //计算总数
 $count = mysql_num_rows($result);
@@ -348,16 +330,12 @@ $pages=$page_count;
 <table  width="800" border="1" align="center" bordercolor=#000000  cellpadding="3">
 <tr><td style="font-size:16px;">任务标题</td><td style="font-size:16px;">任务时间</td><td align="center">课程名称</td><td colspan="2" style="font-size:16px;">用户操作</td></tr>
 <?php
-
-//$sql1="SELECT * FROM ".$ART_TABLE."teacher_task LEFT JOIN ".$ART_TABLE."major ON ".$ART_TABLE."teacher_task.major_id=".$ART_TABLE."major.id where ".$ART_TABLE."teacher_task.teacher='$teacher_id' && ".$ART_TABLE."teacher_task.year='$choice' order by ".$ART_TABLE."teacher_task.id desc limit $offset,$Page_size";
-$sql1=$SQL." order by ".$ART_TABLE."teacher_task.task_id desc limit $offset,$Page_size ";
-$result=mysql_query($sql1);
-
+$SQL.=" order by ".$ART_TABLE."teacher_task.task_id desc limit $offset,$Page_size ";
+$result=mysql_query($SQL);
 if($result)
  {
    while($row=mysql_fetch_array($result))
    {
-
    	?>
   <tr>
   <td width="20%"><a href="?content_id=<?php echo $row[task_id]?>"><?php echo $row[title];?></a></td>
@@ -386,7 +364,6 @@ $key.="<span style='margin-left:20px;'><a href='#'id='pre' onclick=\"javascript:
 $key.="<span style='margin-left:20px;'><a href='#' id='next1' onclick=\"javascript: pass($pages,'$teacher_id','$choice');\">下一页</a></span>";
 $key.="</div>";
 ?>
-
 <?
 echo $key;
 }
@@ -397,6 +374,10 @@ echo $key;
 </tr>
 </table>
 
+
+
+
+
 <?php
 if($_POST['submit'] ||$_POST['submit1'])
 {
@@ -404,7 +385,7 @@ if($_POST['submit'] ||$_POST['submit1'])
    if($_GET['Choice'])
    {
 
-	$sql="insert into ".$ART_TABLE."teacher_task(title,content,start_time,end_time,teacher,year,class,major_id)"."values('$_POST[title]','$_POST[content]','$_POST[start_time]','$_POST[end_time]','$teacher_id','$choice','$_POST[RadioGroup1]','$_POST[RadioGroup2]')";
+	$sql="insert into ".$ART_TABLE."teacher_task(title,content,start_time,end_time,teacher_task,year_task,class,major_id)"."values('$_POST[title]','$_POST[content]','$_POST[start_time]','$_POST[end_time]','$teacher_id','$choice','$_POST[RadioGroup1]','$_POST[RadioGroup2]')";
 
      $result=mysql_query($sql);
 
