@@ -11,6 +11,8 @@ $YM_QX = 1; //本页访问需要权限：普通学生
 include($baseDIR."/bysj/inc_head.php");
 
 $number = $com_id;
+//设置所选年份
+ $year = date("Y",mktime(0,0,0,date("m")-8,1,date("Y"))); //
  ?>
 <script  type="text/javascript" src="upload_db.js"></script>
 <style type="text/css">
@@ -164,7 +166,7 @@ $query = mysql_query($sql);
 $currrows = mysql_num_rows($query);
 if($currrows == 0) //需要插入
 {
-	$sql = "INSERT INTO  `".$ART_TABLE."major_student_select` (`id` ,`student_number` )VALUES (NULL ,  '".$com_online."');";
+	$sql = "INSERT INTO  `".$ART_TABLE."major_student_select` (`id` ,`student_number` ,`year`)VALUES (NULL ,  '".$com_online."','".$year."');";
 	mysql_query($sql);
 	$result[1] = 0;
 	$result[2] = 0;

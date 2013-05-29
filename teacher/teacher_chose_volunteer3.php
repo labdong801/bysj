@@ -34,6 +34,7 @@ html { filter:progid:DXImageTransform.Microsoft.BasicImage(grayscale=1); }
 <link rel="stylesheet" type="text/css" href="/bysj/images/allbig.css">
 <!-- jQuery -->
 <script language=JavaScript src=/bysj/js/jquery-1.7.1.js></script>
+<script language=JavaScript src=/bysj/js/jquery.cookie.js></script>
 <!-- 自己写的js都放在这里 -->
 <script language=JavaScript src=/bysj/js/myjs.js></script>
 
@@ -48,15 +49,11 @@ html { filter:progid:DXImageTransform.Microsoft.BasicImage(grayscale=1); }
 
 <?php
 
-
-
-?>
-
-<?php
 if($_SESSION['com_id']) //检查是否登录
  {
-	 $teacher_id = $_SESSION['com_id'];
-	 
+ 	$teacher_id = $_SESSION['com_id'];
+ 	
+ 	
 	//需要提供乐器信息
 	if($_GET['instrument'])
 		$instrument = $_GET['instrument'];
@@ -69,12 +66,6 @@ if($_SESSION['com_id']) //检查是否登录
 	else
 		exit(0);
 		
-	//需要提供专业
-	if($_GET['major'])
-		$major = $_GET['major'];
-	else
-		exit(0);
-
 	//第几志愿
 	if($_GET['volunteer'])
 	{ 
@@ -87,48 +78,39 @@ if($_SESSION['com_id']) //检查是否登录
 		{
 			$volunteer = "second";
 			//将已经选好的锁定
-			$sql = "UPDATE  `".$ART_TABLE."instrument_student_select` 
-			LEFT JOIN ".$TABLE."student_sheet ON ".$ART_TABLE."instrument_student_select.student_number = ".$TABLE."student_sheet.number
-			LEFT JOIN ".$TABLE."major ON ".$TABLE."student_sheet.profession = ".$TABLE."major.name 
-			SET  `lock` =  '1' WHERE  `lock` = 0 AND teacher = '".$teacher_id."' AND ".$ART_TABLE."instrument_student_select.year = '".$year."' AND ".$TABLE."major.id='".$major."' AND `first` = `finally` ";
-			
-			//echo $sql;
-			mysql_query($sql);
+//			$sql = "UPDATE  `".$ART_TABLE."instrument_student_select` SET  `lock` =  '1' WHERE  `lock` = 0 AND teacher = '".$teacher_id."' ";
+//			//echo $sql;
+//			mysql_query($sql);
 		}
 		else
 		{
 			$volunteer = "third";
-			//将已经选好的锁定
-			$sql = "UPDATE  `".$ART_TABLE."instrument_student_select` 
-			LEFT JOIN ".$TABLE."student_sheet ON ".$ART_TABLE."instrument_student_select.student_number = ".$TABLE."student_sheet.number
-			LEFT JOIN ".$TABLE."major ON ".$TABLE."student_sheet.profession = ".$TABLE."major.name 
-			SET  `lock` =  '1' WHERE  `lock` = 0 AND teacher = '".$teacher_id."' AND ".$ART_TABLE."instrument_student_select.year = '".$year."' AND ".$TABLE."major.id='".$major."' AND `second` = `finally` ";
-			mysql_query($sql);
+//			//将已经选好的锁定
+//			$sql = "UPDATE  `".$ART_TABLE."instrument_student_select` SET  `lock` =  '1' WHERE  `lock` = 0 AND teacher = '".$teacher_id."' ";
+//			mysql_query($sql);
 		}
 	}
+	else
+		exit(0);
 
-
-	 $sql = "SELECT ".$TABLE."student_sheet.name , ".$ART_TABLE."instrument_student_select.student_number, ".$TABLE."student_sheet.class, ".$ART_TABLE."instrument_student_select.lock  FROM  `".$ART_TABLE."instrument_student_select` 
-	 		LEFT JOIN ".$TABLE."student_sheet ON ".$ART_TABLE."instrument_student_select.student_number = ".$TABLE."student_sheet.number 
+ 	 
+	 $sql = "SELECT ".$TABLE."student_sheet.name , ".$ART_TABLE."major_student_select.student_number, ".$TABLE."student_sheet.class, ".$ART_TABLE."major_student_select.lock  FROM  `".$ART_TABLE."major_student_select` 
+	 		LEFT JOIN ".$TABLE."student_sheet ON ".$ART_TABLE."major_student_select.student_number = ".$TABLE."student_sheet.number  
 	 		LEFT JOIN ".$TABLE."major ON ".$TABLE."student_sheet.profession = ".$TABLE."major.name 
-	 		WHERE `teacher`= '".$teacher_id."' AND ".$ART_TABLE."instrument_student_select.year = '".$year."' AND ".$TABLE."major.id='".$major."' ORDER BY  `lock` DESC  ";
-	 		//echo $sql;
+	 		WHERE `".$volunteer."`='".$instrument."' AND `finally`='0' AND ".$ART_TABLE."major_student_select.year = '".$year."' AND  ".$TABLE."major.id='".$major."' ";
+
 	 $query = mysql_query($sql);
 	 if(mysql_num_rows($query))
 	 {
 	 	//echo $sql;
 	 	
 	 	while($row = mysql_fetch_array($query))
-	 	{ 
-	 		if($row['lock']==1)
-	 			echo "<div id='".$row['student_number']."' class='lock'  style='padding-left:20px;padding-top:10px;padding-bottom:10px;cursor:pointer;list-style-type:none;background:#ccc' align=left><span> </span>".$row['name']."[".$row['class']."]</div>";
-	 		else
-	 			echo "<div id='".$row['student_number']."' class='chose'  style='padding-left:20px;padding-top:10px;padding-bottom:10px;cursor:pointer;list-style-type:none;' align=left><span> </span>".$row['name']."[".$row['class']."]</div>";
-	 	}
+	 		echo "<div id='".$row['student_number']."' class='chose'  style='padding-left:20px;padding-top:10px;padding-bottom:10px;cursor:pointer;list-style-type:none;' align=left><span> </span>".$row['name']."[".$row['class']."]</div>";
+
 	 }
 	 else
 	 {
-	 	echo "还没有选择学生！";
+	 	echo "没有可以选择的学生！";
 	 }
  
  
@@ -138,18 +120,19 @@ if($_SESSION['com_id']) //检查是否登录
  	echo "请登录";
  }
 ?>
-
 </font>
 </body>
 </html>
+
 <script language=JavaScript >
+
 $(document).ready(function(){
 	$(".chose").toggle(
 		function () {
 			$(this).css({ color: "#ffffff", background: "#5a6e8f" });
 			$(this).find('span').html("√");
 			var id = $(this).attr("id");
-			$.post("./ajax/jquery_session_ctl.php", { add: id,remove:'2'} );
+			$.post("./ajax/jquery_session_ctl.php", { add: id} );
 		},
 		function () {
 			$(this).css({ color: "#000000", background: "#ffffff" });
@@ -158,5 +141,4 @@ $(document).ready(function(){
 			$.post("./ajax/jquery_session_ctl.php", { clean: id} );
 		});
 });
-
 </script>
