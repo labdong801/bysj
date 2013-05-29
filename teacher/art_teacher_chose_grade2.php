@@ -3,8 +3,8 @@ $self= $PHP_SELF;
 $filename = $_SERVER["SCRIPT_FILENAME"];
 $loc= strpos($filename,$self);
 $baseDIR = substr($filename,0,$loc);
-$YM_ZT = "教师选择指导乐器选修的学生";
-$YM_ZT2 = "乐器选修学生名单";
+$YM_ZT = "教师选择指导钢琴、声乐选修的学生";
+$YM_ZT2 = "钢琴、声乐选修学生名单";
 $YM_MK = "艺术系双选系统";
 $YM_PT ="教师选择";
 $YM_DH = 1; //需要导航条
@@ -55,6 +55,7 @@ $teacher_id = $com_id;
 <td align="left">
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	<?php
+	//年份
 	echo "<a href=".$PHP_SELF."?select_year=".$YEAR_C."><font color=blue><u>查看".$YEAR_C."年(本届)选题</u></font></a>";
 	echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   查看往年情况：";
 	for($i=$YEAR_S;$i<$YEAR_C;$i++) echo "<a href=".$PHP_SELF."?select_year=".$i."><font color=blue><u>".$i."年</u></font></a> ";
@@ -64,12 +65,13 @@ $teacher_id = $com_id;
 	
 	
 	<?php
+	//这个学期应该带哪几门课
 		//$sql = "SELECT * FROM  `art_teacher_student` WHERE `teacher_id`='".$_SESSION['com_id']."' && `year` = '".$year."' ";
 		$sql = "SELECT ".$ART_TABLE."teacher_student.id, major_id, teacher_id, class, YEAR, value, ".$TABLE."major.name AS class_name , ".$ART_TABLE."major.name AS art_name,grade
 			FROM ".$ART_TABLE."teacher_student
 			LEFT JOIN ".$TABLE."major ON ".$ART_TABLE."teacher_student.class = ".$TABLE."major.id 
 			LEFT JOIN ".$ART_TABLE."major ON ".$ART_TABLE."teacher_student.major_id = ".$ART_TABLE."major.id
-			WHERE teacher_id =  '".$_SESSION['com_id']."' && year =  '".$year."' && value > 0 && grade =1" ;
+			WHERE teacher_id =  '".$_SESSION['com_id']."' && year =  '".$year."' && value > 0 && grade =2" ;
 			
 		echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 本学年安排的课程：";
 		
@@ -86,22 +88,22 @@ $teacher_id = $com_id;
 				if( ($instrument == $row['major_id'])  && ($major == $row['class']) )
 					echo "<font><u>".$row['art_name']."[".$row['class_name']."]</u></font>&nbsp;&nbsp;";
 				else
-					echo "<a href='art_teacher_chose_grade1.php?select_year=".$year."&major_id=".$row['major_id']."&class=".$row['class']."' ><font color=blue><u>".$row['art_name']."[".$row['class_name']."]</u></font></a>&nbsp;&nbsp;";
+					echo "<a href='art_teacher_chose_grade2.php?select_year=".$year."&major_id=".$row['major_id']."&class=".$row['class']."' ><font color=blue><u>".$row['art_name']."[".$row['class_name']."]</u></font></a>&nbsp;&nbsp;";
 			}
 		}
 		else
 		{
 			echo "暂无";
-			@include($baseDIR."/bysj/inc_foot.php");
-			exit(0);
+ 			@include($baseDIR."/bysj/inc_foot.php");
+ 			exit(0);
+
 		}
 		echo "&nbsp;<br>&nbsp;<br>";
 	?>
 	
 	
 <?php
-	$sql = "SELECT * FROM ".$ART_TABLE."instrument_student_select WHERE teacher = '".$teacher_id."' AND year = '".$year."'";
- 	$select = mysql_num_rows(mysql_query($sql));
+	//计算当前已经带了多少个学生和一共可以带多少个学生
  	$sql = "SELECT * FROM  `".$ART_TABLE."teacher_student` WHERE major_id = '".$instrument."' AND teacher_id ='".$teacher_id."' AND class='".$major."' AND year = '".$year."'  ";
  	if(mysql_num_rows(mysql_query($sql)))
  	{ 
@@ -109,7 +111,15 @@ $teacher_id = $com_id;
  		$sum = $row['value'];
  	}
  	
-//处理post时间
+ 	if($_GET['major_id'] ==11)
+		$instrument = "vocalmusic";
+	if($_GET['major_id'] ==12 )
+		$instrument = "piano";
+	
+	$sql = "SELECT * FROM ".$ART_TABLE."vocalmusic_student_select WHERE ".$instrument."_finally = '".$teacher_id."' AND year = '".$year."'";
+ 	$select = mysql_num_rows(mysql_query($sql));
+ 	
+	//处理post时间
  	if(isset($_POST['add']))
  	{
  		//$TEST['add'][$teacher_id][1241241]=124124;
@@ -118,7 +128,7 @@ $teacher_id = $com_id;
  			{ 
  				if($select <= $sum)
  				{ 
-		 			$sql = "UPDATE  `".$ART_TABLE."instrument_student_select` SET  `finally` =  '".$instrument."',`teacher` =  '".$teacher_id."' WHERE `student_number` ='".$key."';";
+		 			$sql = "UPDATE  `".$ART_TABLE."vocalmusic_student_select` SET  `".$instrument."_finally` =  '".$teacher_id."'  WHERE `student_number` ='".$key."';";
 		 			//echo $sql ."<br>";
 		 			mysql_query($sql);
  				}
@@ -136,7 +146,7 @@ $teacher_id = $com_id;
  		foreach ($_SESSION[$teacher_id] as $key => $value) {
  		if($value == 2) //清除
  			{ 
-	 			$sql = "UPDATE  `".$ART_TABLE."instrument_student_select` SET  `finally` =  '0',`teacher` =  '' WHERE `student_number` ='".$key."';";
+	 			$sql = "UPDATE  `".$ART_TABLE."vocalmusic_student_select` SET  `".$instrument."_finally` =  '0'  WHERE `student_number` ='".$key."';";
 	 			//echo $sql ."<br>";
 				mysql_query($sql);
  			}
@@ -152,16 +162,18 @@ $teacher_id = $com_id;
 
 <?php
 //现在应该选择第几志愿
-$sql = "SELECT * FROM  `".$ART_TABLE."instrument_student_select` 
-	 		LEFT JOIN ".$TABLE."student_sheet ON ".$ART_TABLE."instrument_student_select.student_number = ".$TABLE."student_sheet.number  
+$sql = "SELECT * FROM  `".$ART_TABLE."vocalmusic_student_select` 
+	 		LEFT JOIN ".$TABLE."student_sheet ON ".$ART_TABLE."vocalmusic_student_select.student_number = ".$TABLE."student_sheet.number  
 	 		LEFT JOIN ".$TABLE."major ON ".$TABLE."student_sheet.profession = bysj_major.name 
-	 		WHERE `first`='".$instrument."' AND `finally`='0' AND ".$ART_TABLE."instrument_student_select.year = '".$year."' AND  ".$TABLE."major.id='".$major."' ";
+	 		WHERE `".$instrument."_first`='".$teacher_id."' AND `".$instrument."_finally`='0' AND ".$ART_TABLE."vocalmusic_student_select.year = '".$year."' AND  ".$TABLE."major.id='".$major."' ";
+	 //		echo $sql;
 $first = mysql_num_rows(mysql_query($sql));
 
-$sql = "SELECT * FROM  `".$ART_TABLE."instrument_student_select` 
-	 		LEFT JOIN ".$TABLE."student_sheet ON ".$ART_TABLE."instrument_student_select.student_number = ".$TABLE."student_sheet.number  
+$sql = "SELECT * FROM  `".$ART_TABLE."vocalmusic_student_select` 
+	 		LEFT JOIN ".$TABLE."student_sheet ON ".$ART_TABLE."vocalmusic_student_select.student_number = ".$TABLE."student_sheet.number  
 	 		LEFT JOIN ".$TABLE."major ON ".$TABLE."student_sheet.profession = bysj_major.name 
-	 		WHERE `second`='".$instrument."' AND `finally`='0' AND ".$ART_TABLE."instrument_student_select.year = '".$year."' AND  ".$TABLE."major.id='".$major."' ";
+	 		WHERE `".$instrument."_second`='".$teacher_id."' AND `".$instrument."_finally`='0' AND ".$ART_TABLE."vocalmusic_student_select.year = '".$year."' AND  ".$TABLE."major.id='".$major."' ";
+	 //		echo $sql;
 $second = mysql_num_rows(mysql_query($sql));
 
 //$sql = "SELECT * FROM  `".$ART_TABLE."instrument_student_select` 
@@ -184,14 +196,14 @@ else
 	<td align=center><font size=+1>已选择的学生(<?php echo $select;?>/<?php echo $sum;?>)</font></td><td></td><td  align=center><font size=+1>第<?php echo $volunteer;?>志愿学生名单</font></td>
 </tr>
 <tr>
-	<td><iframe width=300 height=600 src="./teacher_had_chose.php?year=<?php echo $year;?>&instrument=<?php echo $instrument;?>&major=<?php echo $major; ?>&volunteer=<?php echo $volunteer;?>"> </iframe></td>
+	<td><iframe width=300 height=600 src="./teacher_had_chose2.php?year=<?php echo $year;?>&instrument=<?php echo $instrument;?>&major=<?php echo $major; ?>&volunteer=<?php echo $volunteer;?>"> </iframe></td>
 	<td width=200 align=center>
 		<form action="" method="post">
 		<input type="submit" name="add" value=""  style="background:url('../images/left.png');width:50px;height:50px;border:0px;cursor:pointer" ><br><br><br><br>
 		<input type="submit" name="remove" value=""  style="background:url('../images/right.png');width:50px;height:50px;border:0px;cursor:pointer">
 		</form>
 	</td>
-	<td><iframe width=300 height=600 src="./teacher_chose_volunteer1.php?year=<?php echo $year;?>&instrument=<?php echo $instrument;?>&major=<?php echo $major; ?>&volunteer=<?php echo $volunteer;?>"> </iframe></td>
+	<td><iframe width=300 height=600 src="./teacher_chose_volunteer2.php?year=<?php echo $year;?>&instrument=<?php echo $instrument;?>&major=<?php echo $major; ?>&volunteer=<?php echo $volunteer;?>"> </iframe></td>
 </tr>
 </table>
 <br>

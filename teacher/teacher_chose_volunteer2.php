@@ -72,11 +72,11 @@ if($_SESSION['com_id']) //检查是否登录
 		$volunteer = $_GET['volunteer'];
 		if($volunteer==1)
 		{
-			$volunteer = "first";
+			$volunteer = $instrument."_first";
 		}
 		else if($volunteer == 2)
 		{
-			$volunteer = "second";
+			$volunteer = $instrument."_second";
 			//将已经选好的锁定
 //			$sql = "UPDATE  `".$ART_TABLE."instrument_student_select` SET  `lock` =  '1' WHERE  `lock` = 0 AND teacher = '".$teacher_id."' ";
 //			//echo $sql;
@@ -84,7 +84,7 @@ if($_SESSION['com_id']) //检查是否登录
 		}
 		else
 		{
-			$volunteer = "third";
+			$volunteer = $instrument."_third";
 //			//将已经选好的锁定
 //			$sql = "UPDATE  `".$ART_TABLE."instrument_student_select` SET  `lock` =  '1' WHERE  `lock` = 0 AND teacher = '".$teacher_id."' ";
 //			mysql_query($sql);
@@ -94,11 +94,11 @@ if($_SESSION['com_id']) //检查是否登录
 		exit(0);
 
  	 
-	 $sql = "SELECT ".$TABLE."student_sheet.name , ".$ART_TABLE."instrument_student_select.student_number, ".$TABLE."student_sheet.class, ".$ART_TABLE."instrument_student_select.lock  FROM  `".$ART_TABLE."instrument_student_select` 
-	 		LEFT JOIN ".$TABLE."student_sheet ON ".$ART_TABLE."instrument_student_select.student_number = ".$TABLE."student_sheet.number  
+	 $sql = "SELECT ".$TABLE."student_sheet.name , ".$ART_TABLE."vocalmusic_student_select.student_number, ".$TABLE."student_sheet.class, ".$ART_TABLE."vocalmusic_student_select.".$instrument."_lock  FROM  `".$ART_TABLE."vocalmusic_student_select` 
+	 		LEFT JOIN ".$TABLE."student_sheet ON ".$ART_TABLE."vocalmusic_student_select.student_number = ".$TABLE."student_sheet.number  
 	 		LEFT JOIN ".$TABLE."major ON ".$TABLE."student_sheet.profession = ".$TABLE."major.name 
-	 		WHERE `".$volunteer."`='".$instrument."' AND `finally`='0' AND ".$ART_TABLE."instrument_student_select.year = '".$year."' AND  ".$TABLE."major.id='".$major."' ";
-	 		//echo $sql;
+	 		WHERE `".$volunteer."`='".$teacher_id."' AND `".$instrument."_finally`='0' AND ".$ART_TABLE."vocalmusic_student_select.year = '".$year."' AND  ".$TABLE."major.id='".$major."' ";
+	 		
 	 $query = mysql_query($sql);
 	 if(mysql_num_rows($query))
 	 {

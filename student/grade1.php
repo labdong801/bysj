@@ -11,20 +11,14 @@ $YM_QX = 1; //本页访问需要权限：普通学生
 include($baseDIR."/bysj/inc_head.php");
 
  //设置所选年份
- if($_GET['select_year']) 
- {
- 	$year = $_GET['select_year'];
- }
- else
- {
- 	$year = date("Y",mktime(0,0,0,date("m")-8,1,date("Y"))); //
+ $year = date("Y",mktime(0,0,0,date("m")-8,1,date("Y"))); //
  	/*
  	 * 本学期年份 （当前年份减8个月）
  	 * eg:
  	 * 现在是 2013年6月 ，属于2012学年第二个期。所以 $art_select_year = 2012
  	 * 现在是2013年9月，属于2013年第一学期。所以$art_select_year =2013
  	 * */
- }
+ 
 
 $number = $com_id;
  ?>

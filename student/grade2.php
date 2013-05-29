@@ -11,6 +11,8 @@ $YM_QX = 1; //本页访问需要权限：普通学生
 include($baseDIR."/bysj/inc_head.php");
 
 $number = $com_id;
+//设置所选年份
+ $year = date("Y",mktime(0,0,0,date("m")-8,1,date("Y"))); //
  ?>
 <script  type="text/javascript" src="upload_db.js"></script>
 <style type="text/css">
@@ -59,7 +61,7 @@ $query = mysql_query($sql);
 $currrows = mysql_num_rows($query);
 if($currrows == 0) //需要插入
 {
-	$sql = "INSERT INTO  `".$ART_TABLE."vocalmusic_student_select` (`id` ,`student_number` )VALUES (NULL ,  '".$com_online."');";
+	$sql = "INSERT INTO  `".$ART_TABLE."vocalmusic_student_select` (`id` ,`student_number`,`year` )VALUES (NULL ,  '".$com_online."',".$year.");";
 	mysql_query($sql);
 	$vocalmusic_result[1] = 0;
 	$vocalmusic_result[2] = 0;
@@ -104,9 +106,9 @@ $tmpi = 0;
 
 	  echo "第".$tmpi."志愿：";
 	  if($vocalmusic_result[$tmpi])
-	  	echo "<a href='javascritp::void(0);'><font color=blue><u><span id='vocalmusic_unselect".$tmpi."' class='vocalmusic_select'>".getteachername($vocalmusic_result[$tmpi])."</span></u></font></a>";
+	  	echo "<a href='javascritp:void(0)'><font color=blue><u><span id='vocalmusic_unselect".$tmpi."' class='vocalmusic_select'>".getteachername($vocalmusic_result[$tmpi])."</span></u></font></a>";
 	  else
-	  	echo "<a href='javascritp::void(0);'><font color=blue><u><span id='vocalmusic_unselect".$tmpi."' class='vocalmusic_select'>未选择</span></u></font></a>";
+	  	echo "<a href='javascritp:void(0)'><font color=blue><u><span id='vocalmusic_unselect".$tmpi."' class='vocalmusic_select'>未选择</span></u></font></a>";
 
 	   echo "&nbsp;&nbsp;&nbsp;";
 	}
@@ -165,7 +167,7 @@ $tmpi = 0;
 		  $array2 = mysql_fetch_array($query);
 	?>
 	  <tr align="center">
-	  	<td><a href='javascritp::void(0);'><font color=blue><u><span class='vocalmusic_unselect' id='<?php echo $array2["teacher_id"]; ?>'><?php echo $array2["name"]; ?></span></u></font></a></td>
+	  	<td><a href='javascritp:void(0)'><font color=blue><u><span class='vocalmusic_unselect' id='<?php echo $array2["teacher_id"]; ?>'><?php echo $array2["name"]; ?></span></u></font></a></td>
 		<td align="left" height="30px"><?php echo $array2["officepos"]; ?></td>
 	    <td align="left" >
 	    <?php
@@ -229,9 +231,9 @@ $tmpi = 0;
 
 		  echo "第".$tmpi."志愿：";
 		  if($piano_result[$tmpi])
-		  	echo "<a href='javascritp::void(0);'><font color=blue><u><span class='piano_select' id='piano_unselect".$tmpi."'>".getteachername($piano_result[$tmpi])."</span></u></font></a>";
+		  	echo "<a href='javascritp:void(0)'><font color=blue><u><span class='piano_select' id='piano_unselect".$tmpi."'>".getteachername($piano_result[$tmpi])."</span></u></font></a>";
 		  else
-		  	echo "<a href='javascritp::void(0);'><font color=blue><u><span class='piano_select' id='piano_unselect".$tmpi."'>未选择</span></u></font></a>";
+		  	echo "<a href='javascritp:void(0)'><font color=blue><u><span class='piano_select' id='piano_unselect".$tmpi."'>未选择</span></u></font></a>";
 
 	   echo "&nbsp;&nbsp;&nbsp;";
 	}
@@ -289,7 +291,7 @@ $tmpi = 0;
 		  $array2 = mysql_fetch_array($query);
 	?>
 	  <tr align="center">
-	  	<td><a href='javascritp::void(0);'><font color=blue><u><span class='piano_unselect'  id='<?php echo $array2["teacher_id"]; ?>'><?php echo $array2["name"]; ?></span></u></font></a></td>
+	  	<td><a href='javascritp:void(0)'><font color=blue><u><span class='piano_unselect'  id='<?php echo $array2["teacher_id"]; ?>'><?php echo $array2["name"]; ?></span></u></font></a></td>
 		<td align="left" height="30px"><?php echo $array2["officepos"]; ?></td>
 	    <td align="left" >
 	    <?php
