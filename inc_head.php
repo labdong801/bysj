@@ -261,7 +261,7 @@ if($com_online){
       				"/bysj/teacher/art_teacher_chose_grade1.php",
       				"/bysj/teacher/art_teacher_chose_grade2.php",
       				"/bysj/teacher/art_teacher_chose_grade3.php",
-      				"#",	
+      				"/bysj/teacher/check_handon.php",	
       				//"/bysj/teacher/check_handon.php",
       				//"/bysj/filems/teacher/teacher_m.php",
       				//"/bysj/filems/teacher/examine1.php",

@@ -3,6 +3,15 @@
 <td bgColor=#4a5e7f height=28><font color=#FFFFFF>导&nbsp;&nbsp;航</font></td>
 </tr>
 <tr>
+<td><div align="left"><a href="grade1.php">乐器选修</a></div></td>
+</tr>
+<tr>
+<td><div align="left"><a href="grade2.php">声乐、钢琴选修</a></div></td>
+</tr>
+<tr>
+<td><div align="left"><a href="grade3.php">专业方向选修</a></div></td>
+</tr>
+<tr>
 <td><div align="left"><a href="selecttitle.php">毕业设计选题</a></div></td>
 </tr>
 <tr>
