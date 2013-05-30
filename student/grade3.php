@@ -137,6 +137,37 @@ text-align:left;
 	//         @include($baseDIR."/bysj/inc_foot.php");
 	//          exit;   //不能选题，退出
 	//  }
+	
+	$sql = "select topic_start,topic_end,student_start,student_end,teacher_start,teacher_end from ".$ART_TABLE."set_date where grade = '3'";
+	   $qur_sql = mysql_query($sql);
+	   $fet_result = mysql_fetch_array($qur_sql);
+	   $now = time(0);
+	   $can_select = true;
+	
+	   if($now>=$fet_result["student_start"]&&$now<=$fet_result["student_end"]){
+	   	   $can_select = true;
+	   } else if($now>=$fet_result["teacher_start"]&&$now<=$fet_result["teacher_end"]){
+	   		$show_message = "目前处于教师选学生阶段，暂不能更改选题情况。";
+		   $can_select = false;
+	   } else {
+		   $show_message = "对不起，现在没有专业方向选修任务。";
+		   $can_select = false;
+	   }
+	   
+	   //年级限制
+	   if($grade < 3)
+	   {
+	   		Show_Message("专业方向选修只对大三学生开放。<br>
+		           感谢期待这门课程的同学们。");
+			@include($baseDIR."/bysj/inc_foot.php");
+           exit;   //不能选题，退出
+	   }
+	   if($grade != 3)
+	   {
+	   		$show_message = "";
+			$can_select = false;
+	   }
+	   
 ?>
 
 <table width="838" align="center" border=0>
@@ -180,8 +211,10 @@ else
 	$result[2] = $row['second'];
 	$result[3] = $row['third'];
 	$finally   = $row['finally'];
+	$finally_teacher = $row['teacher'];
 }
 $tmpi = 0;
+$select_flag = false;
 //$wishn = mysql_fetch_array($cc);
 for($tmpi=1;$tmpi<4;$tmpi++){
 	//if($wishn["wish"]!=$tmpi) $dd = array();  //??????
@@ -202,6 +235,7 @@ for($tmpi=1;$tmpi<4;$tmpi++){
       echo "<td align=left style='padding-left:20px;";
       if(($finally == $result[$tmpi] ) && ($finally > 0))
       {
+      	$select_flag = true;
       	echo "background:url(../images/instrument/finally.png) right top  no-repeat";
       }
       echo "'>";
@@ -318,6 +352,13 @@ where ".$TABLE."teacher_information.teacher_id = selecttable.teacher_id && ".$hi
 // echo "<tr><td align=left>$page0 $pagelast $pagenext $pageN</td>
 // <td align=right>第 $page 页，总 $pages 页 / $totalrows 条记录</td></tr>";
 
+if($select_flag)
+{
+  ShowSelectedTopic($finally_teacher);
+  @include($baseDIR."/bysj/inc_foot.php");
+  exit;
+}
+
  $sql = "SELECT * FROM  `".$ART_TABLE."major` WHERE `grade`=3";
  $search = mysql_query($sql);
 
@@ -351,13 +392,40 @@ if($currrows<=0)   {
    	  $array = mysql_fetch_array($search);
    	  $instrument[$array['id']]["name"]= $array["name"];
    	  $instrument[$array['id']]["detail"] = $array["detail"];
-
+		
+	$sql = "SELECT * FROM `".$ART_TABLE."major_student_select` WHERE	`student_number` = '".$com_online."'  ";
+	$year_query = mysql_query($sql);
+	$year=mysql_fetch_array($year_query);
+	$year = $year['year'];
+	//echo $sql;
+	$sql = "SELECT * FROM `".$ART_TABLE."major_student_select` WHERE first = '".$array['id']."' AND year = '".$year."' ";
+	$hot_query=mysql_query($sql);
+	$hot_first = mysql_num_rows($hot_query);
+	$sql = "SELECT * FROM `".$ART_TABLE."major_student_select` WHERE second = '".$array['id']."' AND year = '".$year."' ";
+	$hot_query=mysql_query($sql);
+	$hot_second = mysql_num_rows($hot_query);
+	$sql = "SELECT * FROM `".$ART_TABLE."major_student_select` WHERE third = '".$array['id']."' AND year = '".$year."' ";
+	$hot_query=mysql_query($sql);
+	$hot_third = mysql_num_rows($hot_query);
+	
+	//指导老师
+	$sql = "SELECT *  FROM  `".$ART_TABLE."teacher_student`  " .
+			"LEFT JOIN ".$TABLE."teacher_information ON ".$TABLE."teacher_information.teacher_id = ".$ART_TABLE."teacher_student.teacher_id " .
+			"WHERE `major_id`='".$array['id']."'  AND `class` = '".$com_pro_id."' ";
+	$teacher_query = mysql_query($sql);
+	$teacher= "";
+	if(mysql_num_rows($teacher_query))
+	{
+		while($teacher_result =  mysql_fetch_array($teacher_query))
+			//$teacher .="<p>".$teacher_result['name'] . "</p>";
+			$teacher.="<p><a href='watch_teacher.php?teacher_id=".$teacher_result["teacher_id"]."' title='查看该教师的个人信息' >". $teacher_result["name"]."</a></p>";
+	}
 ?>
   <tr align="center">
   	<td rowspan=2><img id="<?php echo $array['id']; ?>" class="point" style="width:100px;height:100px" src="<?php echo "..".$array['icon'];?>" /></td>
 	<td align="left" height="30px"><span id="name<?php echo $array['id']; ?>"><?php echo $array["name"]; ?></span></td>
-    <td rowspan=2></td>
-	<td rowspan=2><a href="watch_teacher.php?teacher_id=<? echo $array["teacher_id"];?>" title="查看该教师的个人信息"><?php echo $array["teachername"];?></a></td>
+    <td rowspan=2><?php echo hot($hot_first)."/".hot($hot_second)."/".hot($hot_third)."/"; ?></td>
+	<td rowspan=2><?php echo $teacher;?></td>
   </tr>
   <tr>
   <td align="left"><span id="detail<?php echo $array['id']; ?>"><?php echo $array["detail"]; ?><span></td>
@@ -415,34 +483,34 @@ if($debug=="yeah")
    $content = str_replace("\n","<br>",$str);
    return $content;
  }
-
-function ShowSelectedTopic($row){
+function ShowSelectedTopic($id){
+	global $TABLE;
+	$sql = "SELECT * FROM `".$TABLE."teacher_information` WHERE teacher_id = '".$id."'";
+	$query = mysql_query($sql);
+	$row = mysql_fetch_array($query);;
 ?>
-   恭喜您，<b><?php echo $row["t_name"];?></b> 老师已经同意指导您的毕业设计。请联系老师落实毕业设计。<br>&nbsp;<br>
+	<br>&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;
+   恭喜您，<b><?php echo $row["name"];?></b> 老师已经同意指导您的专业方向选修。以下是老师的联系方式。<br>&nbsp;<br>
    <table width=800 align=center border=1 bordercolor=1 cellpadding=6>
-   <tr>
-   	   <td align=center bgColor=#5a6e8f><font color=#FFFFFF>指导教师</font></td><td><?php echo $row["t_name"];?></td>
+   <tr height=40>
+   	   <td align=center bgColor=#5a6e8f><font color=#FFFFFF>指导教师</font></td><td><?php echo $row["name"];?></td>
    	   <td align=center bgColor=#5a6e8f><font color=#FFFFFF>手机号码</font></td><td><?php echo $row["mobilephone"];?></td>
    	   <td align=center bgColor=#5a6e8f><font color=#FFFFFF>移动短号</font></td><td><?php echo $row["short_number"];?></td>
     </tr>
-    <tr>
+    <tr height=40>
    	   <td align=center bgColor=#5a6e8f><font color=#FFFFFF>技术职称</font></td><td><?php echo $row["techpos"];?></td>
    	   <td align=center bgColor=#5a6e8f><font color=#FFFFFF>办公电话</td><td><?php echo $row["officephone"];?></td>
    	   <td align=center bgColor=#5a6e8f><font color=#FFFFFF>QQ号码</font></td><td><?php echo $row["qq_number"];?></td>
     </tr>
-    <tr>
+    <tr height=40>
    	   <td align=center bgColor=#5a6e8f><font color=#FFFFFF>电子邮箱</font></td><td colspan=5><?php echo $row["email"];?></td>
     </tr>
     </table>
-   <br>&nbsp;<br>
-   <table width=800 align=center border=1 bordercolor=1 cellpadding=6>
-   <tr> <td width=130 height=38 align=right><b>毕业设计题目：</b></td> <td width=680><? echo $row["t_topic"];?>
-   	         &nbsp;&nbsp;&nbsp;&nbsp;<b>课题类型：</b><? echo $row["t_type"];?></td></tr>
-   <tr> <td width=130 height=88 align=right><b>本设计课题意义：</b></td> <td width=680><? echo dispEnter($row["meaning"]);?></td></tr>
-   <tr> <td width=130 height=88  align=right><b>对课题的要求：</b></td> <td width=680><? echo dispEnter($row["request"]);?></td></tr>
-   <tr> <td width=130 height=68 align=right><b>本课题重点要解决的问题：</b></td> <td width=680><? echo dispEnter($row["question"]);?></td></tr>
-    </table>
+
+ </table>
+ </table>
     <br>&nbsp;<br>
+   
 <?php
 }
 
@@ -459,6 +527,16 @@ function getmajor($id,$type)
 			return $row[$type];
 		}
 	}
+}
+
+function hot($v)
+{
+	if($v <= 0)
+		return "<font color=blue>冷</font>";
+	else if ($v <=30)
+		return "<font color=orange>温</font>";
+	else
+		return "<font color=red >热</font>";
 }
 ?>
 
@@ -479,6 +557,11 @@ function getmajor($id,$type)
 			echo "var s".$tmpi."=0;";
 ?>
 $(document).ready(function(){
+	
+<?php
+if($can_select) 
+{ 
+?>
 	$(".select").click(function(){
 		if($(this).attr("id") == 1)
 		{
@@ -573,6 +656,24 @@ $(document).ready(function(){
 
 
 	});
+	
+<?php
+}
+else if($show_message != "")
+{ 
+?>
+	$(".select").click(function(){
+		alert("<?php echo $show_message; ?>");
+	});
+	
+	$(".point").click(function(){
+		alert("<?php echo $show_message; ?>");
+	});
+
+<?php
+}
+?>
+	
 });
 </script>
 
