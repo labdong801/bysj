@@ -11,7 +11,7 @@ $YM_DH = 1; //需要导航条
 $YM_QX = 1; //管理员权限
 include($baseDIR."/bysj/inc_head.php");
 $student_id = $com_id;
-$Grade=$grade-1;
+$Grade=$grade-3;
 if($Grade>4)
 {
 	$Grade=4;
@@ -385,7 +385,7 @@ if($_SERVER['REQUEST_METHOD']=='POST')
  	$pifo=pathinfo($name);
  	$type=$pifo['extension'];
  	$name1=$pifo['dirname'];
-    echo $type;
+
 	 if(!is_uploaded_file($_FILES['upfile']['tmp_name']))
      {
  	     echo"文件不存在";
@@ -414,22 +414,31 @@ if($_SERVER['REQUEST_METHOD']=='POST')
      	exit;
      }
 
-   $tt="insert into ".$ART_TABLE."student_task(major_id,classes,task_id,file_name,status,year,teacher_id,sd_grade,student_num)"."" .
-   		"values('$_POST[major_id]','$_POST[classes]','$_POST[task_id]','$name','1','$_POST[years]','$_POST[teacher_id]','$_POST[grade_id]','$student_id')";
+     $jc="select * from ".$ART_TABLE."student_task where task_id='$_POST[task_id]' && student_num='$student_id'";
+     $jr=mysql_query($jc);
+     if(is_array(mysql_fetch_array($jr)))
+     {
+     	//echo "更新";
+     	$tt="UPDATE ".$ART_TABLE."student_task SET file_name='$name',status='1' WHERE task_id='$_POST[task_id]' && student_num='$student_id'";
+     }
+     else
+     {
+     $tt="insert into ".$ART_TABLE."student_task(major_id,classes,task_id,file_name,status,year,teacher_id,sd_grade,student_num)"."" .
+   	 "values('$_POST[major_id]','$_POST[classes]','$_POST[task_id]','$name','1','$_POST[years]','$_POST[teacher_id]','$_POST[grade_id]','$student_id')";
+     // echo "插入";
+     }
 
-    // $tt="UPDATE ".$ART_TABLE."student_task SET file_name='$name',status='1' WHERE task_id='$_POST[task_id]'";
      // echo $tt;
       $query1=mysql_query($tt);
      if($query1)
      {
-   	  echo "上传成功";
-     }
+   	  echo "<script>alert('上传成功'))</script>";
+      }
      else
      {
 
       unlink($destination);
-   	   echo "上传失败";
-
+   	  echo "<script>alert('上传失败'))</script>";
    	   exit;
      }
 }

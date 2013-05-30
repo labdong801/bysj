@@ -123,6 +123,7 @@ $YM_PT ="教师任务下达";
 $YM_DH = 1; //需要导航条
 $YM_QX = 90; //管理员权限
 include($baseDIR."/bysj/inc_head.php");
+
 $teacher_id = $com_id;
 $choice="";//导航条选择
 $Class="";//相应字符
@@ -434,7 +435,7 @@ if($result)
   <td width="25%"><?php if($row['class']==20){echo "音乐学";} else{echo "音乐表演";}?></td>
   <td width="25%" ><?php echo $row['name']?></td>
   <td width="40%"><a href="?content_id=<?php echo $row[task_id]?>"><?php echo $row[title];?></a></td>
-  <td width="10%" align="center"><a href="?down_id=<?php echo $row[task_id]?>">下载</a></td>
+  <td width="10%" align="center"><a href="art_task_down.php?down_id=<?php echo $row[task_id]?>">下载</a></td>
   </tr>
    	<?
    }
@@ -533,36 +534,8 @@ if($_GET['del_id'])
 		echo "<script>alert('删除失败');</script>";
 	}
 }
-if($_GET[aa])
-{
 
 
-	$original_dir="./zip/";
-	$new_dir="./art/";
-    $arr=array("新建文本文档.txt","电影.txt");
-
-    $archive  = new PHPZip();
-    $archive->select_file($original_dir,$new_dir,$arr);
-    $archive->ZipAndDownload($new_dir);
-    $archive->delete_file($new_dir);
-}
-if($_GET['down_id'])
-{
-	$dsql="SELECT title,file_name ,student_num,profession,art_major.name,bysj_student_sheet.NAME  FROM `art_teacher_task`
- LEFT JOIN art_student_task ON art_teacher_task.task_id=art_student_task.task_id
- LEFT JOIN art_major ON art_major.id=art_teacher_task.major_id
- LEFT JOIN bysj_student_sheet ON student_num=number
- where  art_teacher_task.task_id='5'";
- $result=mysql_query($dsql);
- $row=mysql_fetch_array($result);
- echo $row[name].$row[NAME];
- /*
-  include("ART_PHPZip.php");
-  $original_dir=$baseDIR."/bysj/student_homework/";
-  $new_dir=$baseDIR."/bysj/homework/";
-  $archive  = new ART_PHPZip();
-  */
-}
 ?>
 <?php
  @include($baseDIR."/bysj/inc_foot.php");
