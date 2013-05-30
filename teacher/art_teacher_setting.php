@@ -1,8 +1,10 @@
 <?php
-$self= $PHP_SELF;
-$filename = $_SERVER["SCRIPT_FILENAME"];
-$loc= strpos($filename,$self);
-$baseDIR = substr($filename,0,$loc);
+$self= $PHP_SELF;//文件相对地址
+
+$filename = $_SERVER["SCRIPT_FILENAME"];//获取文件绝对地址
+$loc= strpos($filename,$self);//自己相对地址在绝对地址中出现的位置
+$baseDIR = substr($filename,0,$loc);//根本地址
+
 $YM_ZT = "教师设置";
 $YM_ZT2 = "教师指导学生数量设置";
 $YM_MK = "毕业设计双向选题系统";
@@ -12,6 +14,7 @@ $YM_QX = 90; //管理员权限
 include($baseDIR."/bysj/inc_head.php");
 
 $teacher_id = $com_id;
+echo $teacher_id;
  ?>
 
 
@@ -34,7 +37,7 @@ $teacher_id = $com_id;
 
 <?php
  //设置所选年份
- if($_GET['select_year']) 
+ if($_GET['select_year'])
  {
  	$year = $_GET['select_year'];
  }
@@ -48,8 +51,8 @@ $teacher_id = $com_id;
  	 * 现在是2013年9月，属于2013年第一学期。所以$art_select_year =2013
  	 * */
  }
- 
- 
+
+
 /*找出所有专业*/
 $sql="SELECT * FROM  `".$TABLE."major` WHERE h_level = 19";
 $search = mysql_query($sql);
