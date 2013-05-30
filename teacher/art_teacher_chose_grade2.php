@@ -43,7 +43,28 @@ $teacher_id = $com_id;
  	$major = "";
  	
  	
- 	
+	//时间限制
+	   $sql = "select topic_start,topic_end,student_start,student_end,teacher_start,teacher_end from ".$ART_TABLE."set_date where grade = '2'";
+	   $qur_sql = mysql_query($sql);
+	   $fet_result = mysql_fetch_array($qur_sql);
+	   $now = time(0);
+	   $can_select = true;
+	
+	   if($now>=$fet_result["student_start"]&&$now<=$fet_result["student_end"]){
+	   	   $can_select = false;
+	   	   //$show_message = "目前处于学生报志愿阶段。";
+	   	   Show_Message("目前处于学生报志愿阶段。<br>
+	           该阶段将于 ".date("Y-m-d",$fet_result["student_end"])." 结束。<br>
+	           请在此日期后再查看最新消息，谢谢。");
+	       @include($baseDIR."/bysj/inc_foot.php");
+	       exit;
+	   } else if($now>=$fet_result["teacher_start"]&&$now<=$fet_result["teacher_end"]){
+	   	  // $show_message = "目前处于教师选学生阶段，暂不能更改选修情况。";
+		   $can_select = true;
+	   } else {
+		   $show_message = "对不起，现在没有选修任务。";
+		   $can_select = false;
+	   }
  	
  	
  
@@ -118,6 +139,18 @@ $teacher_id = $com_id;
 	
 	$sql = "SELECT * FROM ".$ART_TABLE."vocalmusic_student_select WHERE ".$instrument."_finally = '".$teacher_id."' AND year = '".$year."'";
  	$select = mysql_num_rows(mysql_query($sql));
+ 	
+ 	if($_POST)
+ 	{
+ 		if($can_select)
+ 		{
+ 			Show_Message("非选题阶段。<br>
+	           如要修改，请联系管理员，谢谢。");
+	           echo "</table>";
+	       @include($baseDIR."/bysj/inc_foot.php");
+	       exit;
+ 		}
+ 	}
  	
 	//处理post时间
  	if(isset($_POST['add']))

@@ -3,9 +3,9 @@ $self= $PHP_SELF;
 $filename = $_SERVER["SCRIPT_FILENAME"];
 $loc= strpos($filename,$self);
 $baseDIR = substr($filename,0,$loc);
-$YM_ZT = "器乐选修";
-$YM_ZT2 = "查看器乐选修情况";
-$YM_MK = "器乐选修";
+$YM_ZT = "声乐、钢琴选修";
+$YM_ZT2 = "查看声乐、钢琴选修情况";
+$YM_MK = "声乐、钢琴选修";
 $YM_DH = 1; //需要导航条
 $YM_QX = 1; //本页访问需要权限：普通学生
 include($baseDIR."/bysj/inc_head.php");
@@ -37,8 +37,31 @@ text-align:left;
 
 <?php
    $welcomestr = '&nbsp;&nbsp;&nbsp;欢迎'.$com_from.'<b>'.$com_name. '</b>同学使用艺术系双选系统'."<p>";
-
-
+	   
+	//时间限制
+	   $sql = "select topic_start,topic_end,student_start,student_end,teacher_start,teacher_end from ".$ART_TABLE."set_date where grade = '2'";
+	   $qur_sql = mysql_query($sql);
+	   $fet_result = mysql_fetch_array($qur_sql);
+	   $now = time(0);
+	   $can_select = true;
+	
+	   if($now>=$fet_result["student_start"]&&$now<=$fet_result["student_end"]){
+	   	   $can_select = true;
+	   } else if($now>=$fet_result["teacher_start"]&&$now<=$fet_result["teacher_end"]){
+	   		$show_message = "目前处于教师选学生阶段，暂不能更改选修情况。";
+		   $can_select = false;
+	   } else {
+		   $show_message = "对不起，现在没有选修任务。";
+		   $can_select = false;
+	   }
+	//年级限制
+	   if($grade < 2)
+	   {
+	   		Show_Message("声乐、钢琴选修只对大二学生开放。<br>
+		           感谢期待这门课程的同学们。");
+			@include($baseDIR."/bysj/inc_foot.php");
+           exit;   //不能选题，退出
+	   }
 ?>
 
 <table width="838" align="center" border=0>
@@ -106,9 +129,9 @@ $tmpi = 0;
 
 	  echo "第".$tmpi."志愿：";
 	  if($vocalmusic_result[$tmpi])
-	  	echo "<a href='javascritp:void(0)'><font color=blue><u><span id='vocalmusic_unselect".$tmpi."' class='vocalmusic_select'>".getteachername($vocalmusic_result[$tmpi])."</span></u></font></a>";
+	  	echo "<a style='cursor:pointer'><font color=blue><u><span id='vocalmusic_unselect".$tmpi."' class='vocalmusic_select'>".getteachername($vocalmusic_result[$tmpi])."</span></u></font></a>";
 	  else
-	  	echo "<a href='javascritp:void(0)'><font color=blue><u><span id='vocalmusic_unselect".$tmpi."' class='vocalmusic_select'>未选择</span></u></font></a>";
+	  	echo "<a style='cursor:pointer'><font color=blue><u><span id='vocalmusic_unselect".$tmpi."' class='vocalmusic_select'>未选择</span></u></font></a>";
 
 	   echo "&nbsp;&nbsp;&nbsp;";
 	}
@@ -167,7 +190,7 @@ $tmpi = 0;
 		  $array2 = mysql_fetch_array($query);
 	?>
 	  <tr align="center">
-	  	<td><a href='javascritp:void(0)'><font color=blue><u><span class='vocalmusic_unselect' id='<?php echo $array2["teacher_id"]; ?>'><?php echo $array2["name"]; ?></span></u></font></a></td>
+	  	<td><a style='cursor:pointer'><font color=blue><u><span class='vocalmusic_unselect' id='<?php echo $array2["teacher_id"]; ?>'><?php echo $array2["name"]; ?></span></u></font></a></td>
 		<td align="left" height="30px"><?php echo $array2["officepos"]; ?></td>
 	    <td align="left" >
 	    <?php
@@ -231,9 +254,9 @@ $tmpi = 0;
 
 		  echo "第".$tmpi."志愿：";
 		  if($piano_result[$tmpi])
-		  	echo "<a href='javascritp:void(0)'><font color=blue><u><span class='piano_select' id='piano_unselect".$tmpi."'>".getteachername($piano_result[$tmpi])."</span></u></font></a>";
+		  	echo "<a style='cursor:pointer'><font color=blue><u><span class='piano_select' id='piano_unselect".$tmpi."'>".getteachername($piano_result[$tmpi])."</span></u></font></a>";
 		  else
-		  	echo "<a href='javascritp:void(0)'><font color=blue><u><span class='piano_select' id='piano_unselect".$tmpi."'>未选择</span></u></font></a>";
+		  	echo "<a style='cursor:pointer'><font color=blue><u><span class='piano_select' id='piano_unselect".$tmpi."'>未选择</span></u></font></a>";
 
 	   echo "&nbsp;&nbsp;&nbsp;";
 	}
@@ -291,7 +314,7 @@ $tmpi = 0;
 		  $array2 = mysql_fetch_array($query);
 	?>
 	  <tr align="center">
-	  	<td><a href='javascritp:void(0)'><font color=blue><u><span class='piano_unselect'  id='<?php echo $array2["teacher_id"]; ?>'><?php echo $array2["name"]; ?></span></u></font></a></td>
+	  	<td><a style='cursor:pointer'><font color=blue><u><span class='piano_unselect'  id='<?php echo $array2["teacher_id"]; ?>'><?php echo $array2["name"]; ?></span></u></font></a></td>
 		<td align="left" height="30px"><?php echo $array2["officepos"]; ?></td>
 	    <td align="left" >
 	    <?php
@@ -318,7 +341,7 @@ $tmpi = 0;
 	// echo "<tr><td align=left>$page0 $pagelast $pagenext $pageN</td>
 	// <td align=right>第 $page 页，总 $pages 页 / 共 $totalrows 条记录</td></tr>";
 	?>
-	<tr><td colspan=2 align=left style='padding-left:20px;'><br><font color=red>友情提示：</font><font color=green>每种器乐所指导的学生人数有限，故不要选过于热门的器乐！<br>
+	<tr><td colspan=2 align=left style='padding-left:20px;'><br><font color=red>友情提示：</font><font color=green>每个老师所指导的学生人数有限，请尽量分散选择！<br>
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	</td></tr>
 	</table>
@@ -445,6 +468,11 @@ function getteachername($teacher_id)
 ?>
 
 $(document).ready(function(){
+	
+<?php
+if($can_select)
+{ 
+?>
 
 	$(".vocalmusic_select").click(function(){
 		if($(this).attr("id") == 'vocalmusic_unselect1')
@@ -508,9 +536,9 @@ $(document).ready(function(){
 			}
 			else
 			{
-				alert(vs1);
-				alert(vs2);
-				alert(vs3);
+//				alert(vs1);
+//				alert(vs2);
+//				alert(vs3);
 				temp = $(this).html();
 				$("#vocalmusic_unselect1").html(temp);
 				$.post("./ajax/update_grade2.php", { select: "vocalmusic_first", value: vs1 ,number:"<?php echo $com_online;?>"});
@@ -609,6 +637,34 @@ $(document).ready(function(){
 
 
 	});
+	
+<?php
+
+}
+else if($show_message != "")
+{
+	 
+?>
+	$(".vocalmusic_select").click(function(){
+		alert("<?php echo $show_message; ?>");
+	});
+	
+	$(".piano_select").click(function(){
+		alert("<?php echo $show_message; ?>");
+	});
+		
+	$(".vocalmusic_unselect").click(function(){
+		alert("<?php echo $show_message; ?>");
+	});
+		
+	$(".piano_unselect").click(function(){
+		alert("<?php echo $show_message; ?>");
+	});
+	
+<?php
+	
+}
+?>
 });
 </script>
 
