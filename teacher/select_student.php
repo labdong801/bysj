@@ -13,21 +13,46 @@ include($baseDIR."/bysj/inc_head.php");
 $teacher_id = $com_id;
 ?>
 <?php
+//指导的专业用新的机制
 	 $curr_pro_id = $set_pro_id;
-         $majiorlist = get_majior_list();
-         $pro_list = explode(",", $com_pro_id);  
+//         $majiorlist = get_majior_list();
+//         $pro_list = explode(",", $com_pro_id);  
 	 echo "<p align=left>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;请选择操作的专业：";
-	 $pro_name = "";
-	 while(list($k,$v)=each($majiorlist)){
-	 	   if(in_array($k,$pro_list)&&$v[open]){
-	 	   	   if($curr_pro_id ==0) $curr_pro_id = $k;
-	 	   	   if($curr_pro_id == $v["id"]){
-	 	   	   	    echo "[<b>".$v["name"]."</b>]";
-			 	    $pro_name = $v["name"];
-	 	   	   } else echo "[<a href=".$PHP_SELF."?set_pro_id=".$k."><font color=blue><u>".$v["name"]."</u></font></a>]";
-	 	   	   echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-	 	   }
- 	 }
+//	 $pro_name = "";
+//	 while(list($k,$v)=each($majiorlist)){
+//	 	   if(in_array($k,$pro_list)&&$v[open]){
+//	 	   	   if($curr_pro_id ==0) $curr_pro_id = $k;
+//	 	   	   if($curr_pro_id == $v["id"]){
+//	 	   	   	    echo "[<b>".$v["name"]."</b>]";
+//			 	    $pro_name = $v["name"];
+//	 	   	   } else echo "[<a href=".$PHP_SELF."?set_pro_id=".$k."><font color=blue><u>".$v["name"]."</u></font></a>]";
+//	 	   	   echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+//	 	   }
+// 	 }
+	$sql = "SELECT ".$ART_TABLE."teacher_student.id, major_id, teacher_id, class, YEAR, value, ".$TABLE."major.name AS class_name , ".$ART_TABLE."major.name AS art_name,grade
+			FROM ".$ART_TABLE."teacher_student
+			LEFT JOIN ".$TABLE."major ON ".$ART_TABLE."teacher_student.class = ".$TABLE."major.id 
+			LEFT JOIN ".$ART_TABLE."major ON ".$ART_TABLE."teacher_student.major_id = ".$ART_TABLE."major.id
+			WHERE teacher_id =  '".$_SESSION['com_id']."' && year =  '".$year."' && value > 0 && grade =4" ;
+			//echo $sql;
+	$query = mysql_query($sql);
+//	mysql_fetch_array($query);
+	if(mysql_num_rows($query))
+	{
+		while($row = mysql_fetch_array($query))
+		{
+			if($curr_pro_id ==0) $curr_pro_id = $row['class'];
+	 	   	if($curr_pro_id == $row['class']){
+	 	   		echo "[<b>".$row['class_name']."</b>]";
+				$pro_name = $row['class_name'];
+	 	   	} else echo "[<a href=".$PHP_SELF."?set_pro_id=".$row['class']."><font color=blue><u>".$row['class_name']."</u></font></a>]";
+		}
+			
+	}
+	else
+	{
+		echo "无";
+	}
  	 echo "</p>";
  	if($pro_name==""){
  		echo "<br><br>";
@@ -37,10 +62,20 @@ $teacher_id = $com_id;
  	}
 
 	//取得指导人数上限
- 	 $sql = "select (0+mid('$com_pro_num',instr('$com_pro_num',',".$curr_pro_id."-')+".strlen(",".$curr_pro_id."-").",2)) as lead_student"; 
- 	 $que_sql = mysql_query($sql);
- 	 $fet_result = mysql_fetch_array($que_sql); 
- 	 $allow_num = $fet_result["lead_student"];
+// 	 $sql = "select (0+mid('$com_pro_num',instr('$com_pro_num',',".$curr_pro_id."-')+".strlen(",".$curr_pro_id."-").",2)) as lead_student"; 
+// 	 $que_sql = mysql_query($sql);
+// 	 $fet_result = mysql_fetch_array($que_sql); 
+// 	 $allow_num = $fet_result["lead_student"];
+	//取得指导人数上限(新)
+	$sql = "SELECT ".$ART_TABLE."teacher_student.id, major_id, teacher_id, class, YEAR, value, ".$TABLE."major.name AS class_name , ".$ART_TABLE."major.name AS art_name,grade
+			FROM ".$ART_TABLE."teacher_student
+			LEFT JOIN ".$TABLE."major ON ".$ART_TABLE."teacher_student.class = ".$TABLE."major.id 
+			LEFT JOIN ".$ART_TABLE."major ON ".$ART_TABLE."teacher_student.major_id = ".$ART_TABLE."major.id
+			WHERE teacher_id =  '".$_SESSION['com_id']."' && year =  '".$year."' && class = '".$curr_pro_id."' && grade =4" ;
+	//echo $sql;
+	$que_sql = mysql_query($sql);
+	$fet_result = mysql_fetch_array($que_sql); 
+	$allow_num = $fet_result['value'];
  	
  	if($_POST["submit"]){
 		$ok = array();
@@ -89,7 +124,7 @@ $teacher_id = $com_id;
  	}
  	
  	 //查看当前是否可以选择学生
-	$sql = "select * from ".$TABLE."set_date where pro_id = $curr_pro_id";
+	$sql = "select * from ".$ART_TABLE."set_date where grade = 4";
 	//echo $sql;
 	$que_sql = mysql_query($sql);
 	$fet_result = mysql_fetch_array($que_sql);

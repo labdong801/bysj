@@ -12,7 +12,9 @@ include($baseDIR."/bysj/inc_head.php");
 
 $number = $com_id;
  ?>
-<script  type="text/javascript" src="upload_db.js"></script>
+ <!-- 
+<script  type="text/javascript" src="upload_db.js"></script>改成jQuery了
+-->
 <style type="text/css">
 <!--
 .align_top{vertical-align:top}
@@ -84,12 +86,22 @@ function fill_search(){
 function noinput(){
  alert("请先在下面选好题目，再点击确认选题按钮来提交题目");
 }
+
+//jQuery重新寫Ajax
+
+function upload(objID,v,w){
+	$.get("upload_db.php", { topicid: v, wish: w },
+  		function(data){
+    	//alert("Data Loaded: " + data);
+    	$("#"+objID).html(data);
+  	});
+}
 </script>
 
 <?php
    $welcomestr = '&nbsp;&nbsp;&nbsp;欢迎'.$com_from.'<b>'.$com_name. '</b>同学使用毕业选题系统'."<p>";
 
-   $sql = "select is_select, topic as t_topic, ".$TABLE."title_sort.name as t_type,meaning,request,question,
+   $sql = "select is_select, topic as t_topic, ".$ART_TABLE."title_sort.name as t_type,meaning,request,question,
                            ".$TABLE."teacher_information.name as t_name, 
                            ".$TABLE."teacher_information.officephone,
                            ".$TABLE."teacher_information.techpos,
@@ -97,9 +109,9 @@ function noinput(){
                            ".$TABLE."teacher_information. short_number,
                            ".$TABLE."teacher_information.qq_number,
                            ".$TABLE."teacher_information.email
-                  from ".$TABLE."topic,".$TABLE."teacher_information,".$TABLE."title_sort 
+                  from ".$TABLE."topic,".$TABLE."teacher_information,".$ART_TABLE."title_sort 
                   where student_number = '$number'&&year='$YEAR_C'&&".$TABLE."teacher_information.teacher_id=".$TABLE."topic.teacher_id
-                              &&".$TABLE."title_sort.id=".$TABLE."topic.type&&".$TABLE."topic.student_number=student_number&&".$TABLE."topic.verify>0&&is_select=1"; 
+                              &&".$ART_TABLE."title_sort.id=".$TABLE."topic.type&&".$TABLE."topic.student_number=student_number&&".$TABLE."topic.verify>0&&is_select=1"; 
    $qur_sql = mysql_query($sql);
    $fet_result = mysql_fetch_array($qur_sql);
    if($fet_result["is_select"]==1) {
@@ -107,8 +119,9 @@ function noinput(){
          @include($baseDIR."/bysj/inc_foot.php");
           exit;   //若课题已选中，则完成
    }
-
-   $sql = "select topic_start,topic_end,student_start,student_end,teacher_start,teacher_end from ".$TABLE."set_date where pro_id = '$com_pro_id'";
+  // 按新的时间设置方式
+   $sql = "select topic_start,topic_end,student_start,student_end,teacher_start,teacher_end from ".$ART_TABLE."set_date where grade = '4'";
+   
    $qur_sql = mysql_query($sql);
    $fet_result = mysql_fetch_array($qur_sql);
    $now = time(0);
@@ -147,7 +160,7 @@ function noinput(){
    $randseed = ceil(time(0)/7200)+($number+0)%1000;   //按学生，每2个小时的随机种子不一样
 
 echo "<tr><td colspan=2 align=left>$welcomestr</td><td rowspan=5 valign=top>";
-	 $arr = mysql_query("SELECT * FROM ".$TABLE."title_sort where open = 1 LIMIT 0 , 30");
+	 $arr = mysql_query("SELECT * FROM ".$ART_TABLE."title_sort where open = 1 LIMIT 0 , 30");
 	 echo "<table width=98% border=0 align=center>";
 	 echo "<tr><td bgColor=#5a6e8f  height=28 align=center><font color=#FFFFFF>按课题类型检索</font></td></tr>";
 	 while($array = mysql_fetch_array($arr)){
@@ -163,10 +176,10 @@ for($tmpi=1;$tmpi<4;$tmpi++){
 	if($wishn["wish"]!=$tmpi) $dd = array();
 	else $dd = $wishn;
 	    echo "<tr>
-      <td align=right><font color=blue>志愿".$tmpi."：</font></td>
+      <td align=right width=60><font color=blue>志愿".$tmpi."：</font></td>
       <td>
       <input name=wish".$tmpi." type=hidden id=wish".$tmpi." value=".($dd["id"]>0?$dd["id"]:0).">";
-      echo "<span id=here".$tmpi."><input  type=text size=60 readonly value=\"".$dd["topic"]."--".$dd["name"]."\" onMouseDown=\"noinput()\"> </span>";
+      echo "<span id=here".$tmpi."><input  type=text size=40 readonly value=\"".$dd["topic"]."--".$dd["name"]."\" onMouseDown=\"noinput()\"> </span>";
       echo "&nbsp;<input name=button".$tmpi." type=button value='确认选题' onMouseDown='submitTopic(".$tmpi.")' onClick=\"upload('here".$tmpi."',form1.wish".$tmpi.".value,'".$tmpi."')\">
 	      </td>
     </tr>";
@@ -228,7 +241,7 @@ where ".$TABLE."teacher_information.teacher_id = selecttable.teacher_id && ".$hi
 where ".$TABLE."teacher_information.teacher_id = selecttable.teacher_id && ".$hisleadnum." > selecttable.selectednum && ".$canleadflag." &&";
 
 
- $wherestr .= $TABLE."teacher_information.teacher_id = ".$TABLE."topic .teacher_id && ".$TABLE."title_sort.id = ".$TABLE."topic .type && student_number = '0'   && verify>0 &&".$TABLE."topic.year='$YEAR_C' && ".$TABLE."topic .profession REGEXP '^".$com_pro_id.",|,".$com_pro_id.",|,".$com_pro_id."$|^".$com_pro_id."$'";
+ $wherestr .= $TABLE."teacher_information.teacher_id = ".$TABLE."topic .teacher_id && ".$ART_TABLE."title_sort.id = ".$TABLE."topic .type && student_number = '0'   && verify>0 &&".$TABLE."topic.year='$YEAR_C' && ".$TABLE."topic .profession REGEXP '^".$com_pro_id.",|,".$com_pro_id.",|,".$com_pro_id."$|^".$com_pro_id."$'";
  						//所有查询的必须条件，未选定且经过审核的课题，且属于本专业的课题
  $orderbystr  = "rand($randseed)";										//缺省为随机显示符合条件记录
  if($forteacher!=""){
@@ -244,7 +257,7 @@ if($finds!=""){
 $page += 0;
 if($page < 1) $page = 1;
 $pagenums = 10 ;
-$countsql = "select count(*) as cnt from ".$TABLE."topic ,".$TABLE."teacher_information,".$TABLE."title_sort $wherestr";
+$countsql = "select count(*) as cnt from ".$TABLE."topic ,".$TABLE."teacher_information,".$ART_TABLE."title_sort $wherestr";
 $rs = mysql_query($countsql);
 $myrow = mysql_fetch_array($rs);
 $totalrows=$myrow["cnt"]; //获得符合条件的记录数
@@ -253,7 +266,7 @@ if($pages < 1) $pages = 1;
 if($page>$pages) $page = $pages; //如果超过范围，则显示最后一页
 $pagebegin = ($page - 1) * $pagenums;
 
-$sql = "select topic,".$TABLE."title_sort.name as titlename, ".$TABLE."topic .type as typeid, ".$TABLE."topic .id as topicid, ".$TABLE."teacher_information.teacher_id,".$TABLE."teacher_information.name as teachername, meaning, request, question from ".$TABLE."topic ,".$TABLE."teacher_information,".$TABLE."title_sort   $wherestr order by $orderbystr LIMIT $pagebegin, $pagenums";
+$sql = "select topic,".$ART_TABLE."title_sort.name as titlename, ".$TABLE."topic .type as typeid, ".$TABLE."topic .id as topicid, ".$TABLE."teacher_information.teacher_id,".$TABLE."teacher_information.name as teachername, meaning, request, question from ".$TABLE."topic ,".$TABLE."teacher_information,".$ART_TABLE."title_sort   $wherestr order by $orderbystr LIMIT $pagebegin, $pagenums";
 //echo $sql;
 $search = mysql_query($sql);
 $currrows = 0;

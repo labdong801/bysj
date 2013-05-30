@@ -23,7 +23,7 @@ if(!$number){
 	exit;
 }
 
-$sql = "select student.name, topic,title.name as ttype,student.mobilephone,student.tmptime as stmptime,short_number,student.email,list.name as wdname,list.address,filename1,filename2,uploader,demonstration,start_time,end_time,print_time,needdoc,paper_type,paper_num,lockit,list.year from ".$TABLE."student_sheet as student,".$TABLE."topic as topic ,".$TABLE."title_sort as title,".$TABLE."mission_list as list,".$TABLE."major as major where number = '$number' && mission_id='$mission_id'&&list.year=student.year&&title.id = topic.type && is_select=1 &&topic.student_number='$number'&& topic.teacher_id='$teacher_id'&&list.pro_id=major.id&&major.name=student.profession&&number=number";
+$sql = "select student.name, topic,title.name as ttype,student.mobilephone,student.tmptime as stmptime,short_number,student.email,list.name as wdname,list.address,filename1,filename2,uploader,demonstration,start_time,end_time,print_time,needdoc,paper_type,paper_num,lockit,list.year from ".$TABLE."student_sheet as student,".$TABLE."topic as topic ,".$ART_TABLE."title_sort as title,".$TABLE."mission_list as list,".$TABLE."major as major where number = '$number' && mission_id='$mission_id'&&list.year=student.year&&title.id = topic.type && is_select=1 &&topic.student_number='$number'&& topic.teacher_id='$teacher_id'&&list.pro_id=major.id&&major.name=student.profession&&number=number";
 //echo $sql;
 $sj_que = mysql_query($sql);
 $sj_fet = mysql_fetch_array($sj_que);

@@ -15,7 +15,7 @@ $number = $com_id;
 ?>
 
 <?php
-$sql = "select student.name,teacher.name as tname,student.tmptime as stmptime,teacher.teacher_id,teacher.mobilephone as phone,techpos  as zhicheng, topic,".$TABLE."title_sort.name as ttype from ".$TABLE."student_sheet as student,".$TABLE."topic as topic ,".$TABLE."title_sort,".$TABLE."teacher_information as teacher where number = '$number' && ".$TABLE."title_sort.id = type && is_select=1 && number = student_number&&teacher.teacher_id=topic.teacher_id";
+$sql = "select student.name,teacher.name as tname,student.tmptime as stmptime,teacher.teacher_id,teacher.mobilephone as phone,techpos  as zhicheng, topic,".$ART_TABLE."title_sort.name as ttype from ".$TABLE."student_sheet as student,".$TABLE."topic as topic ,".$ART_TABLE."title_sort,".$TABLE."teacher_information as teacher where number = '$number' && ".$ART_TABLE."title_sort.id = type && is_select=1 && number = student_number&&teacher.teacher_id=topic.teacher_id";
 $sj_que = mysql_query($sql);
 $sj_fet = mysql_fetch_array($sj_que);
 if(!$sj_fet||$sj_fet["name"]==""){

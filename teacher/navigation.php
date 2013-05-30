@@ -3,14 +3,26 @@
 <td bgColor=#4a5e7f height=28><font color=#FFFFFF>导&nbsp;&nbsp;航</font></td>
 </tr>
 <tr>
-<td><a href="check_handon.php">毕业设计题目</a></td>
+<td><a href="art_teacher_chose_grade1.php">器乐选修</a></td>
 </tr>
 <tr>
-<td><a href="select_student.php">选择学生</a></td>
+<td><a href="art_teacher_chose_grade2.php">钢琴、声乐选修</a></td>
 </tr>
 <tr>
-<td><a href="watch_my_student_all.php">指导学生一览</a></td>
+<td><a href="art_teacher_chose_grade3.php">专业主修方向选修</a></td>
 </tr>
+<tr>
+<td><a href="select_student.php">毕业设计</a></td>
+</tr>
+<tr>
+<td><a href="check_handon.php">毕业设计题目添加</a></td>
+</tr>
+<?php
+//<tr>
+//<td><a href="watch_my_student_all.php">指导学生一览</a></td>
+//</tr>
+
+?>
 <tr>
 <td><a href="suggestion.php">意见和建议</a></td>
 </tr>
@@ -24,13 +36,26 @@
 if($com_auth>=40){
 ?>
 <tr>
+<td align=left bgColor=#5a6e8f height=28><font color=#FFFFFF>&nbsp;→&nbsp;时间设置</font></td>
+</tr>
+<tr>
+<td><a href="art_grade1_set_date.php">乐器选修时间设置</a></td>
+</tr>
+<tr>
+<td><a href="art_grade2_set_date.php">钢琴、声乐时间设置</a></td>
+</tr>
+<tr>
+<td><a href="art_grade3_set_date.php">主修方向时间设置</a></td>
+</tr>
+<tr>
+<td><a href="art_grade4_set_date.php">毕业设计时间设置</a></td>
+</tr>
+
+<tr>
 <td align=left bgColor=#5a6e8f height=28><font color=#FFFFFF>&nbsp;→&nbsp;管理员功能</font></td>
 </tr>
 <tr>
 <td><a href="all_information.php">审核教师选题</a></td>
-</tr>
-<tr>
-<td><a href="set_date.php">选题阶段时间设置</a></td>
 </tr>
 <tr>
 <td><a href="view_select.php">毕设课题选择一览</a></td>

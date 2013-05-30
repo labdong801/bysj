@@ -45,7 +45,7 @@ function is_empty2(){
 <td>开启</td>
 </tr>
 <?php
- $cc = mysql_query("select * from ".$TABLE."title_sort");
+ $cc = mysql_query("select * from ".$ART_TABLE."title_sort");
  while($dd = mysql_fetch_array($cc)){
  $id = $dd["id"];
  $check = "check".$id;
@@ -73,7 +73,7 @@ if($_POST["start"]){
    }else{
      $start = 0;
    }
-  $open = mysql_query("update ".$TABLE."title_sort set open = '$start' where id = $id");
+  $open = mysql_query("update ".$ART_TABLE."title_sort set open = '$start' where id = $id");
   if($open){
     echo "<script>alert('开启成功！');history.back();</script>";
   }else{
@@ -90,7 +90,7 @@ if($_POST["start"]){
 <?php
 if($_POST["add"]){
 $name = trim($_POST["name"]);
-$cd = mysql_query("select name from ".$TABLE."title_sort");
+$cd = mysql_query("select name from ".$ART_TABLE."title_sort");
 $de = 0;
 while($dc = mysql_fetch_array($cd)){
 if($dc["name"]==$name) {
@@ -99,7 +99,7 @@ echo "<script>alert('该类别已经存在！');history.back();</script>";
 }
 }
 if($de==0){
-$sql = mysql_query("insert into ".$TABLE."title_sort(name,open) values ('$name','1')");
+$sql = mysql_query("insert into ".$ART_TABLE."title_sort(name,open) values ('$name','1')");
 if($sql){
  echo "<script>alert('类别添加成功！');history.back();</script>";
 }
@@ -110,7 +110,7 @@ if($sql){
  if($_POST["revise"]){
    $select_class = $_POST["type"];
    $new_name = $_POST["new_name"];
-   $update = mysql_query("update ".$TABLE."title_sort set name = '$new_name' where id = '$select_class'");
+   $update = mysql_query("update ".$ART_TABLE."title_sort set name = '$new_name' where id = '$select_class'");
    if($update){
     echo "<script>alert('类别修改成功！');history.back();</script>";
    }
@@ -124,7 +124,7 @@ if($sql){
  <td>
  <select name="type" id="type">
    <?php    
-	$query = mysql_query("select * from ".$TABLE."title_sort");
+	$query = mysql_query("select * from ".$ART_TABLE."title_sort");
 	  while($row = mysql_fetch_array($query)){
 	?>
   <option value="<? echo $row["id"];?>"><? echo $row["name"];?></option>

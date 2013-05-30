@@ -67,18 +67,19 @@ if($PHP_SELF != "/bysj/index.php"){
          $his_type = $_POST["histype"];
          $his_pass = $_POST["hispass"];
          if($his_type=="student") {
-         	 //$sql = "select number as his_id,password as his_pass,authority,".$TABLE."student_sheet.name,class as his_from,profession as his_pro, id as his_pro_id,year
-         	 //                   from ".$TABLE."student_sheet, ".$TABLE."major WHERE ".$TABLE."student_sheet.profession = ".$TABLE."major.name&&".$TABLE."major.type=4&&`number`='$his_id'";
+         	 $sql = "select number as his_id,password as his_pass,authority,".$TABLE."student_sheet.name,class as his_from,profession as his_pro, id as his_pro_id,year
+         	                    from ".$TABLE."student_sheet, ".$TABLE."major WHERE ".$TABLE."student_sheet.profession = ".$TABLE."major.name&&".$TABLE."major.type=4&&`number`='$his_id'";
          	 //好复杂 - -;
          	 //先不限制学院了，我都没那张表格
          	 //$TABLE是那张表格的前缀，我的不用这个
-			 $sql = "SELECT number as his_id,password as his_pass,authority,".$TABLE."student_sheet.name,class as his_from,profession as his_pro,year FROM `".$TABLE."student_sheet` WHERE `number` ='$his_id'" ;
+			 //$sql = "SELECT number as his_id,password as his_pass,authority,".$TABLE."student_sheet.name,class as his_from,profession as his_pro,year " .
+			 //		"FROM `".$TABLE."student_sheet` WHERE `number` ='$his_id'" ;
 
          } else {
          	$his_type = "teacher";
-         	//$sql = "select teacher_id as his_id, fenzu,password as his_pass, authority,".$TABLE."teacher_information.name, ".$TABLE."major.name as his_from, lead_num as his_pro_id,belong as his_pro
-         	//                    from ".$TABLE."teacher_information, ".$TABLE."major where ".$TABLE."teacher_information.belong = ".$TABLE."major.id&&".$TABLE."major.type=3&&(`teacher_id` = '$his_id'||`teacher_alias`!=''&&`teacher_alias`='$his_id')";
-			$sql = "SELECT teacher_id as his_id, fenzu,password as his_pass, authority,".$TABLE."teacher_information.name,  lead_num as his_pro_id,belong as his_pro FROM `".$TABLE."teacher_information` WHERE (`teacher_id` = '$his_id'||`teacher_alias`!=''&&`teacher_alias`='$his_id')" ;
+         	$sql = "select teacher_id as his_id, fenzu,password as his_pass, authority,".$TABLE."teacher_information.name, ".$TABLE."major.name as his_from, lead_num as his_pro_id,belong as his_pro
+         	                   from ".$TABLE."teacher_information, ".$TABLE."major where ".$TABLE."teacher_information.belong = ".$TABLE."major.id&&".$TABLE."major.type=3&&(`teacher_id` = '$his_id'||`teacher_alias`!=''&&`teacher_alias`='$his_id')";
+			//$sql = "SELECT teacher_id as his_id, fenzu,password as his_pass, authority,".$TABLE."teacher_information.name,  lead_num as his_pro_id,belong as his_pro FROM `".$TABLE."teacher_information` WHERE (`teacher_id` = '$his_id'||`teacher_alias`!=''&&`teacher_alias`='$his_id')" ;
 			//echo $sql;
 		}
 
@@ -109,7 +110,7 @@ if($PHP_SELF != "/bysj/index.php"){
 	         $_SESSION['com_pro_num'] = $tmp_fetch["his_pro_id"];  //专业id,我没获取
 			 $_SESSION['grade']       = (date("Y",mktime(0,0,0,date("m")-8,1,date("Y")))-intval(substr($_SESSION['com_id'],0,2))-2000)+1;; //年级
 
-	         /*好麻烦啊，大概是判断专业分组之类的
+	         //好麻烦啊，大概是判断专业分组之类的
              if($his_type!="student"){
              	   $get_id_num  = explode(",",$tmp_fetch["his_pro_id"]);
              	   $pro_list = "";
@@ -131,7 +132,7 @@ if($PHP_SELF != "/bysj/index.php"){
              if($referer!=""){
              	echo "<META HTTP-EQUIV=REFRESH CONTENT='0;URL=$referer'>";
             }
-            */
+            
          } else {
          	$err_show = true;
          	$err_msg = "密码错误！".$tmp_fetch["his_pass"];
@@ -243,7 +244,7 @@ if($com_online){
       				"/bysj/student/grade1.php",
       				"/bysj/student/grade2.php",
       				"/bysj/student/grade3.php",
-      				"#",
+      				"/bysj/student/selecttitle.php",
       				//"/bysj/filems/student/mygroup.php",
       				);
       		} else {//教师看到的菜单
@@ -257,6 +258,10 @@ if($com_online){
       				"毕业设计",
       				);
       			$xturl = array(
+      				"/bysj/teacher/art_teacher_chose_grade1.php",
+      				"/bysj/teacher/art_teacher_chose_grade2.php",
+      				"/bysj/teacher/art_teacher_chose_grade3.php",
+      				"#",	
       				//"/bysj/teacher/check_handon.php",
       				//"/bysj/filems/teacher/teacher_m.php",
       				//"/bysj/filems/teacher/examine1.php",
@@ -364,7 +369,7 @@ if(($YM_PT=="文档系统"||$YM_PT=="答辩系统")&&$com_type=="teacher"){
 if($YM_DH){
    echo "<td height=31 width=148 valign=top>";
    if($YM_PT=="答辩系统")   @include("navigation2.php");
-   else if($YM_PT=="全局设定") @include("art_setting_navigation.php");
+  // else if($YM_PT=="全局设定") @include("art_setting_navigation.php");
    else    @include("navigation.php");
 
    echo "</td>";

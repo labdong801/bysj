@@ -46,7 +46,7 @@ if($doit =="clear"&&$mm=="qingkong") {
 
 if($doit=="input"&&$mm=="daoru")  {
       $sql = "select topic,student_number,topic .teacher_id as tid, teacher.name as tname, teacher.techpos as tpos, sort.name as typename,student_pro_id
-                  from ".$TABLE."topic as topic ,".$TABLE."student_sheet as student,".$TABLE."title_sort as sort, ".$TABLE."teacher_information as teacher
+                  from ".$TABLE."topic as topic ,".$TABLE."student_sheet as student,".$ART_TABLE."title_sort as sort, ".$TABLE."teacher_information as teacher
                   where student.number=topic .student_number &&topic.teacher_id=teacher.teacher_id&&is_select = 1 &&topic.year=$CURR_YEAR
                   &&student_pro_id=$CURR_PID && sort.id = topic .type order by student.number";
       $ab = mysql_query($sql);  

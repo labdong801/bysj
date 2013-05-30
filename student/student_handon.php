@@ -115,7 +115,7 @@ function is_empty(){
       <td>
 	  <select name="type" id="type">
        <?php
-	   $query = mysql_query("select * from ".$TABLE."title_sort");
+	   $query = mysql_query("select * from ".$ART_TABLE."title_sort");
 	   while($row = mysql_fetch_array($query)){
 	   if($row["open"]==1){
 	   ?>

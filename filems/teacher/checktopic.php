@@ -39,7 +39,7 @@ $teacher_id = $com_id;
       	 $all_doc[$madata["mission_id"]][$madata["student_id"]]["filename"] = $madata["filename"];
       	 $all_doc[$madata["mission_id"]][$madata["student_id"]]["first_upload"] = $madata["first_upload"];
     }
-   $sql = "select topic,student_number,class,".$TABLE."student_sheet.name as sname,".$TABLE."teacher_information.name as tname, ".$TABLE."topic .teacher_id as tid,".$TABLE."topic .id as did, ".$TABLE."title_sort.name as typename from ".$TABLE."topic ,".$TABLE."teacher_information,".$TABLE."student_sheet,".$TABLE."title_sort where ".$TABLE."student_sheet.number=".$TABLE."topic .student_number && ".$TABLE."teacher_information.teacher_id = ".$TABLE."topic .teacher_id && is_select = 1  && ".$TABLE."title_sort.id = ".$TABLE."topic .type&& ".$TABLE."topic.year=$CURR_YEAR   order by ".$TABLE."topic .teacher_id, ".$TABLE."student_sheet.number";
+   $sql = "select topic,student_number,class,".$TABLE."student_sheet.name as sname,".$TABLE."teacher_information.name as tname, ".$TABLE."topic .teacher_id as tid,".$TABLE."topic .id as did, ".$ART_TABLE."title_sort.name as typename from ".$TABLE."topic ,".$TABLE."teacher_information,".$TABLE."student_sheet,".$ART_TABLE."title_sort where ".$TABLE."student_sheet.number=".$TABLE."topic .student_number && ".$TABLE."teacher_information.teacher_id = ".$TABLE."topic .teacher_id && is_select = 1  && ".$ART_TABLE."title_sort.id = ".$TABLE."topic .type&& ".$TABLE."topic.year=$CURR_YEAR   order by ".$TABLE."topic .teacher_id, ".$TABLE."student_sheet.number";
    $ab = mysql_query($sql);  
    $schedule = array();
    $tcnt = array();

@@ -52,7 +52,7 @@ if($seeall!="yeah") $seeall = "";
       	 $all_doc[$madata["mission_id"]][$madata["student_id"]]["filename"] = $madata["filename"];
       	 $all_doc[$madata["mission_id"]][$madata["student_id"]][$timestr] = $madata[$timestr];
     }
-   $sql = "select topic,student_number,class,student.name as sname,teacher.name as tname, topic.teacher_id as tid,topic .id as did, ".$TABLE."title_sort.name as typename from ".$TABLE."topic as topic,".$TABLE."teacher_information as teacher,".$TABLE."student_sheet as student,".$TABLE."title_sort where student.number=topic.student_number && teacher.teacher_id = topic .teacher_id && is_select = 1  &&student.year=$CURR_YEAR&&student.profession='$pro_name'&& ".$TABLE."title_sort.id = topic .type  order by topic .teacher_id, student.number";
+   $sql = "select topic,student_number,class,student.name as sname,teacher.name as tname, topic.teacher_id as tid,topic .id as did, ".$ART_TABLE."title_sort.name as typename from ".$TABLE."topic as topic,".$TABLE."teacher_information as teacher,".$TABLE."student_sheet as student,".$ART_TABLE."title_sort where student.number=topic.student_number && teacher.teacher_id = topic .teacher_id && is_select = 1  &&student.year=$CURR_YEAR&&student.profession='$pro_name'&& ".$ART_TABLE."title_sort.id = topic .type  order by topic .teacher_id, student.number";
    //echo $sql;
    $ab = mysql_query($sql);  
    $currrows = 0;

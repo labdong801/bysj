@@ -85,7 +85,7 @@ if($see=="nextid"){
 <td>
 <?php 
  $type_id = $row["type"]; 
- $aa = mysql_query("select name from ".$TABLE."title_sort where id = '$type_id'");
+ $aa = mysql_query("select name from ".$ART_TABLE."title_sort where id = '$type_id'");
  $bb = mysql_fetch_array($aa);
  echo $bb[name];
 ?>

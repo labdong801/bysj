@@ -50,7 +50,7 @@ $teacher_id = $com_id;
       <td align=right>¿‡–Õ£∫</td>
       <td><select name="type">
        <?php
-	   $query = mysql_query("select * from ".$TABLE."title_sort");
+	   $query = mysql_query("select * from ".$ART_TABLE."title_sort");
 	   while($row = mysql_fetch_array($query)){
 	   if($array["type"]==$row["id"]){
 	   ?>

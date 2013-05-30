@@ -35,7 +35,7 @@ if($old_topic_id) $str = "修改";
 else $str = "新增";
 if($cnt) $str .= "成功";
 else $str .= "失败";
-echo "<input  type=text size=60 value='【".$str."】".$nowresult["topic"]."--".$nowresult["name"]."' onMouseDown='noinput()'>";
+echo "<input  type=text size=40 value='【".$str."】".$nowresult["topic"]."--".$nowresult["name"]."' onMouseDown='noinput()'> ";
 
 mysql_close($link);
 ?>

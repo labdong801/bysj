@@ -60,7 +60,7 @@ if($select_year<$YEAR_S) $select_year = $CURR_YEAR;
       	 $all_doc[$madata["mission_id"]][$madata["student_id"]]["filename"] = $madata["filename"];
       	 $all_doc[$madata["mission_id"]][$madata["student_id"]]["first_upload"] = $madata["first_upload"];
     }
-   $sql = "select topic,student_number,class,student.name as sname,teacher.name as tname, topic.teacher_id as tid, teacher.techpos as tpos,title.name as typename from ".$TABLE."topic as topic,".$TABLE."teacher_information as teacher,".$TABLE."student_sheet as student,".$TABLE."title_sort  as title where student.number=topic.student_number && teacher.teacher_id = topic.teacher_id && is_select = 1 && title.id = topic.type&&student.year='$select_year'&&student_pro_id='$curr_pro_id' order by student.number";
+   $sql = "select topic,student_number,class,student.name as sname,teacher.name as tname, topic.teacher_id as tid, teacher.techpos as tpos,title.name as typename from ".$TABLE."topic as topic,".$TABLE."teacher_information as teacher,".$TABLE."student_sheet as student,".$ART_TABLE."title_sort  as title where student.number=topic.student_number && teacher.teacher_id = topic.teacher_id && is_select = 1 && title.id = topic.type&&student.year='$select_year'&&student_pro_id='$curr_pro_id' order by student.number";
    $ab = mysql_query($sql);  
    $schedule = array();
    $tcnt = array();
