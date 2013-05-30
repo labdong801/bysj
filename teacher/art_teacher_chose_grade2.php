@@ -59,8 +59,11 @@ $teacher_id = $com_id;
 	       @include($baseDIR."/bysj/inc_foot.php");
 	       exit;
 	   } else if($now>=$fet_result["teacher_start"]&&$now<=$fet_result["teacher_end"]){
-	   	  // $show_message = "目前处于教师选学生阶段，暂不能更改选修情况。";
-		   $can_select = true;
+	   	  // 本学年的才可以修改
+	   	  if($year == date("Y",mktime(0,0,0,date("m")-8,1,date("Y"))) )
+		   	$can_select = true;
+		  else
+		  	$can_select = false;
 	   } else {
 		   $show_message = "对不起，现在没有选修任务。";
 		   $can_select = false;
@@ -142,7 +145,7 @@ $teacher_id = $com_id;
  	
  	if($_POST)
  	{
- 		if($can_select)
+ 		if(!$can_select)
  		{
  			Show_Message("非选题阶段。<br>
 	           如要修改，请联系管理员，谢谢。");
