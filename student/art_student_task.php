@@ -11,70 +11,104 @@ $YM_DH = 1; //需要导航条
 $YM_QX = 1; //管理员权限
 include($baseDIR."/bysj/inc_head.php");
 $student_id = $com_id;
-$Grade=$grade-3;
-echo $student_id;
-$SQL="SELECT finally, teacher, profession, art_major.name, bysj_major.id, art_teacher_task . * ,
-STATUS FROM `art_instrument_student_select`
+$Grade=$grade-1;
+if($Grade>4)
+{
+	$Grade=4;
+}
+
+ if($_GET['select_year'])
+ {
+ 	$year = $_GET['select_year'];
+ }
+ else
+ {
+ 	$year = date("Y",mktime(0,0,0,date("m")-8,1,date("Y"))); //
+ 	/*
+ 	 * 本学期年份 （当前年份减8个月）
+ 	 * eg:
+ 	 * 现在是 2013年6月 ，属于2012学年第二个期。所以 $art_select_year = 2012
+ 	 * 现在是2013年9月，属于2013年第一学期。所以$art_select_year =2013
+ 	 * */
+ }
+//echo $student_id;
+
+//查询 1
+$SQL="SELECT finally, teacher, profession, art_major.name, bysj_major.id, art_teacher_task . *
+FROM `art_instrument_student_select`
 LEFT JOIN bysj_student_sheet ON number = student_number
 LEFT JOIN art_major ON art_major.id = finally
 LEFT JOIN bysj_major ON profession = bysj_major.name
 LEFT JOIN art_teacher_task ON art_teacher_task.class = bysj_major.id && year_task = art_instrument_student_select.year && teacher_task = art_instrument_student_select.teacher && finally = art_teacher_task.major_id
-LEFT JOIN art_student_task ON art_student_task.classes = art_teacher_task.class && art_student_task.year = art_teacher_task.year_task && teacher_id = art_teacher_task.teacher_task && art_teacher_task.major_id = art_student_task.major_id && art_teacher_task.task_id = art_student_task.task_id
-WHERE student_number = '$student_id'";
- //echo $Grade;
+WHERE student_number = '$student_id' ";
 
-
-
-
-
-
-/*
- *
- *
- *
- *
-$SQL="SELECT finally, teacher, profession, art_major.name, bysj_major.id, art_teacher_task . * ,
-STATUS FROM `art_instrument_student_select`
+//任务上交 1
+$SQL2="SELECT finally, profession, art_major.name, bysj_major.id, art_teacher_task . * ,
+status FROM `art_instrument_student_select`
 LEFT JOIN bysj_student_sheet ON number = student_number
 LEFT JOIN art_major ON art_major.id = finally
 LEFT JOIN bysj_major ON profession = bysj_major.name
 LEFT JOIN art_teacher_task ON art_teacher_task.class = bysj_major.id && year_task = art_instrument_student_select.year && teacher_task = art_instrument_student_select.teacher && finally = art_teacher_task.major_id
-LEFT JOIN art_student_task ON art_student_task.classes = bysj_major.id && art_student_task.year = art_instrument_student_select.year && teacher_id = art_instrument_student_select.teacher && finally = art_student_task.major_id
-WHERE student_number = '$student_id'";
-if($_GET[sel]==3)
-{
-$SQL="SELECT student_number,finally,art_teacher_task.*,status,art_major.name FROM art_major_student_select LEFT JOIN art_teacher_task ON art_teacher_task.major_id=art_major_student_select.finally LEFT JOIN art_student_task ON art_major_student_select.finally=art_student_task.major_id LEFT JOIN art_major ON art_major.id=art_major_student_select.finally where art_major_student_select.student_number='$student_id' && art_teacher_task.year='$Grade' && art_student_task.status='0' order by  art_teacher_task.task_id desc";
+LEFT JOIN art_student_task ON art_student_task.classes = art_teacher_task.class && art_student_task.year = art_teacher_task.year_task && teacher_id = art_teacher_task.teacher_task && art_teacher_task.major_id = art_student_task.major_id && art_teacher_task.task_id = art_student_task.task_id && student_num=number
+WHERE student_number = '$student_id'&& art_teacher_task.grade='$Grade' && art_teacher_task.year_task='$year' ";
+//查询2
+$SQL3="SELECT art_vocalmusic_student_select.student_number,vocalmusic_finally ,piano_finally ,art_teacher_task.* ,profession,art_major.name
+FROM `art_vocalmusic_student_select`
+LEFT JOIN bysj_student_sheet ON number = student_number
+LEFT JOIN art_teacher_task ON art_teacher_task.year_task=art_vocalmusic_student_select.year &&
+(art_teacher_task.teacher_task=art_vocalmusic_student_select.piano_finally ||art_teacher_task.teacher_task=art_vocalmusic_student_select.vocalmusic_finally)
+LEFT JOIN art_major ON art_major.id = art_teacher_task.major_id
+LEFT JOIN bysj_major ON profession = bysj_major.name
+where student_number='$student_id'&& art_teacher_task.grade='$Grade' ";
+//任务2
+$SQL4="SELECT art_vocalmusic_student_select.student_number,vocalmusic_finally ,piano_finally ,art_teacher_task.* ,profession,art_major.name,status
+FROM `art_vocalmusic_student_select`
+LEFT JOIN bysj_student_sheet ON number = student_number
 
-}
-else if($_GET[sel]==4)
-{
-$SQL="SELECT student_number,finally,art_teacher_task.*,status,art_major.name FROM art_major_student_select LEFT JOIN art_teacher_task ON art_teacher_task.major_id=art_major_student_select.finally LEFT JOIN art_student_task ON art_major_student_select.finally=art_student_task.major_id LEFT JOIN art_major ON art_major.id=art_major_student_select.finally where art_major_student_select.student_number='$student_id' && art_student_task.status='1' order by  art_teacher_task.task_id desc";
+LEFT JOIN art_teacher_task ON art_teacher_task.year_task=art_vocalmusic_student_select.year &&
+(art_teacher_task.teacher_task=art_vocalmusic_student_select.piano_finally ||art_teacher_task.teacher_task=art_vocalmusic_student_select.vocalmusic_finally)
+LEFT JOIN art_student_task ON art_student_task.classes = art_teacher_task.class && art_student_task.year = art_teacher_task.year_task && teacher_id = art_teacher_task.teacher_task && art_teacher_task.major_id = art_student_task.major_id && art_teacher_task.task_id = art_student_task.task_id && student_num=number
+LEFT JOIN art_major ON art_major.id = art_teacher_task.major_id
+LEFT JOIN bysj_major ON profession = bysj_major.name
+where student_number='$student_id'&& art_teacher_task.grade='$Grade' && art_teacher_task.year_task='$year' ";
 
-}
-else if($_GET[sel]==2)
-{
-	$SQL="SELECT student_number,finally,art_teacher_task.*,status,art_major.name FROM art_major_student_select LEFT JOIN art_teacher_task ON art_teacher_task.major_id=art_major_student_select.finally LEFT JOIN art_student_task ON art_major_student_select.finally=art_student_task.major_id LEFT JOIN art_major ON art_major.id=art_major_student_select.finally where art_major_student_select.student_number='$student_id' && art_teacher_task.year='$Grade' order by  art_teacher_task.task_id desc";
+//查询3
+$SQL5="SELECT finally, teacher, profession, art_major.name, bysj_major.id, art_teacher_task . *
+FROM `art_major_student_select`
+LEFT JOIN bysj_student_sheet ON number = student_number
+LEFT JOIN art_major ON art_major.id = finally
+LEFT JOIN bysj_major ON profession = bysj_major.name
+LEFT JOIN art_teacher_task ON art_teacher_task.class = bysj_major.id && year_task = art_major_student_select.year && teacher_task = art_major_student_select.teacher && finally = art_teacher_task.major_id
+WHERE student_number = '$student_id'&& art_teacher_task.grade='$Grade'";
 
-}
-else
+//任务上交 3
+$SQL6="SELECT finally, profession, art_major.name, bysj_major.id, art_teacher_task . * ,
+status FROM `art_major_student_select`
+LEFT JOIN bysj_student_sheet ON number = student_number
+LEFT JOIN art_major ON art_major.id = finally
+LEFT JOIN bysj_major ON profession = bysj_major.name
+LEFT JOIN art_teacher_task ON art_teacher_task.class = bysj_major.id && year_task = art_major_student_select.year && teacher_task = art_major_student_select.teacher && finally = art_teacher_task.major_id
+LEFT JOIN art_student_task ON art_student_task.classes = art_teacher_task.class && art_student_task.year = art_teacher_task.year_task && teacher_id = art_teacher_task.teacher_task && art_teacher_task.major_id = art_student_task.major_id && art_teacher_task.task_id = art_student_task.task_id && student_num=number
+WHERE student_number = '$student_id'&& art_teacher_task.grade='$Grade' && art_teacher_task.year_task='$year' ";
+if(!$_GET[grade])
 {
-	$SQL="SELECT student_number,finally,art_teacher_task.*,status,art_major.name FROM art_major_student_select LEFT JOIN art_teacher_task ON art_teacher_task.major_id=art_major_student_select.finally LEFT JOIN art_student_task ON art_major_student_select.finally=art_student_task.major_id LEFT JOIN art_major ON art_major.id=art_major_student_select.finally where art_major_student_select.student_number='$student_id' && art_teacher_task.year='$Grade' order by  art_teacher_task.task_id desc";
-}
-*/
 if($Grade==1)
 {
+	$SQL.="&& art_teacher_task.year_task='$year' && art_teacher_task.grade='$Grade'";
 	if($_GET[sel]==3)
   {
-  $SQL.=" && status='0' order by task_id desc";
+  $SQL.="   &&  order by task_id desc";
   }
   else if($_GET[sel]==4)
  {
-  $SQL.=" && status='1' order by task_id desc"	;
+  $SQL=$SQL2;
+  $SQL.="&& status='1' order by task_id desc";
 
  }
  else if($_GET[sel]==2)
  {
- 	$SQL.=" order by ".$ART_TABLE."student_task.status asc";
+ 	$SQL.=" order by ".$ART_TABLE."teacher_task.task_id desc";
+
  }
  else if($_GET[content_id])
  {
@@ -82,17 +116,105 @@ if($Grade==1)
  }
  else if(!empty($_GET[sj]))
  {
- 	$SQL.=" && ".$ART_TABLE."teacher_task.task_id='$_GET[sj]' order by status desc";
- }
- else if($_GET[grade]==1)
- {
-   $SQL.=" order by task_id desc ";
+ 	$SQL.=" && ".$ART_TABLE."teacher_task.task_id='$_GET[sj]' order by task_id desc";
  }
  else
  {
  	$SQL.=" order by task_id desc ";
  }
   $result=mysql_query($SQL);
+}
+
+
+
+else if($Grade==2)
+{
+	$SQL=$SQL3;
+	$SQL.="&& art_teacher_task.year_task='$year' && art_teacher_task.grade='$Grade'";
+	if($_GET[sel]==3)
+  {
+   $SQL.=" &&  order by task_id desc";
+  }
+  else if($_GET[sel]==4)
+ {
+  $SQL=$SQL4;
+  $SQL.="&& status='1' order by task_id desc";
+
+ }
+ else if($_GET[sel]==2)
+ {
+ 	$SQL.=" order by ".$ART_TABLE."teacher_task.task_id desc ";
+
+ }
+ else if($_GET[content_id])
+ {
+ 	 $SQL.=" && ".$ART_TABLE."teacher_task.task_id='$_GET[content_id]'";
+ }
+ else if(!empty($_GET[sj]))
+ {
+ 	$SQL.=" && ".$ART_TABLE."teacher_task.task_id='$_GET[sj]' order by task_id desc";
+ }
+ else
+ {
+ 	$SQL.=" order by task_id desc ";
+ }
+  $result=mysql_query($SQL);
+}
+
+else if($Grade==3)
+{
+	$SQL=$SQL5;
+	$SQL.="&& art_teacher_task.year_task='$year' && art_teacher_task.grade='$Grade'";
+	if($_GET[sel]==3)
+  {
+   $SQL.=" &&  order by task_id desc";
+  }
+  else if($_GET[sel]==4)
+ {
+  $SQL=$SQL6;
+  $SQL.=" && status='1' order by task_id desc";
+
+ }
+ else if($_GET[sel]==2)
+ {
+ 	$SQL.=" order by ".$ART_TABLE."teacher_task.task_id desc";
+
+ }
+ else if($_GET[content_id])
+ {
+ 	 $SQL.=" && ".$ART_TABLE."teacher_task.task_id='$_GET[content_id]'";
+ }
+ else if(!empty($_GET[sj]))
+ {
+ 	$SQL.=" && ".$ART_TABLE."teacher_task.task_id='$_GET[sj]' order by task_id desc";
+ }
+
+ else
+ {
+   $SQL.=" order by task_id desc ";
+ }
+
+  $result=mysql_query($SQL);
+}
+}
+else
+{
+	if($_GET[grade]==1)
+  {
+     $SQL=$SQL;
+  }
+  else if($_GET[grade]==2)
+  {
+  	$SQL=$SQL3;
+  }
+  else if($_GET[grade]==3)
+  {
+  	$SQL=$SQL5;
+  }
+ // echo $_GET[grade];
+  $SQL.=" && art_teacher_task.grade='$_GET[grade]' order by task_id desc ";
+ $result=mysql_query($SQL);
+
 }
 ?>
 
@@ -120,7 +242,6 @@ if($_GET[sel]!=2 and empty($_GET[sj]))
 <?php
 if($_GET[content_id])
 {
-// $SQL1="SELECT student_number,finally,art_teacher_task.*,status,art_major.name FROM art_major_student_select LEFT JOIN art_teacher_task ON art_teacher_task.major_id=art_major_student_select.finally LEFT JOIN art_student_task ON art_major_student_select.finally=art_student_task.major_id LEFT JOIN art_major ON art_major.id=art_major_student_select.finally where art_teacher_task.task_id='$_GET[content_id]'";
 
 
  $row=mysql_fetch_array($result);
@@ -141,7 +262,7 @@ else{
 ?>
 
 <table  width="800" border="1" align="center" bordercolor=#000000  cellpadding="3">
-<tr><td style="font-size:16px;">课程名称</td><td style="font-size:16px;">任务名称</td><td style="font-size:16px;">任务时间</td><td style="font-size:16px;">任务内容</td><td style="font-size:16px;" align="center">是否上交</td></tr>
+<tr><td style="font-size:16px;" align="center">班级</td><td style="font-size:16px;">课程名称</td><td style="font-size:16px;">任务名称</td><td style="font-size:16px;">任务时间</td><td style="font-size:16px;">任务内容</td></tr>
 <?php
 
 
@@ -152,11 +273,12 @@ if($result)
 
    	?>
   <tr>
+  <td width="10%" align="center"><?echo $row[profession]?></td>
   <td width="10%"><?php echo $row[name];?></a></td>
   <td width="15%"><a href="?content_id=<?php echo $row[task_id]?>"><?php echo $row[title];?></a></td>
   <td width="30%"><?php echo $row['start_time']."----".$row['end_time']?></td>
   <td width="35%"><a href="?content_id=<?php echo $row[task_id]?>"><?php echo $row[content];?></a></td>
-  <td width="10%" align="center"><?php if($row[STATUS]==0){echo "否"; }else{echo "是";} ?></td>
+
   </tr>
    	<?
    }
@@ -182,8 +304,12 @@ if(!empty($_GET[sj]))
   $row=mysql_fetch_array($result);
   $title=$row[title];
   $t_id=$row[task_id];
-  $status=$row[STATUS];
 
+  $major=$row[major_id];
+  $grade_id=$row[grade];
+  $classes=$row['class'];
+  $years=$row['year_task'];
+  $teacher=$row['teacher_task'];
 ?>
 
 	<?
@@ -198,16 +324,29 @@ else{
 <?php
 if($result)
  {
+
    while($row=mysql_fetch_array($result))
    {
 
+    $sl="select task_id from ".$ART_TABLE."student_task where task_id='$row[task_id]'";
+ 	 $ss=mysql_query($sl);
+ 	 $arr=mysql_fetch_array($ss);
+ 	 //判断是否上交
+ 	 if(!empty($arr))
+ 	 {
+ 	 	$st=1;
+ 	 }
+ 	 else
+ 	 {
+ 	 	$st=0;
+ 	 }
    	?>
   <tr>
   <td width="10%"><?php echo $row[name];?></a></td>
   <td width="15%"><a href="?content_id=<?php echo $row[task_id]?>"><?php echo $row[title];?></a></td>
   <td width="30%"><?php echo $row['start_time']."----".$row['end_time']?></td>
   <td width="30%"><a href="?content_id=<?php echo $row[task_id]?>"><?php echo $row[content];?></a></td>
-  <td width="10%" align="center"><?if ($row['STATUS']==0){ echo "否";}else{ echo "是";}?></td>
+  <td width="10%" align="center"><?if ($st==1){ echo "是";}else{ echo "否";}?></td>
   <td width="15%" align="center"><a href="?sj=<?php echo $row[task_id]?>">上交</td>
   </tr>
    	<?
@@ -275,8 +414,11 @@ if($_SERVER['REQUEST_METHOD']=='POST')
      	exit;
      }
 
-     $tt="UPDATE ".$ART_TABLE."student_task SET file_name='$name',status='1' WHERE task_id='$_POST[task_id]'";
-      echo $tt;
+   $tt="insert into ".$ART_TABLE."student_task(major_id,classes,task_id,file_name,status,year,teacher_id,sd_grade,student_num)"."" .
+   		"values('$_POST[major_id]','$_POST[classes]','$_POST[task_id]','$name','1','$_POST[years]','$_POST[teacher_id]','$_POST[grade_id]','$student_id')";
+
+    // $tt="UPDATE ".$ART_TABLE."student_task SET file_name='$name',status='1' WHERE task_id='$_POST[task_id]'";
+     // echo $tt;
       $query1=mysql_query($tt);
      if($query1)
      {

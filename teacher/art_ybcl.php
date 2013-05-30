@@ -1,6 +1,8 @@
 <?php
 session_start();
 include("../connect_db.php");
+//echo $_POST[grade];
+
 if($_POST[value])
 {
 $sql="SELECT  art_major.name,art_major.id,art_teacher_student.teacher_id FROM `art_major`,`art_teacher_student` WHERE art_major.id=art_teacher_student.major_id && art_teacher_student.year='$_SESSION[years]' && art_teacher_student.value>0 && art_teacher_student.class='$_POST[value]' && art_teacher_student.teacher_id='$_SESSION[com_id]' ";

@@ -47,10 +47,11 @@ while($rp=mysql_fetch_array($query1))
 <?php
 if($_GET[Choice])
 {
-	?>
-	<tr>
-<td colspan="2"><label> <input type="radio" name="RadioGroup1" value="<?php echo $arr[0][id] ?>" checked="checked" <?php /*if($ZY!=23){?>checked="checked"<?} */?> id="lab1"/><?php echo $arr[0][name] ?></label>
-<label> <input type="radio" name="RadioGroup1" value="<?php echo $arr[1][id] ?>" <?php /* if($ZY==23){?>checked="checked"<?}*/?>id="lab2"/><?php echo $arr[1][name] ?></label>
+
+?>
+<tr>
+<td colspan="2"><label> <input type="radio" name="RadioGroup1" value="<?php echo $arr[0][id] ?>" checked="checked" <?php /*if($ZY!=23){?>checked="checked"<?} */?> id="lab1" /><?php echo $arr[0][name] ?></label>
+<label> <input type="radio" name="RadioGroup1" value="<?php echo $arr[1][id] ?>" <?php /* if($ZY==23){?>checked="checked"<?}*/?>id="lab2" /><?php echo $arr[1][name] ?></label>
 </td>
 </tr>
 <?
@@ -59,7 +60,22 @@ if($_GET[Choice])
 
 
 <tr>
+<?php if($_GET[Choice]==2)
+{
+
+?>
+<td colspan="2">
+<label> <input type="radio" name="RadioGroup2" value="1" >ÉùÀÖ</label>
+
+<label> <input type="radio" name="RadioGroup2" value="2" >¸ÖÇÙ</label>
+</td>
+<?php
+}else{
+?>
 <td colspan="2" id="pro_id"></td>
+<?php
+}
+?>
 </tr>
 
 <tr>

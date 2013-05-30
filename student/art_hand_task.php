@@ -22,5 +22,10 @@
 </td>
 </tr>
 </table>
+<input type="hidden" value="<?php echo $major ?>" name="major_id">
+<input type="hidden" value="<?php echo $classes ?>" name="classes">
 <input type="hidden" value="<?php echo $t_id ?>" name="task_id">
+<input type="hidden" value="<?php echo $years ?>" name="years">
+<input type="hidden" value="<?php echo $teacher ?>" name="teacher_id">
+<input type="hidden" value="<?php echo $grade_id ?>" name="grade_id">
 </form>
