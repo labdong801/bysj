@@ -61,6 +61,15 @@ if($com_auth>=40){
 <td><a href="view_select.php">毕设课题选择一览</a></td>
 </tr>
 <tr>
+<td><a href="art_admin_chose_grade1.php">乐器选修选择一览</a></td>
+</tr>
+<tr>
+<td><a href="art_admin_chose_grade2.php">声乐、钢琴选择一览</a></td>
+</tr>
+<tr>
+<td><a href="art_admin_chose_grade3.php">专业方向选择一览</a></td>
+</tr>
+<tr>
 <td><a href="authority.php">指导教师授权</a></td>
 </tr>
 <tr>

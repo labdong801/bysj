@@ -74,7 +74,10 @@ $teacher_id = $com_id;
 					$major          = $row['id'];
 						
 				if( $major == $row['id']  )
+				{ 
 					echo "<font><u>".$row['name']."</u></font>&nbsp;&nbsp;";
+					$class_name = $row['name'];
+				}
 				else
 					echo "<a href='art_admin_chose_grade1.php?select_year=".$year."&class=".$row['id']."' ><font color=blue><u>".$row['name']."</u></font></a>&nbsp;&nbsp;";
 				
@@ -91,28 +94,53 @@ $teacher_id = $com_id;
 
 
 <table width="800" border="1" align="center" cellpadding="3">
-<tr align=center  bgColor=#5a6e8f  height=38>
-	<td>学号</td><td ><font size=+1>学生姓名</font></td><td>选修</td><td>指导老师</td><td>备注</td>
-</tr>
+
 <?php
 
 	//$sql = "SELECT * FROM ".$ART_TABLE."instrument_student_select ORDER BY student_number ";
-	$sql = "SELECT number, ".$TABLE."student_sheet.name AS student_name, finally, teacher, profession FROM ".$ART_TABLE."instrument_student_select 
+	$sql = "SELECT number, ".$TABLE."student_sheet.name AS student_name,".$TABLE."student_sheet.class AS student_class, finally, teacher, profession FROM ".$ART_TABLE."instrument_student_select 
 		LEFT JOIN ".$TABLE."student_sheet ON ".$TABLE."student_sheet.number = ".$ART_TABLE."instrument_student_select.student_number 
 		LEFT JOIN ".$TABLE."major ON ".$TABLE."major.name = ".$TABLE."student_sheet.profession
 		WHERE ".$ART_TABLE."instrument_student_select.year = '".$year."' AND ".$TABLE."major.id = '".$major."' 
 		ORDER BY student_number";
-		//echo $sql;
+		//echo $sql."<br>";
 	$query = mysql_query($sql);
-	while($row = mysql_fetch_array($query))
-	{
-		echo "<tr height = 35><td>".$row['number']."</td><td>".$row['student_name']."</td><td width='120'>".major($row['finally'],$row['number'])."</td><td width='120'><span id='t".$row['number']."'>".teacher($row['teacher'],$row['finally'],$major,$year)."</span></td><td></td></tr>";
+	$unselected = 0;
+	if($select_count = mysql_num_rows($query))
+	{ 
+		
+		?>
+<tr align=center  bgColor=#5a6e8f  height=38>
+	<td>学号</td><td ><font size=+1>学生姓名</font></td><td>班级</td><td>选修</td><td>指导老师</td><td>备注</td>
+</tr>
+		
+		<?php
+		while($row = mysql_fetch_array($query))
+		{
+			$key = $row['number'];
+			if($row['finally']==0)
+				$unselected++;
+			echo "<tr height = 35><td>".$row['number']."</td><td>".$row['student_name']."</td><td>".$row['student_class']."</td><td width='120'>".major($row['finally'],$row['number'])."</td><td width='120'><span id='t".$row['number']."'>".teacher($row['teacher'],$row['finally'],$major,$year)."</span></td><td></td></tr>";
+		}
 	}
 
 ?>
 </table>
 <br>
+<?php
+	//显示总数
+	$key = floor($key /100 );
+	if($key > 0)
+	{ 
+		$sql = "SELECT * FROM ".$TABLE."student_sheet WHERE number LIKE '%".$key."%' ";
+		$query = mysql_query($sql);
+		$sum=mysql_num_rows($query);
+		echo "&nbsp;&nbsp;&nbsp;&nbsp;<b>".$class_name."共".$sum."名学生，".$select_count."名已填志愿。".$unselected."名还没被老师选上。</b>";
+	}
 
+?>
+<br>
+<br>
 </td>
 </tr>
 </table>
