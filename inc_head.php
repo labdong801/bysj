@@ -193,8 +193,9 @@ html { filter:progid:DXImageTransform.Microsoft.BasicImage(grayscale=1); }
   <td height="90">
   <table width="992" height="100%" border=0 cellpadding=0 cellspacing=0 align=center>
   <tr>
-     <td align=right background="/bysj/images/mmc1.jpg" valign=bottom>
-     <font face=ºÚÌå size=7 color=#0A2856><b><?php echo $YM_MK; ?>&nbsp;&nbsp;&nbsp;&nbsp;</b></font>
+  	<!--  <td align=right background="/bysj/images/mmc1.jpg" valign=bottom>  --> 
+     <td align=right  valign=top style="background:url('/bysj/images/logo.jpg') no-repeat;padding-top:40px"  height=200>
+     <font face=ºÚÌå size=7 color=#0A2856 ><b><?php echo $YM_MK; ?>&nbsp;&nbsp;&nbsp;&nbsp;</b></font>
      </td>
   </tr>
   </table>
