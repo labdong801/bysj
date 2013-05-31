@@ -117,7 +117,7 @@ $teacher_id = $com_id;
 		<?php
 		while($row = mysql_fetch_array($query))
 		{
-			$key = $row['number'];
+			$key = $row['number']; //用于最后统计全班有多少个人 将学号最后两位去掉，再查找有学号前面相同的学生，就能够查出同专业的学生
 			if($row['finally']==0)
 				$unselected++;
 			echo "<tr height = 35><td>".$row['number']."</td><td>".$row['student_name']."</td><td>".$row['student_class']."</td><td width='120'>".major($row['finally'],$row['number'])."</td><td width='120'><span id='t".$row['number']."'>".teacher($row['teacher'],$row['finally'],$major,$year)."</span></td><td></td></tr>";
@@ -129,7 +129,7 @@ $teacher_id = $com_id;
 <br>
 <?php
 	//显示总数
-	$key = floor($key /100 );
+	$key = floor($key /10000 );
 	if($key > 0)
 	{ 
 		$sql = "SELECT * FROM ".$TABLE."student_sheet WHERE number LIKE '%".$key."%' ";
