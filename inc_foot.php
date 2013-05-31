@@ -21,7 +21,7 @@
    <TABLE WIDTH=100% border=0 cellpadding=0 cellspacing=0 align=center>
    <tr>
       <td align=center height=28>
-   &copy; 2009-<?php echo date("Y");?> 广东石油化工学院 计算机与电子信息学院 <a href=http://www.dianxinxi.cn>WWW.DianXinXi.CN</a>
+   &copy; 2012-<?php echo date("Y");?> 广东石油化工学院 计算机与电子信息学院 <a href=http://www.dianxinxi.cn>www.yishuxi.cn</a>
       </td>
    </tr>
 </TABLE>

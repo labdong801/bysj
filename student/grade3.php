@@ -3,9 +3,9 @@ $self= $PHP_SELF;
 $filename = $_SERVER["SCRIPT_FILENAME"];
 $loc= strpos($filename,$self);
 $baseDIR = substr($filename,0,$loc);
-$YM_ZT = "器乐选修";
-$YM_ZT2 = "查看器乐选修情况";
-$YM_MK = "器乐选修";
+$YM_ZT = "专业方向选修";
+$YM_ZT2 = "查看专业方向选修情况";
+$YM_MK = "艺术系课程双向选择系统";
 $YM_DH = 1; //需要导航条
 $YM_QX = 1; //本页访问需要权限：普通学生
 include($baseDIR."/bysj/inc_head.php");

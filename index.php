@@ -16,8 +16,8 @@ $filename = $_SERVER["SCRIPT_FILENAME"];
 $loc= strpos($filename,$self);
 $baseDIR = substr($filename,0,$loc);
 
-$YM_ZT = "艺术系双选系统登录";
-$YM_MK = "艺术系双选系统";
+$YM_ZT = "艺术系课程双向选择系统登录";
+$YM_MK = "艺术系课程双向选择系统";
 $YM_DH = 0; //不需要导航条
 $YM_QX = 0; //本页访问需要权限
 

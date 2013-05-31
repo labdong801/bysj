@@ -5,7 +5,7 @@ $loc= strpos($filename,$self);
 $baseDIR = substr($filename,0,$loc);
 $YM_ZT = "查看毕设候选课题";
 $YM_ZT2 = "查看选择毕业设计（论文）课题";
-$YM_MK = "毕业设计双向选题系统";
+$YM_MK = "艺术系课程双向选择系统";
 $YM_DH = 1; //需要导航条
 $YM_QX = 1; //本页访问需要权限：普通学生
 include($baseDIR."/bysj/inc_head.php");
