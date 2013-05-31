@@ -158,11 +158,19 @@ function show_menu(){
                      "联系方式"=>"/bysj/student/student_contact.php",
                      "修改密码"=>"/bysj/change_password.php",
                      );
-            }else {
+            }else if($com_auth>=90){  //管理员
+            	$cylj = array(
+                     "文档系统"=>"#",
+                     "时间设置"=>"/bysj/teacher/art_grade1_set_date.php",
+                     "选课一览"=>"/bysj/teacher/art_admin_chose_grade1.php",
+                     "审核题目"=>"/bysj/teacher/all_information.php",
+                     "个人信息"=>"/bysj/teacher/teacher_information.php",
+                     "联系方式"=>"/bysj/teacher/teacher_contact.php",
+                     );
+            }
+            else{ 
                $cylj = array(
-                     "查看选题"=>"/bysj/teacher/check_handon.php",
-                     "添加选题"=>"/bysj/teacher/hand_on.php",
-                     "选择学生"=>"/bysj/teacher/select_student.php",
+                     "文档系统"=>"#",
                      "学生一览"=>"/bysj/teacher/watch_my_student_all.php",
                      "个人信息"=>"/bysj/teacher/teacher_information.php",
                      "联系方式"=>"/bysj/teacher/teacher_contact.php",
