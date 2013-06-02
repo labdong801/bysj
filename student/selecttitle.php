@@ -127,6 +127,16 @@ function upload(objID,v,w){
    $now = time(0);
    $can_select = true;
    
+   
+   //年级限制
+   if($grade < 4)
+	{
+		Show_Message("专业方向选修只对大四学生开放。<br>
+		           感谢期待毕业设计的同学们。");
+		@include($baseDIR."/bysj/inc_foot.php");
+		exit;   //不能选题，退出
+	}
+   
    if($now>=$fet_result["student_start"]&&$now<=$fet_result["student_end"]){
    	   $can_select = true;
    } else if($now>=$fet_result["topic_start"]&&$now<=$fet_result["topic_end"]){
@@ -147,6 +157,8 @@ function upload(objID,v,w){
          @include($baseDIR."/bysj/inc_foot.php");
           exit;   //不能选题，退出
   }
+  
+  
 ?>
 
 <table width="838" align="center" border=0>
