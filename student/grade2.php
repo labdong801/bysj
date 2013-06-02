@@ -62,6 +62,11 @@ text-align:left;
 			@include($baseDIR."/bysj/inc_foot.php");
            exit;   //不能选题，退出
 	   }
+	   if($grade != 2)
+	   {
+	   		$show_message = "";
+			$can_select = false;
+	   }
 ?>
 
 <table width="838" align="center" border=0>
