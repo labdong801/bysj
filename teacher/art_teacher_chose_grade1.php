@@ -8,7 +8,7 @@ $YM_ZT2 = "乐器选修学生名单";
 $YM_MK = "艺术系课程双向选择系统";
 $YM_PT ="教师选择";
 $YM_DH = 1; //需要导航条
-$YM_QX = 90; //管理员权限
+$YM_QX = 10; //管理员权限
 include($baseDIR."/bysj/inc_head.php");
 
 
