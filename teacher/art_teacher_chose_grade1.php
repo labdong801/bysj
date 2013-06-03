@@ -116,6 +116,8 @@ $teacher_id = $com_id;
 		else
 		{
 			echo "ÔÝÎÞ";
+			echo "</td></tr>";
+			echo "</table>";
 			@include($baseDIR."/bysj/inc_foot.php");
 			exit(0);
 		}
