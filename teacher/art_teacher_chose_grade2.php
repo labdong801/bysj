@@ -118,6 +118,8 @@ $teacher_id = $com_id;
 		else
 		{
 			echo "ÔÝÎÞ";
+			echo "</td></tr>";
+			echo "</table>";
  			@include($baseDIR."/bysj/inc_foot.php");
  			exit(0);
 
@@ -134,14 +136,22 @@ $teacher_id = $com_id;
  		$row = mysql_fetch_array(mysql_query($sql));
  		$sum = $row['value'];
  	}
+ 	else
+ 	{
+ 		$sum=0;
+ 	}
  	
  	if($_GET['major_id'] ==11)
 		$instrument = "vocalmusic";
 	if($_GET['major_id'] ==12 )
 		$instrument = "piano";
 	
-	$sql = "SELECT * FROM ".$ART_TABLE."vocalmusic_student_select WHERE ".$instrument."_finally = '".$teacher_id."' AND year = '".$year."'";
+	$sql = "SELECT * FROM ".$ART_TABLE."vocalmusic_student_select 
+			LEFT JOIN ".$TABLE."student_sheet ON  ".$ART_TABLE."vocalmusic_student_select.student_number = ".$TABLE."student_sheet.number 
+			LEFT JOIN ".$TABLE."major ON ".$TABLE."student_sheet.profession = ".$TABLE."major.name  
+			WHERE ".$instrument."_finally = '".$teacher_id."' AND ".$ART_TABLE."vocalmusic_student_select.year = '".$year."' AND  ".$TABLE."major.id= '".$major."'  ";
  	$select = mysql_num_rows(mysql_query($sql));
+ 	//echo $sql;
  	
  	if($_POST)
  	{
@@ -162,11 +172,12 @@ $teacher_id = $com_id;
  		foreach ($_SESSION[$teacher_id] as $key => $value) {
  			if($value == 1) //Ìí¼Ó
  			{ 
- 				if($select <= $sum)
+ 				if($select < $sum)
  				{ 
 		 			$sql = "UPDATE  `".$ART_TABLE."vocalmusic_student_select` SET  `".$instrument."_finally` =  '".$teacher_id."'  WHERE `student_number` ='".$key."';";
 		 			//echo $sql ."<br>";
 		 			mysql_query($sql);
+		 			$select++;
  				}
  				else
  				{
