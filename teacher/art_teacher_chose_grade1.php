@@ -159,11 +159,12 @@ $teacher_id = $com_id;
  		foreach ($_SESSION[$teacher_id] as $key => $value) {
  			if($value == 1) //Ìí¼Ó
  			{ 
- 				if($select <= $sum)
+ 				if($select < $sum)
  				{ 
 		 			$sql = "UPDATE  `".$ART_TABLE."instrument_student_select` SET  `finally` =  '".$instrument."',`teacher` =  '".$teacher_id."' WHERE `student_number` ='".$key."';";
 		 			//echo $sql ."<br>";
 		 			mysql_query($sql);
+		 			$select++;
  				}
  				else
  				{
