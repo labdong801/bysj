@@ -213,7 +213,7 @@ for($tmpi=1;$tmpi<4;$tmpi++){
       }
 	  echo "</div></td>";
       //echo "<td><input name=wish".$tmpi." type=hidden id=wish".$tmpi." value=".($dd["id"]>0?$dd["id"]:0).">";
-      echo "<td align=left style='padding-left:20px;";
+      echo "<td width=550 align=left style='padding-left:20px;";
       if(($finally == $result[$tmpi] ) && ($finally > 0))
       {
       	echo "background:url(../images/instrument/finally.png) right top  no-repeat";
@@ -239,7 +239,7 @@ for($tmpi=1;$tmpi<4;$tmpi++){
       }
       else
       {
-      	echo "Î´Ñ¡Ôñ";
+      	echo "<span class='select".$tmpi."'>Î´Ñ¡Ôñ</span>";
       }
       echo "</td>";
       echo "</tr>";
@@ -349,7 +349,7 @@ if($select_flag)
 
  echo "<tr><td width=100% colspan=2 valign=top>
 
- <table width=100% border=1   cellpadding=5 bordercolor=#000000 style='margin-left:25px'>";
+ <table width=95% border=1   cellpadding=5 bordercolor=#000000 style='margin-left:25px'>";
 
  echo "<tr align=center  bgColor=#5a6e8f  height=38 align=center>
  	<td width=100></td>
