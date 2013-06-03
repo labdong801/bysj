@@ -106,11 +106,10 @@ function checkit(e){
 <table width="660" border="1" align="center"  cellpadding=5 bordercolor=#000000>
 <tr  bgColor=#5a6e8f  height=38 align=center>
 <td width="32"><font color=#FFFFFF><b>序号</b></font></td>
-<td width="100"><font color=#FFFFFF><b>教师帐号</b></font></td>
-<td width="100"><font color=#FFFFFF><b>教师姓名</b></font></td>
-<td><font color=#FFFFFF><b>指导权</b></font></td>
-<td><font color=#FFFFFF><b>权限设置</b></font></td>
-<td><font color=#FFFFFF><b>指导上限</b></font></td>
+<td><font color=#FFFFFF><b>教师帐号</b></font></td>
+<td><font color=#FFFFFF><b>教师姓名</b></font></td>
+<td width="50"><font color=#FFFFFF><b>指导权</b></font></td>
+<td width="100" ><font color=#FFFFFF ><b>权限设置</b></font></td>
 </tr>
 <?php
 $hisleadnum = "(0+mid(lead_num,instr(lead_num,',".$curr_pro_id."-')+".strlen(",".$curr_pro_id."-").",2)) as hisleadnum";
@@ -146,9 +145,7 @@ $hisleadnum = "(0+mid(lead_num,instr(lead_num,',".$curr_pro_id."-')+".strlen(","
 	}
 	echo "</select>";
 ?>
-</td>
-<td>
-<input name=lnum<? echo $tindex;?>[] type="text" size="2" maxlength=2 value="<?php echo $row["hisleadnum"];?>"/>
+<input name=lnum<? echo $tindex;?>[] type="hidden" size="2" maxlength=2 value="<?php echo $row["hisleadnum"];?>"/>
 </td>
 </tr>
 <?php
