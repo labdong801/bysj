@@ -109,7 +109,17 @@ if($PHP_SELF != "/bysj/index.php"){
              $_SESSION['com_pro'] = $tmp_fetch["his_pro"];  //专业中文名
 	         $_SESSION['com_pro_num'] = $tmp_fetch["his_pro_id"];  //专业id,我没获取
 			 $_SESSION['grade']       = (date("Y",mktime(0,0,0,date("m")-8,1,date("Y")))-intval(substr($_SESSION['com_id'],0,2))-2000)+1;; //年级
-
+			 if($_SESSION['com_type']=="student") {
+	
+				switch($_SESSION['grade'])
+				{
+					case 1:echo "<script>window.location.href='student/grade1.php';</script>";  break;
+					case 2:echo "<script language='javascript'>window.location.href='student/grade2.php';</script>";  break;
+					case 3:echo "<script language='javascript'>window.location.href='student/grade3.php';</script>";  break;
+					case 4:echo "<script language='javascript'>window.location.href='student/selecttitle.php';</script>";  break;
+					//default:echo "<script>alert();</script>";  break;
+				}
+			}
 	         //好麻烦啊，大概是判断专业分组之类的
              if($his_type!="student"){
              	   $get_id_num  = explode(",",$tmp_fetch["his_pro_id"]);
@@ -156,12 +166,15 @@ $CURR_PID		= $_SESSION['CURR_PID'];
 $com_bysj		= $_SESSION['com_bysj'];
 $com_fenzu     =$_SESSION['com_fenzu'];
 $grade          = $_SESSION['grade'];
+
+
 //大地震周年开关 - -;  选题系统这个都有。大地震载入相关CSS
 $day512 = date("md");  //四川汶川大地震 2008年5月12日
 if($day512==512) $day512 = true;
 else $day512 = false;
 if($day512) echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n";
 ?>
+<html>
 <html>
 <head>
 <title><?php echo $YM_ZT;if($com_from)echo "－".$com_from; ?></title>
