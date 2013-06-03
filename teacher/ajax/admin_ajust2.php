@@ -17,23 +17,30 @@ include($baseDIR."/bysj/connect_db.php");
 
  if($_SESSION['com_online'])
  {
- 	if($_POST['major']&&$_POST['class']&&$_POST['year'])
+// 	if($_POST['major']&&$_POST['class']&&$_POST['year'])
+// 	{
+// 		//echo mb_convert_encoding(teacher("",$_POST['major'],$_POST['class'],$_POST['year']),'gbk','utf-8');;
+// 		echo teacher("",$_POST['major'],$_POST['class'],$_POST['year']);
+// 	}
+// 	else if($_POST['major']&&isset($_POST['teacher'])&&$_POST['year']&&$_POST['student'])
+	if($_POST['major']&&isset($_POST['teacher'])&&$_POST['year']&&$_POST['student'])
  	{
- 		//echo mb_convert_encoding(teacher("",$_POST['major'],$_POST['class'],$_POST['year']),'gbk','utf-8');;
- 		echo teacher("",$_POST['major'],$_POST['class'],$_POST['year']);
- 	}
- 	else if($_POST['major']&&isset($_POST['teacher'])&&$_POST['year']&&$_POST['student'])
- 	{
+ 		if($_POST['major'] == 11)
+ 			$major = "vocalmusic";
+ 		else if($_POST['major'] == 12)
+ 			$major = "piano";
+ 		else
+ 			exit;
  		$_POST['student'] = str_replace("t","",$_POST['student']);
- 		$sql = "UPDATE  `".$ART_TABLE."instrument_student_select` SET  `finally` =  '".$_POST['major']."',
-		`teacher` =  '".$_POST['teacher']."' WHERE  `".$ART_TABLE."instrument_student_select`.`student_number` ='".$_POST['student']."';";
+ 		$sql = "UPDATE  `".$ART_TABLE."vocalmusic_student_select` SET  `".$major."_finally` =  '".$_POST['teacher']."'
+		 WHERE  `".$ART_TABLE."vocalmusic_student_select`.`student_number` ='".$_POST['student']."';";
 		mysql_query($sql);
 		//echo $sql;
  	}
  	
  	
  }
- 
+ /*
  function teacher($teacher,$major,$class,$year)
 {
 	global $ART_TABLE;
@@ -61,4 +68,6 @@ include($baseDIR."/bysj/connect_db.php");
 	}
 	return $result;
 }
+
+*/
 ?>
