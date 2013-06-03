@@ -3,8 +3,8 @@ $self= $PHP_SELF;
 $filename = $_SERVER["SCRIPT_FILENAME"];
 $loc= strpos($filename,$self);
 $baseDIR = substr($filename,0,$loc);
-$YM_ZT = "教师选择指导乐器选修的学生";
-$YM_ZT2 = "乐器选修学生名单";
+$YM_ZT = "教师选择专业方向选修的学生";
+$YM_ZT2 = "专业方向选修学生名单";
 $YM_MK = "艺术系课程双向选择系统";
 $YM_PT ="教师选择";
 $YM_DH = 1; //需要导航条
@@ -79,13 +79,15 @@ $teacher_id = $com_id;
 					$class_name = $row['name'];
 				}
 				else
-					echo "<a href='art_admin_chose_grade1.php?select_year=".$year."&class=".$row['id']."' ><font color=blue><u>".$row['name']."</u></font></a>&nbsp;&nbsp;";
+					echo "<a href='art_admin_chose_grade3.php?select_year=".$year."&class=".$row['id']."' ><font color=blue><u>".$row['name']."</u></font></a>&nbsp;&nbsp;";
 				
 			}
 		}
 		else
 		{
 			echo "暂无";
+			echo "</td></tr>";
+			echo "</table>";
 			@include($baseDIR."/bysj/inc_foot.php");
 			exit(0);
 		}
@@ -98,10 +100,10 @@ $teacher_id = $com_id;
 <?php
 
 	//$sql = "SELECT * FROM ".$ART_TABLE."instrument_student_select ORDER BY student_number ";
-	$sql = "SELECT number, ".$TABLE."student_sheet.name AS student_name,".$TABLE."student_sheet.class AS student_class, finally, teacher, profession FROM ".$ART_TABLE."instrument_student_select 
-		LEFT JOIN ".$TABLE."student_sheet ON ".$TABLE."student_sheet.number = ".$ART_TABLE."instrument_student_select.student_number 
+	$sql = "SELECT number, ".$TABLE."student_sheet.name AS student_name,".$TABLE."student_sheet.class AS student_class, finally, teacher, profession FROM ".$ART_TABLE."major_student_select  
+		LEFT JOIN ".$TABLE."student_sheet ON ".$TABLE."student_sheet.number = ".$ART_TABLE."major_student_select.student_number 
 		LEFT JOIN ".$TABLE."major ON ".$TABLE."major.name = ".$TABLE."student_sheet.profession
-		WHERE ".$ART_TABLE."instrument_student_select.year = '".$year."' AND ".$TABLE."major.id = '".$major."' 
+		WHERE ".$ART_TABLE."major_student_select.year = '".$year."' AND ".$TABLE."major.id = '".$major."' 
 		ORDER BY student_number";
 		//echo $sql."<br>";
 	$query = mysql_query($sql);
@@ -158,7 +160,7 @@ function major($id,$student)
 //		$row = mysql_fetch_array($query);
 //		$grade = $row['grade'];
 		
-		$sql = "SELECT *  FROM  `".$ART_TABLE."major` WHERE `grade` = '1' ";
+		$sql = "SELECT *  FROM  `".$ART_TABLE."major` WHERE `grade` = '3' ";
 		$query = mysql_query($sql);
 		
 		if(mysql_num_rows($query))
@@ -222,9 +224,9 @@ $(document).ready(function(){
   		//alert($(this).attr("value"));
   		var s = $(this).attr("id");
   		//alert (s);
-  		$.post("./ajax/admin_ajust1.php", { major: $(this).attr("value"), class: "<?php echo $major; ?>" , year: "<?php echo $year; ?>" },
+  		$.post("./ajax/admin_ajust3.php", { major: $(this).attr("value"), class: "<?php echo $major; ?>" , year: "<?php echo $year; ?>" },
 		   function(data){
-			     //alert("Data Loaded: " + data);
+			     alert("Data Loaded: " + data);
 			     $("#t"+s).html(data);
 			     $("#t"+s).empty();
 			     $("#t"+s).append(data);
@@ -233,7 +235,7 @@ $(document).ready(function(){
 		  		//alert($(this).attr("value"));
 		  		var s = $(this).attr("id");
 		  		var st = $(this).parent().attr("id");
-		  		$.post("./ajax/admin_ajust1.php", { teacher: $(this).attr("value"), major: $(this).attr("id") ,  student: $(this).parent().attr("id") , year: "<?php echo $year; ?> " },
+		  		$.post("./ajax/admin_ajust3.php", { teacher: $(this).attr("value"), major: $(this).attr("id") ,  student: $(this).parent().attr("id") , year: "<?php echo $year; ?> " },
 				   function(data){
 				     //alert("Data Loaded: " + data);
 				     //$("#t"+s).html(data);
@@ -247,7 +249,7 @@ $(document).ready(function(){
   		//alert($(this).attr("value"));
   		var s = $(this).attr("id");
   		var st = $(this).parent().attr("id");
-  		$.post("./ajax/admin_ajust1.php", { teacher: $(this).attr("value"), major: $(this).attr("id") ,  student: $(this).parent().attr("id") , year: "<?php echo $year; ?> " },
+  		$.post("./ajax/admin_ajust3.php", { teacher: $(this).attr("value"), major: $(this).attr("id") ,  student: $(this).parent().attr("id") , year: "<?php echo $year; ?> " },
 		   function(data){
 		     //alert("Data Loaded: " + data);
 		     //$("#t"+s).html(data);
