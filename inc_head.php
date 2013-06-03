@@ -177,6 +177,7 @@ html { filter:progid:DXImageTransform.Microsoft.BasicImage(grayscale=1); }
 <link rel="stylesheet" type="text/css" href="/bysj/images/allbig.css">
 <!-- jQuery -->
 <script language=JavaScript src=/bysj/js/jquery-1.7.1.js></script>
+<script language=JavaScript src=/bysj/js/jquery.rotate.js></script>
 <!-- 自己写的js都放在这里 -->
 <script language=JavaScript src=/bysj/js/myjs.js></script>
 

@@ -130,27 +130,7 @@ function show_menu(){
 	 global $com_pro_id;
 	 global $com_pro_num;
 	 global $com_level;
-	?>
-          <table width="200" border="0" align="center">
-            <tr align="center">
-        	  <td colspan="2" height=38><strong>您已经登录</strong></td>
-        	</tr>
-        	<tr><td align=right>姓名：</td> <td><?php echo $com_name; ?></td></tr>
-        	<tr><td align=right>单位：</td> <td><?php echo $com_from; ?></td></tr>
-        	<tr><td align=right>权限：</td> <td><?php echo $com_level[$com_auth]; ?></td></tr>
-        	<?php
-        	/*
-        	<tr><td align=right>专业：</td> <td><?php echo $com_pro; ?></td></tr>
-        	<tr><td align=right>专业ID：</td> <td><?php echo $com_pro_id; ?></td></tr>
-        	<tr><td align=right>人数：</td> <td><?php echo $com_pro_num; ?></td></tr>
-        	<tr><td align=right>ＩＤ：</td> <td><?php echo $com_id; ?></td></tr>
-        	<tr><td align=right>类别：</td> <td><?php echo $com_type; ?></td></tr>
-        	*/
-        	?>
-            <tr><td height=20>&nbsp;</td><td>&nbsp;</td></tr>
-          </table>
-          <table width="200" border="0" align="center">
-          <?php
+
           if($com_type=="student") {
                $cylj = array(
                      "查看选题"=>"/bysj/student/selecttitle.php",
@@ -176,22 +156,167 @@ function show_menu(){
                      "联系方式"=>"/bysj/teacher/teacher_contact.php",
                      );
             }
-            $i = 0;
-            while(list($k,$v) = @each($cylj)){
-            	   if($i%2==0) echo "<tr height=36 align=center>";
-                echo "<td>[<a href=".$v."><font color=blue><u>".$k."</u></font></a>]</td>";
-                if($i%2==1) echo "</tr>\n";
-                $i ++;
+            
+            
+            if($com_type=="student")
+            { 
+            ?>
+            <table width="200" border="0" align="center">
+	            <tr align="center">
+	        	  <td colspan="2" height=38><strong>您已经登录</strong></td>
+	        	</tr>
+	        	<tr><td align=right>姓名：</td> <td><?php echo $com_name; ?></td></tr>
+	        	<tr><td align=right>单位：</td> <td><?php echo $com_from; ?></td></tr>
+	        	<tr><td align=right>权限：</td> <td><?php echo $com_level[$com_auth]; ?></td></tr>
+	            <tr><td height=20>&nbsp;</td><td>&nbsp;</td></tr>
+	          </table>
+	          
+          
+        	
+        	<table width="200" border="0" align="center">
+        	<?php
+            
+	            $i = 0;
+	            while(list($k,$v) = @each($cylj)){
+	            	   if($i%2==0) echo "<tr height=36 align=center>";
+	                echo "<td>[<a href=".$v."><font color=blue><u>".$k."</u></font></a>]</td>";
+	                if($i%2==1) echo "</tr>\n";
+	                $i ++;
+	            }
+	            
+	            if($i%2==1) echo "<td>&nbsp;</td></tr>";
+	             //if($com_type=="teacher"){
+	            	echo "<tr><td colspan=2><input type=button  style='FONT: 22px arial, sans-serif bold; HEIGHT: 30px;' name=back value=进入系室工作管理系统 onclick='location.href=\"/dept\"'/></td></tr>";
+	            //}
             }
-            if($i%2==1) echo "<td>&nbsp;</td></tr>";
-             //if($com_type=="teacher"){
-            	echo "<tr><td colspan=2><input type=button  style='FONT: 22px arial, sans-serif bold; HEIGHT: 30px;' name=back value=进入系室工作管理系统 onclick='location.href=\"/dept\"'/></td></tr>";
-            //}
+            else
+            {
+            	?>
+            	<table style="margin:20px;" border="0" align="center">
+            		<tr height=130>
+            			<td width=130 style="cursor:pointer" align="center"  id="link1"><img id="grade1" src="./images/grade1.png"/></td><td width=30></td><td width=130 style="cursor:pointer" align="center"  id="link2"><img id="grade2" src="./images/grade2.png"/></td>
+            		</tr>
+            		<tr height=30>
+            			<td width=130 align="center">器乐选修</td><td width=30></td><td width=130 align="center">声乐、钢琴</td>
+            		</tr>
+            		<tr height=130>
+            			<td width=130 style="cursor:pointer" align="center"  id="link3"><img id="grade3" src="./images/grade3.png"/></td><td width=30></td><td width=130 style="cursor:pointer" align="center"  id="link4"><img id="grade4" src="./images/grade4.png"/></td>
+            		</tr>
+            		<tr height=30>
+            			<td width=130 align="center">主修方向</td><td width=30></td><td width=130 align="center">毕业设计</td>
+            		</tr>
+            	</table>
+            	<?php
+            }
             ?>
 
           </table>
 	<?php
 }   //function show_menu();
 
+
+?>
+
+<script language=JavaScript >
+var angle=new Array (1,1,1,-1,-1,-1,-1,-1,-1,1,1,1);
+$(window).load(function(){
+	//$("#grade1").rotate(-5);
+	
+	<?php
+		$now = time(0);
+		$sql = "select topic_start,topic_end,student_start,student_end,teacher_start,teacher_end ,grade from ".$ART_TABLE."set_date";
+	    //echo "alert(".$sql." );" ;
+	    $qur_sql = mysql_query($sql);
+	    while($fet_result = mysql_fetch_array($qur_sql))
+	    {
+	    	if(($now>=$fet_result["teacher_start"]&&$now<=$fet_result["teacher_end"])  ||  ($now>=$fet_result["topic_start"]&&$now<=$fet_result["topic_end"]) )
+	    	{
+	    	?>
+	    	rotate_grade<?php echo $fet_result['grade'];?>();
+	    	<?php
+	    	}
+	    }
+	?>
+	
+	$("#link1").click( function () { window.location.href="./teacher/art_teacher_chose_grade1.php"  });
+	$("#link2").click( function () { window.location.href="./teacher/art_teacher_chose_grade2.php" });
+	$("#link3").click( function () { window.location.href="./teacher/art_teacher_chose_grade3.php" });
+	$("#link4").click( function () { window.location.href="./teacher/select_student.php" });
+});
+
+
+
+function r1(i)
+{
+	setTimeout(function() {
+		//alert(i);
+		$("#grade1").rotate(angle[i]);
+		if(i<11)
+			r1(i+1);
+	}, 30);
+}
+
+function r2(i)
+{
+	setTimeout(function() {
+		//alert(i);
+		$("#grade2").rotate(angle[i]);
+		if(i<11)
+			r2(i+1);
+	}, 30);
+}
+
+function r3(i)
+{
+	setTimeout(function() {
+		//alert(i);
+		$("#grade3").rotate(angle[i]);
+		if(i<11)
+			r3(i+1);
+	}, 30);
+}
+
+function r4(i)
+{
+	setTimeout(function() {
+		//alert(i);
+		$("#grade4").rotate(angle[i]);
+		if(i<11)
+			r4(i+1);
+	}, 30);
+}
+
+function rotate_grade1()
+{
+	r1(0);
+	setTimeout(function() {	
+		rotate_grade1();
+	}, 3000);
+}
+function rotate_grade2()
+{
+	r2(0);
+	setTimeout(function() {
+		rotate_grade2();
+	}, 3000);
+}
+function rotate_grade3()
+{
+	r3(0);
+	setTimeout(function() {
+		rotate_grade3();
+	}, 3000);
+}
+function rotate_grade4()
+{
+	r4(0);
+	setTimeout(function() {
+		rotate_grade4();
+	}, 3000);
+}
+</script>
+
+<?php
   @include($baseDIR."/bysj/inc_foot.php");
 ?>
+
