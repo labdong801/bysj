@@ -116,6 +116,8 @@ $teacher_id = $com_id;
 		else
 		{
 			echo "ÔÝÎÞ";
+			echo "</td></tr>";
+			echo "</table>";
 			@include($baseDIR."/bysj/inc_foot.php");
 			exit(0);
 		}
@@ -124,7 +126,10 @@ $teacher_id = $com_id;
 	
 	
 <?php
-	$sql = "SELECT * FROM ".$ART_TABLE."major_student_select WHERE teacher = '".$teacher_id."' AND year = '".$year."'";
+	$sql = "SELECT * FROM ".$ART_TABLE."major_student_select 
+			LEFT JOIN ".$TABLE."student_sheet ON  ".$ART_TABLE."major_student_select.student_number = ".$TABLE."student_sheet.number 
+			LEFT JOIN ".$TABLE."major ON ".$TABLE."student_sheet.profession = ".$TABLE."major.name  
+			WHERE teacher = '".$teacher_id."' AND ".$ART_TABLE."major_student_select.year = '".$year."'  AND ".$TABLE."major.id= '".$major."' ";
  	$select = mysql_num_rows(mysql_query($sql));
  	$sql = "SELECT * FROM  `".$ART_TABLE."teacher_student` WHERE major_id = '".$instrument."' AND teacher_id ='".$teacher_id."' AND class='".$major."' AND year = '".$year."'  ";
  	if(mysql_num_rows(mysql_query($sql)))
@@ -154,11 +159,12 @@ $teacher_id = $com_id;
  		foreach ($_SESSION[$teacher_id] as $key => $value) {
  			if($value == 1) //Ìí¼Ó
  			{ 
- 				if($select <= $sum)
+ 				if($select < $sum)
  				{ 
 		 			$sql = "UPDATE  `".$ART_TABLE."major_student_select` SET  `finally` =  '".$instrument."',`teacher` =  '".$teacher_id."' WHERE `student_number` ='".$key."';";
 		 			//echo $sql ."<br>";
 		 			mysql_query($sql);
+		 			$select++;
  				}
  				else
  				{
