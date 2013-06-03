@@ -124,7 +124,11 @@ $teacher_id = $com_id;
 	
 	
 <?php
-	$sql = "SELECT * FROM ".$ART_TABLE."instrument_student_select WHERE teacher = '".$teacher_id."' AND year = '".$year."'";
+	$sql = "SELECT * FROM ".$ART_TABLE."instrument_student_select 
+			LEFT JOIN ".$TABLE."student_sheet ON  ".$ART_TABLE."instrument_student_select.student_number = ".$TABLE."student_sheet.number 
+			LEFT JOIN ".$TABLE."major ON ".$TABLE."student_sheet.profession = ".$TABLE."major.name  
+			WHERE teacher = '".$teacher_id."' AND ".$ART_TABLE."instrument_student_select.year = '".$year."' AND ".$TABLE."major.id= '".$major."' ";
+	//echo $sql;
  	$select = mysql_num_rows(mysql_query($sql));
  	$sql = "SELECT * FROM  `".$ART_TABLE."teacher_student` WHERE major_id = '".$instrument."' AND teacher_id ='".$teacher_id."' AND class='".$major."' AND year = '".$year."'  ";
  	if(mysql_num_rows(mysql_query($sql)))
