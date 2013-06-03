@@ -196,6 +196,7 @@ $teacher_id = $com_id;
 	 			$sql = "UPDATE  `".$ART_TABLE."vocalmusic_student_select` SET  `".$instrument."_finally` =  '0'  WHERE `student_number` ='".$key."';";
 	 			//echo $sql ."<br>";
 				mysql_query($sql);
+				$select--;
  			}
  		}
  	}

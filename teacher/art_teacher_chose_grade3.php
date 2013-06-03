@@ -183,6 +183,7 @@ $teacher_id = $com_id;
 	 			$sql = "UPDATE  `".$ART_TABLE."major_student_select` SET  `finally` =  '0',`teacher` =  '' WHERE `student_number` ='".$key."';";
 	 			//echo $sql ."<br>";
 				mysql_query($sql);
+				$select--;
  			}
  		}
  	}
