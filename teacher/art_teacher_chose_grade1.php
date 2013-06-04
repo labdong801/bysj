@@ -50,7 +50,13 @@ $teacher_id = $com_id;
 	   $now = time(0);
 	   $can_select = true;
 	
-	   if($now>=$fet_result["student_start"]&&$now<=$fet_result["student_end"]){
+	    if($now>=$fet_result["teacher_start"]&&$now<=$fet_result["teacher_end"]){
+	   	  // 本学年的才可以修改
+	   	  if($year == date("Y",mktime(0,0,0,date("m")-8,1,date("Y"))) )
+		   	$can_select = true;
+		  else
+		  	$can_select = false;
+	   } else if($now>=$fet_result["student_start"]&&$now<=$fet_result["student_end"]){
 	   	   $can_select = false;
 	   	   //$show_message = "目前处于学生报志愿阶段。";
 	   	   Show_Message("目前处于学生报志愿阶段。<br>
@@ -58,12 +64,6 @@ $teacher_id = $com_id;
 	           请在此日期后再查看最新消息，谢谢。");
 	       @include($baseDIR."/bysj/inc_foot.php");
 	       exit;
-	   } else if($now>=$fet_result["teacher_start"]&&$now<=$fet_result["teacher_end"]){
-	   	  // 本学年的才可以修改
-	   	  if($year == date("Y",mktime(0,0,0,date("m")-8,1,date("Y"))) )
-		   	$can_select = true;
-		  else
-		  	$can_select = false;
 	   } else {
 		   $show_message = "对不起，现在没有选修任务。";
 		   $can_select = false;
