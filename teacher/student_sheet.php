@@ -15,24 +15,44 @@ $teacher_id = $com_id;
  <?php
    $cnt = 0;
  	 $curr_pro_id = $set_pro_id;
-         $majiorlist = get_majior_list($com_auth>80?"":$com_pro);
-         $pro_list = explode(",", $com_pro_id);  
+ 	 $sql = "SELECT * FROM  `".$TABLE."major` WHERE h_level = 19";
+//         $majiorlist = get_majior_list($com_auth>80?"":$com_pro);
+//         $pro_list = explode(",", $com_pro_id);  
 	 echo "<p align=left>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;请选择操作的专业：";
-	 $pro_name = "";
-	 //print_r($majiorlist);
-	 while(list($k,$v)=each($majiorlist)){
-	 	   if((in_array($k,$pro_list)||$com_auth>40)&&$v[open]){
-	 	   	   if($cnt && $cnt%4==0) echo "<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;　　　　　　　　　";
-	 	   	   $cnt ++;
-	 	   	   if($curr_pro_id ==0) $curr_pro_id = $k;
-	 	   	   if($curr_pro_id == $v["id"]){
-	 	   	   	  echo "[<b>".$v["name"]."</b>]";
-			 	      $pro_name = $v["name"];
-			 	      $short_name = $v["shortname"];
-	 	   	   } else echo "[<a href=".$PHP_SELF."?set_pro_id=".$k."><font color=blue><u>".$v["name"]."</u></font></a>]";
-	 	   	   echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-	 	   }
- 	 }
+//	 $pro_name = "";
+//	 //print_r($majiorlist);
+//	 while(list($k,$v)=each($majiorlist)){
+//	 	   if((in_array($k,$pro_list)||$com_auth>40)&&$v[open]){
+//	 	   	   if($cnt && $cnt%4==0) echo "<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;　　　　　　　　　";
+//	 	   	   $cnt ++;
+//	 	   	   if($curr_pro_id ==0) $curr_pro_id = $k;
+//	 	   	   if($curr_pro_id == $v["id"]){
+//	 	   	   	  echo "[<b>".$v["name"]."</b>]";
+//			 	      $pro_name = $v["name"];
+//			 	      $short_name = $v["shortname"];
+//	 	   	   } else echo "[<a href=".$PHP_SELF."?set_pro_id=".$k."><font color=blue><u>".$v["name"]."</u></font></a>]";
+//	 	   	   echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+//	 	   }
+// 	 }
+		$query = mysql_query($sql);
+		if(mysql_num_rows($query))
+		{ 
+			while($row = mysql_fetch_array($query))
+			{ 
+				if($curr_pro_id == "")
+					$curr_pro_id          = $row['id'];
+						
+				if( $curr_pro_id == $row['id']  )
+				{ 
+					echo "<font><u>".$row['name']."</u></font>&nbsp;&nbsp;";
+					$pro_name = $row['name'];
+					$short_name = $row["shortname"];
+				}
+				else
+					echo "<a href='".$PHP_SELF."?set_pro_id=".$row['id']."' ><font color=blue><u>".$row['name']."</u></font></a>&nbsp;&nbsp;";
+				
+			}
+		}
  	 echo "</p>";
  	if($pro_name==""){
  		echo "<br><br>";
@@ -97,6 +117,7 @@ if(is_uploaded_file($_FILES["file"]["tmp_name"])){
    $type = $upfile["type"];
    $size = $upfile["size"];
    $tmp_name = $upfile["tmp_name"];
+//   /echo $tmp_name."<br>";
    $error = $upfile["error"];
    $destination = "../../uploadfile/".$name;
    if($type!='application/vnd.ms-excel'||$error!='0'){  //只允许上传excel文件
@@ -163,7 +184,12 @@ if(is_uploaded_file($_FILES["file"]["tmp_name"])){
    	  	$errcnt ++;
    	  	continue;
    	  }
-   	  mysql_query("insert into ".$TABLE."student_sheet values ('$pro_name','".$insertlist[$i][classname]."','".$insertlist[$i][num]."','".$insertlist[$i][name]."','".$insertlist[$i][num]."',1, '0', '0', '0', '0', '0', '0', '".$byyear."', 0, '无', 0)");
+   	  //默认密码设置为帐号的话就替换过来
+   	  if($INIT_PWD == "account")
+	   	  $INIT_PWD = $insertlist[$i][num];
+   	  mysql_query("insert into ".$TABLE."student_sheet values ('$pro_name','".$insertlist[$i][classname]."','".$insertlist[$i][num]."','".$insertlist[$i][name]."','".$INIT_PWD."',1, '0', '0', '0', '0', '0', '0', '".$byyear."', 0, '无', 0)");
+   	  if($INIT_PWD == $insertlist[$i][num])
+   	  	$INIT_PWD = "account";
    }
    echo "名单导入完成".($errcnt>0?"，其中 $errcnt 条记录因重复未导入":"")."请查询<a href=student_account.php?select_year=2013><font color=blue><u>学生名单</u></font></a>是否正确。";
    //if($i == 1){

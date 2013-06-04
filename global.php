@@ -37,4 +37,6 @@ $READONLY = true; //禁止修改成绩
 $TMPWRITE = true; //指定日期内，可修改答辩意见
 
 $ART_TABLE = "art_";
+
+$INIT_PWD="1";
 ?>
