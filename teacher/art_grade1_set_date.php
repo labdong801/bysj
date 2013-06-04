@@ -110,7 +110,12 @@ function ShowDateHint($dtime)
 	 $que_sql = mysql_query($sql);
 	 $row = mysql_fetch_array($que_sql);
 ?>
-
+<p>
+<a href="art_grade1_set_date.php"><font color=blue>[器乐选修时间设置]</font></a>
+<a href="art_grade2_set_date.php"><font color=blue>[钢琴、声乐时间设置]</font></a>
+<a href="art_grade3_set_date.php"><font color=blue>[主修方向时间设置]</font></a>
+<a href="art_grade4_set_date.php"><font color=blue>[毕业设计时间设置]</font></a>
+</p>
 <form name="form1" action="<?php echo $PHP_SELF; ?>" method="post">
 
  <?php if($row["student_start"]<10000) echo "<font color=red><b>提示：</b>当前尚未设置任何日期。若需设置，请点击“修改选题时段”按钮！</font> <br>"; ?>
