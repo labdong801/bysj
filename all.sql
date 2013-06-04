@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- 主机: localhost
--- 生成日期: 2013 年 06 月 04 日 10:53
+-- 生成日期: 2013 年 06 月 04 日 14:15
 -- 服务器版本: 5.5.31
 -- PHP 版本: 5.3.10-1ubuntu3.6
 
@@ -37,7 +37,24 @@ CREATE TABLE IF NOT EXISTS `art_instrument_student_select` (
   `year` varchar(4) NOT NULL,
   `lock` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=12 ;
+
+--
+-- 转存表中的数据 `art_instrument_student_select`
+--
+
+INSERT INTO `art_instrument_student_select` (`id`, `student_number`, `first`, `second`, `third`, `finally`, `teacher`, `year`, `lock`) VALUES
+(1, '12104880201', 13, 14, 15, 0, '', '2012', 1),
+(2, '12104880202', 13, 14, 15, 0, '', '2012', 1),
+(3, '12104880203', 13, 15, 14, 0, '', '2012', 1),
+(4, '12104880204', 14, 13, 15, 0, '', '2012', 1),
+(5, '12104880205', 14, 13, 15, 0, '', '2012', 1),
+(6, '12104880206', 13, 15, 16, 0, '', '2012', 1),
+(7, '12104880207', 13, 14, 15, 0, '', '2012', 1),
+(8, '12104880209', 14, 15, 13, 0, '', '2012', 0),
+(9, '12104880210', 14, 15, 13, 0, '', '2012', 0),
+(10, '12104880212', 15, 13, 14, 0, '', '2012', 1),
+(11, '12104880214', 13, 14, 15, 0, '', '2012', 1);
 
 -- --------------------------------------------------------
 
@@ -95,7 +112,23 @@ CREATE TABLE IF NOT EXISTS `art_major_student_select` (
   `year` varchar(4) NOT NULL,
   `lock` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=11 ;
+
+--
+-- 转存表中的数据 `art_major_student_select`
+--
+
+INSERT INTO `art_major_student_select` (`id`, `student_number`, `first`, `second`, `third`, `finally`, `teacher`, `year`, `lock`) VALUES
+(1, '10104010101', 2, 1, 3, 0, '', '2012', 0),
+(2, '10104010102', 2, 1, 3, 0, '', '2012', 0),
+(3, '10104010103', 1, 3, 2, 0, '', '2012', 0),
+(4, '10104010105', 2, 1, 3, 0, '', '2012', 0),
+(5, '10104010106', 5, 4, 2, 0, '', '2012', 0),
+(6, '10104010107', 1, 2, 3, 0, '', '2012', 0),
+(7, '10104010108', 1, 2, 3, 0, '', '2012', 0),
+(8, '10104010109', 4, 3, 2, 0, '', '2012', 0),
+(9, '10104010110', 5, 4, 2, 0, '', '2012', 0),
+(10, '10104010111', 3, 2, 1, 0, '', '2012', 0);
 
 -- --------------------------------------------------------
 
@@ -121,7 +154,7 @@ CREATE TABLE IF NOT EXISTS `art_set_date` (
 
 INSERT INTO `art_set_date` (`id`, `grade`, `topic_start`, `topic_end`, `student_start`, `student_end`, `teacher_start`, `teacher_end`) VALUES
 (10, 1, 0, 0, 1367337600, 1372607999, 1367337600, 1372607999),
-(11, 2, 0, 0, 1367769600, 1372521599, 1367510400, 1373126399),
+(11, 2, 0, 0, 1367769600, 1372521599, 1370448000, 1373126399),
 (12, 3, 0, 0, 1369065600, 1371830399, 1367424000, 1372521599),
 (13, 4, 1368547200, 1370015999, 1369238400, 1372348799, 1367424000, 1373299199);
 
@@ -310,7 +343,22 @@ CREATE TABLE IF NOT EXISTS `art_vocalmusic_student_select` (
   `piano_lock` tinyint(1) NOT NULL,
   `year` varchar(4) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10 ;
+
+--
+-- 转存表中的数据 `art_vocalmusic_student_select`
+--
+
+INSERT INTO `art_vocalmusic_student_select` (`id`, `student_number`, `vocalmusic_first`, `vocalmusic_second`, `vocalmusic_third`, `vocalmusic_finally`, `vocalmusic_lock`, `piano_first`, `piano_second`, `piano_third`, `piano_finally`, `piano_lock`, `year`) VALUES
+(1, '11104010101', 'dj901', 'cgl903', 'yxx905', '0', 0, 'fj902', 'ty911', 'cxy910', '0', 0, '2012'),
+(2, '11104010102', 'dj901', 'cgl903', 'yxx905', '0', 0, 'fj902', 'ty911', 'cxy910', '0', 0, '2012'),
+(3, '11104010103', 'dj901', 'cgl903', 'yxx905', '0', 0, 'ty911', 'fj902', 'cxy910', '0', 0, '2012'),
+(4, '11104010104', '0', '0', '0', '0', 0, 'ty911', 'fj902', 'cxy910', '0', 0, '2012'),
+(5, '11104010105', '0', '0', '0', '0', 0, 'fj902', 'ty911', 'cxy910', '0', 0, '2012'),
+(6, '11104010106', '0', '0', '0', '0', 0, 'fj902', 'ty911', 'cxy910', '0', 0, '2012'),
+(7, '11104010107', 'dj901', 'cgl903', 'yxx905', '0', 0, 'ty911', 'fj902', 'cxy910', '0', 0, '2012'),
+(8, '11104010109', '0', '0', '0', '0', 0, 'ty911', 'cxy910', 'fj902', '0', 0, '2012'),
+(9, '11104010110', '0', '0', '0', '0', 0, 'ty911', 'cxy910', 'fj902', '0', 0, '2012');
 
 -- --------------------------------------------------------
 
