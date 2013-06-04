@@ -194,16 +194,16 @@ function show_menu(){
             	?>
             	<table style="margin:20px;" border="0" align="center">
             		<tr height=130>
-            			<td width=130 style="cursor:pointer" align="center"  id="link1"><img id="grade1" src="./images/grade1.png"/></td><td width=30></td><td width=130 style="cursor:pointer" align="center"  id="link2"><img id="grade2" src="./images/grade2.png"/></td>
+            			<td width=130 style="cursor:pointer" align="center"  id="link1"><img id="grade1" src="./images/grade1.png"/></td><td width=5></td><td width=130 style="cursor:pointer" align="center"  id="link2"><img id="grade2" src="./images/grade2.png"/></td>
             		</tr>
-            		<tr height=30>
-            			<td width=130 align="center">器乐选修</td><td width=30></td><td width=130 align="center">声乐、钢琴</td>
+            		<tr height=20>
+            			<td width=130 align="center">器乐选修</td><td width=5></td><td width=130 align="center">声乐、钢琴</td>
             		</tr>
             		<tr height=130>
-            			<td width=130 style="cursor:pointer" align="center"  id="link3"><img id="grade3" src="./images/grade3.png"/></td><td width=30></td><td width=130 style="cursor:pointer" align="center"  id="link4"><img id="grade4" src="./images/grade4.png"/></td>
+            			<td width=130 style="cursor:pointer" align="center"  id="link3"><img id="grade3" src="./images/grade3.png"/></td><td width=5></td><td width=130 style="cursor:pointer" align="center"  id="link4"><img id="grade4" src="./images/grade4.png"/></td>
             		</tr>
-            		<tr height=30>
-            			<td width=130 align="center">主修方向</td><td width=30></td><td width=130 align="center">毕业设计</td>
+            		<tr height=20>
+            			<td width=130 align="center">主修方向</td><td width=5></td><td width=130 align="center">毕业设计</td>
             		</tr>
             	</table>
             	<?php
