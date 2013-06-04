@@ -209,11 +209,11 @@ $sql = "SELECT * FROM  `".$ART_TABLE."instrument_student_select`
 	 		WHERE `second`='".$instrument."' AND `finally`='0' AND ".$ART_TABLE."instrument_student_select.year = '".$year."' AND  ".$TABLE."major.id='".$major."' ";
 $second = mysql_num_rows(mysql_query($sql));
 
-//$sql = "SELECT * FROM  `".$ART_TABLE."instrument_student_select` 
-//	 		LEFT JOIN ".$TABLE."student_sheet ON ".$ART_TABLE."instrument_student_select.student_number = ".$TABLE."student_sheet.number  
-//	 		LEFT JOIN ".$TABLE."major ON ".$TABLE."student_sheet.profession = bysj_major.name 
-//	 		WHERE `third`='".$instrument."' AND `finally`='0' AND ".$ART_TABLE."instrument_student_select.year = '".$year."' AND  ".$TABLE."major.id='".$major."' ";
-//$third = mysql_num_rows(mysql_query($sql));
+$sql = "SELECT * FROM  `".$ART_TABLE."instrument_student_select` 
+	 		LEFT JOIN ".$TABLE."student_sheet ON ".$ART_TABLE."instrument_student_select.student_number = ".$TABLE."student_sheet.number  
+	 		LEFT JOIN ".$TABLE."major ON ".$TABLE."student_sheet.profession = bysj_major.name 
+	 		WHERE `third`='".$instrument."' AND `finally`='0' AND ".$ART_TABLE."instrument_student_select.year = '".$year."' AND  ".$TABLE."major.id='".$major."' ";
+$third = mysql_num_rows(mysql_query($sql));
 
 if($first > 0)
 	$volunteer = 1;
@@ -221,7 +221,42 @@ else if($second > 0)
 	$volunteer = 2;
 else
 	$volunteer = 3;
+	
+if($third <= 0)
+{
+	?>
+	<table width="800" border="1" align="center" cellpadding="3">
+	
+	
+	<?php
+	$sql = "SELECT  ".$TABLE."student_sheet.name AS student_name , ".$TABLE."student_sheet.class AS student_class ,mobilephone , short_number ,student_number 
+		FROM  ".$ART_TABLE."instrument_student_select 
+		LEFT JOIN ".$TABLE."student_sheet ON ".$TABLE."student_sheet.number = ".$ART_TABLE."instrument_student_select.student_number 
+		LEFT JOIN ".$TABLE."major ON ".$TABLE."student_sheet.profession = ".$TABLE."major.name 
+		WHERE ".$ART_TABLE."instrument_student_select.year = '".$year."' AND teacher = '".$teacher_id."'";
+	$query =mysql_query($sql);
+	if(mysql_num_rows($query))
+	{
+		echo "<tr align=center  bgColor=#5a6e8f  height=38>
+						<td width=150>学号</td><td>姓名</td><td width=150>班级</td><td>电话</td><td>短号</td>
+					</tr>";
+		while($row=mysql_fetch_array($query))
+		{
+			echo "<tr><td>".$row['student_number']."</td><td>".$row['student_name']."</td><td>".$row['student_class']."</td><td>".$row['mobilephone']."</td><td>".$row['short_number']."</td></tr>";
+		}
+	}
+	?>
+	
+	</table>
+	<br>
 
+	</td>
+	</tr>
+	</table>
+	<?php
+}
+else
+{ 
 ?>
 <table width="800" border="0" align="center" cellpadding="3">
 </tr>
@@ -247,6 +282,7 @@ else
 
 
 <?php
+}
   @include($baseDIR."/bysj/inc_foot.php");
 ?>
 
