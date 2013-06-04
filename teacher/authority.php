@@ -14,21 +14,40 @@ $teacher_id = $com_id;
  ?>
  <?php
  	 $curr_pro_id = $set_pro_id;
-         $majiorlist = get_majior_list($com_auth>80?"":$com_pro);
-         $pro_list = explode(",", $com_pro_id);  
+ 	 $sql = "SELECT * FROM  `".$TABLE."major` WHERE h_level = 19";
+//         $majiorlist = get_majior_list($com_auth>80?"":$com_pro);
+//         $pro_list = explode(",", $com_pro_id);  
 	 echo "<p align=left>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;请选择操作的专业：";
-	 $pro_name = "";
-	 //print_r($majiorlist);
-	 while(list($k,$v)=each($majiorlist)){
-	 	   if((in_array($k,$pro_list)||$com_auth>40)&&$v[open]){
-	 	   	   if($curr_pro_id ==0) $curr_pro_id = $k;
-	 	   	   if($curr_pro_id == $v["id"]){
-	 	   	   	    echo "[<b>".$v["name"]."</b>]";
-			 	    $pro_name = $v["name"];
-	 	   	   } else echo "[<a href=".$PHP_SELF."?set_pro_id=".$k."><font color=blue><u>".$v["name"]."</u></font></a>]";
-	 	   	   echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-	 	   }
- 	 }
+//	 $pro_name = "";
+//	 //print_r($majiorlist);
+//	 while(list($k,$v)=each($majiorlist)){
+//	 	   if((in_array($k,$pro_list)||$com_auth>40)&&$v[open]){
+//	 	   	   if($curr_pro_id ==0) $curr_pro_id = $k;
+//	 	   	   if($curr_pro_id == $v["id"]){
+//	 	   	   	    echo "[<b>".$v["name"]."</b>]";
+//			 	    $pro_name = $v["name"];
+//	 	   	   } else echo "[<a href=".$PHP_SELF."?set_pro_id=".$k."><font color=blue><u>".$v["name"]."</u></font></a>]";
+//	 	   	   echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+//	 	   }
+// 	 }
+	$query = mysql_query($sql);
+		if(mysql_num_rows($query))
+		{ 
+			while($row = mysql_fetch_array($query))
+			{ 
+				if($curr_pro_id == "")
+					$curr_pro_id          = $row['id'];
+						
+				if( $curr_pro_id == $row['id']  )
+				{ 
+					echo "<font><u>".$row['name']."</u></font>&nbsp;&nbsp;";
+					$pro_name = $row['name'];
+				}
+				else
+					echo "<a href='".$PHP_SELF."?set_pro_id=".$row['id']."' ><font color=blue><u>".$row['name']."</u></font></a>&nbsp;&nbsp;";
+				
+			}
+		}
  	 echo "</p>";
  	if($pro_name==""){
  		echo "<br><br>";

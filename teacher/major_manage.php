@@ -11,6 +11,8 @@ $YM_QX = 80; //本页访问需要权限：管理员
 include($baseDIR."/bysj/inc_head.php");
 
 $teacher_id = $com_id;
+//固定只能修改艺术系的
+$xueyuan = 18;
  ?>
  
  <?php
@@ -132,7 +134,7 @@ if(sizeof($v1)<1) {
 	$id2 = $v1[$i1][id];
 	while(list($k2,$v2)=each($m1)){
 		if($k2!="hl".$id2) continue;
-		echo "<tr height=50><td >请选择要操作的学院：<select name=xueyuan size=+1 onchange=\"MM_jumpMenu('parent',this,1)\" >";
+		//echo "<tr height=50><td >请选择要操作的学院：<select name=xueyuan size=+1 onchange=\"MM_jumpMenu('parent',this,1)\" >";
 		$xy = false;
 		for($i2=0;$i2<sizeof($v2);$i2++){
 			if($v2[$i2][id]==$xueyuan) {
@@ -173,18 +175,18 @@ if(sizeof($v1)<1) {
 					}
 				}
 			}
-			echo "<tr><td height=38 colspan=3>&nbsp;&nbsp;增加一个系或中心：\n";
-			echo "<input type=text  name=long".$ccc." size=20>（简称：<input type=text name=short".$ccc." size=8>）&nbsp;&nbsp;<input type=button  onclick=\"return set_value($ccc,long".$ccc.",short".$ccc.",3,'$id3','add',1)\" value=新增系></td></tr>";
+//			echo "<tr><td height=38 colspan=3>&nbsp;&nbsp;增加一个系或中心：\n";
+//			echo "<input type=text  name=long".$ccc." size=20>（简称：<input type=text name=short".$ccc." size=8>）&nbsp;&nbsp;<input type=button  onclick=\"return set_value($ccc,long".$ccc.",short".$ccc.",3,'$id3','add',1)\" value=新增系></td></tr>";
 			$ccc ++;
 		}
 		echo "</table>";
 		echo "</td></tr>";
 	}
-		echo "<tr height=50><td>";
-		echo "增加二级学院：\n";
-		echo "<input type=text  name=long".$ccc." size=20>（简称：<input type=text name=short".$ccc." size=8>）&nbsp;&nbsp;<input type=button  onclick=\"return set_value($ccc,long".$ccc.",short".$ccc.",2,'$id2','add',1)\" value=新增二级学院>";
-		$ccc ++;
-		echo "</td></tr>";
+//		echo "<tr height=50><td>";
+//		echo "增加二级学院：\n";
+//		echo "<input type=text  name=long".$ccc." size=20>（简称：<input type=text name=short".$ccc." size=8>）&nbsp;&nbsp;<input type=button  onclick=\"return set_value($ccc,long".$ccc.",short".$ccc.",2,'$id2','add',1)\" value=新增二级学院>";
+//		$ccc ++;
+//		echo "</td></tr>";
 }
 echo "</form>";
 echo "</table>";
