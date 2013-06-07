@@ -14,7 +14,6 @@ $YM_QX = 90; //管理员权限
 include($baseDIR."/bysj/inc_head.php");
 
 $teacher_id = $com_id;
-echo $teacher_id;
  ?>
 
 

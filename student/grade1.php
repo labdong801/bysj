@@ -394,7 +394,7 @@ if($currrows<=0)   {
 	//指导老师
 	$sql = "SELECT *  FROM  `".$ART_TABLE."teacher_student`  " .
 			"LEFT JOIN ".$TABLE."teacher_information ON ".$TABLE."teacher_information.teacher_id = ".$ART_TABLE."teacher_student.teacher_id " .
-			"WHERE `major_id`='".$array['id']."'  AND `class` = '".$com_pro_id."' ";
+			"WHERE `major_id`='".$array['id']."'  AND `class` = '".$com_pro_id."' AND value > 0 ";
 	$teacher_query = mysql_query($sql);
 	$teacher= "";
 	if(mysql_num_rows($teacher_query))
