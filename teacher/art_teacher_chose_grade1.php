@@ -49,6 +49,10 @@ $teacher_id = $com_id;
 	   $fet_result = mysql_fetch_array($qur_sql);
 	   $now = time(0);
 	   $can_select = true;
+	   $pass = false;
+	   //时间已经过去，显示学生名单
+	   if($now > $fet_result["teacher_end"])
+	   	$pass = true;
 	
 	    if($now>=$fet_result["teacher_start"]&&$now<=$fet_result["teacher_end"]){
 	   	  // 本学年的才可以修改
@@ -222,7 +226,7 @@ else if($second > 0)
 else
 	$volunteer = 3;
 	
-if($third <= 0)
+if(($third <= 0)  ||  $pass )  //第三志愿选择完后或者时间已经过了
 {
 	?>
 	<table width="800" border="1" align="center" cellpadding="3">
@@ -242,7 +246,7 @@ if($third <= 0)
 					</tr>";
 		while($row=mysql_fetch_array($query))
 		{
-			echo "<tr><td>".$row['student_number']."</td><td>".$row['student_name']."</td><td>".$row['student_class']."</td><td>".$row['mobilephone']."</td><td>".$row['short_number']."</td></tr>";
+			echo "<tr height=35><td>".$row['student_number']."</td><td>".$row['student_name']."</td><td>".$row['student_class']."</td><td>".$row['mobilephone']."</td><td>".$row['short_number']."</td></tr>";
 		}
 	}
 	?>

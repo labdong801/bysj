@@ -49,6 +49,10 @@ $teacher_id = $com_id;
 	   $fet_result = mysql_fetch_array($qur_sql);
 	   $now = time(0);
 	   $can_select = true;
+	   $pass = false;
+	   //时间已经过去，显示学生名单
+	   if($now > $fet_result["teacher_end"])
+	   	$pass = true;
 	
 	   if($now>=$fet_result["teacher_start"]&&$now<=$fet_result["teacher_end"]){
 	   	  // 本学年的才可以修改
@@ -141,9 +145,9 @@ $teacher_id = $com_id;
  		$sum=0;
  	}
  	
- 	if($_GET['major_id'] ==11)
+ 	if($instrument ==11)
 		$instrument = "vocalmusic";
-	if($_GET['major_id'] ==12 )
+	if($instrument ==12 )
 		$instrument = "piano";
 	
 	$sql = "SELECT * FROM ".$ART_TABLE."vocalmusic_student_select 
@@ -217,31 +221,85 @@ $sql = "SELECT * FROM  `".$ART_TABLE."vocalmusic_student_select`
 	 //		echo $sql;
 $first = mysql_num_rows(mysql_query($sql));
 
+
+$sql = "SELECT * FROM  `".$ART_TABLE."vocalmusic_student_select` 
+	 		LEFT JOIN ".$TABLE."student_sheet ON ".$ART_TABLE."vocalmusic_student_select.student_number = ".$TABLE."student_sheet.number  
+	 		LEFT JOIN ".$TABLE."major ON ".$TABLE."student_sheet.profession = bysj_major.name 
+	 		WHERE `".$instrument."_first` NOT LIKE '[%]'  AND ".$ART_TABLE."vocalmusic_student_select.year = '".$year."' AND  ".$TABLE."major.id='".$major."' ";
+	 		//echo $sql;
+$second_wait = mysql_num_rows(mysql_query($sql));
+
+
 $sql = "SELECT * FROM  `".$ART_TABLE."vocalmusic_student_select` 
 	 		LEFT JOIN ".$TABLE."student_sheet ON ".$ART_TABLE."vocalmusic_student_select.student_number = ".$TABLE."student_sheet.number  
 	 		LEFT JOIN ".$TABLE."major ON ".$TABLE."student_sheet.profession = bysj_major.name 
 	 		WHERE `".$instrument."_second`='".$teacher_id."' AND `".$instrument."_finally`='0' AND ".$ART_TABLE."vocalmusic_student_select.year = '".$year."' AND  ".$TABLE."major.id='".$major."' ";
-	 //		echo $sql;
+	 		//echo $sql;
 $second = mysql_num_rows(mysql_query($sql));
 
-//$sql = "SELECT * FROM  `".$ART_TABLE."instrument_student_select` 
-//	 		LEFT JOIN ".$TABLE."student_sheet ON ".$ART_TABLE."instrument_student_select.student_number = ".$TABLE."student_sheet.number  
-//	 		LEFT JOIN ".$TABLE."major ON ".$TABLE."student_sheet.profession = bysj_major.name 
-//	 		WHERE `third`='".$instrument."' AND `finally`='0' AND ".$ART_TABLE."instrument_student_select.year = '".$year."' AND  ".$TABLE."major.id='".$major."' ";
-//$third = mysql_num_rows(mysql_query($sql));
+$sql = "SELECT * FROM  `".$ART_TABLE."vocalmusic_student_select` 
+	 		LEFT JOIN ".$TABLE."student_sheet ON ".$ART_TABLE."vocalmusic_student_select.student_number = ".$TABLE."student_sheet.number  
+	 		LEFT JOIN ".$TABLE."major ON ".$TABLE."student_sheet.profession = bysj_major.name 
+	 		WHERE `".$instrument."_second` NOT LIKE '[%]'  AND ".$ART_TABLE."vocalmusic_student_select.year = '".$year."' AND  ".$TABLE."major.id='".$major."' ";
+$third_wait = mysql_num_rows(mysql_query($sql));
+
+$sql = "SELECT * FROM  `".$ART_TABLE."vocalmusic_student_select` 
+	 		LEFT JOIN ".$TABLE."student_sheet ON ".$ART_TABLE."vocalmusic_student_select.student_number = ".$TABLE."student_sheet.number  
+	 		LEFT JOIN ".$TABLE."major ON ".$TABLE."student_sheet.profession = bysj_major.name 
+	 		WHERE `".$instrument."_third`='".$teacher_id."' AND `".$instrument."_finally`='0' AND ".$ART_TABLE."vocalmusic_student_select.year = '".$year."' AND  ".$TABLE."major.id='".$major."' ";
+$third = mysql_num_rows(mysql_query($sql));
 
 if($first > 0)
 	$volunteer = 1;
+else if($second_wait > 0)
+	$volunteer = 1.5;
 else if($second > 0)
 	$volunteer = 2;
+else if($third_wait > 0)
+	$volunteer = 2.5;
 else
 	$volunteer = 3;
+	
+//echo $third;
+	//echo $volunteer;
+	
+if(($third <= 0)  ||  $pass )  //第三志愿选择完后或者时间已经过了
+{ 
+	?>
+	<table width="800" border="1" align="center" cellpadding="3">
+  
+  
+  <?php
+  $sql = "SELECT  ".$TABLE."student_sheet.name AS student_name , ".$TABLE."student_sheet.class AS student_class ,mobilephone , short_number ,student_number 
+    FROM  ".$ART_TABLE."vocalmusic_student_select 
+    LEFT JOIN ".$TABLE."student_sheet ON ".$TABLE."student_sheet.number = ".$ART_TABLE."vocalmusic_student_select.student_number 
+    LEFT JOIN ".$TABLE."major ON ".$TABLE."student_sheet.profession = ".$TABLE."major.name 
+    WHERE ".$ART_TABLE."vocalmusic_student_select.year = '".$year."' AND ".$instrument."_finally = '".$teacher_id."'";
+  $query =mysql_query($sql);
+  if(mysql_num_rows($query))
+  {
+    echo "<tr align=center  bgColor=#5a6e8f  height=38>
+            <td width=150>学号</td><td>学生姓名</td><td width=150>班级</td><td>手机号码</td><td>短号</td>
+          </tr>";
+    while($row=mysql_fetch_array($query))
+    {
+      echo "<tr height=35><td>".$row['student_number']."</td><td>".$row['student_name']."</td><td>".$row['student_class']."</td><td>".$row['mobilephone']."</td><td>".$row['short_number']."</td></tr>";
+    }
+  }
+  ?>
+  
+  </table>
+  <br>
+	<?php
+}
+else
+{ 
 
 ?>
 <table width="800" border="0" align="center" cellpadding="3">
 </tr>
 <tr>
-	<td align=center><font size=+1>已选择的学生(<?php echo $select;?>/<?php echo $sum;?>)</font></td><td></td><td  align=center><font size=+1>第<?php echo $volunteer;?>志愿学生名单</font></td>
+	<td align=center><font size=+1>已选择的学生(<?php echo $select;?>/<?php echo $sum;?>)</font></td><td></td><td  align=center><font size=+1>第<?php echo floor($volunteer);?>志愿学生名单</font></td>
 </tr>
 <tr>
 	<td><iframe width=300 height=600 src="./teacher_had_chose2.php?year=<?php echo $year;?>&instrument=<?php echo $instrument;?>&major=<?php echo $major; ?>&volunteer=<?php echo $volunteer;?>"> </iframe></td>
@@ -251,9 +309,27 @@ else
 		<input type="submit" name="remove" value=""  style="background:url('../images/right.png');width:50px;height:50px;border:0px;cursor:pointer">
 		</form>
 	</td>
-	<td><iframe width=300 height=600 src="./teacher_chose_volunteer2.php?year=<?php echo $year;?>&instrument=<?php echo $instrument;?>&major=<?php echo $major; ?>&volunteer=<?php echo $volunteer;?>"> </iframe></td>
+	<td>
+	<?php
+	if($volunteer == 1.5  || $volunteer == 2.5)
+	{ 
+		?>
+		<iframe width=300 height=600 src="./teacher_chose_volunteer_wait.php?v=<?php echo floor($volunteer);?>">请等待其他老师选择志愿</iframe>
+		<?php
+	}
+	else{ 
+		?>
+	<iframe width=300 height=600 src="./teacher_chose_volunteer2.php?year=<?php echo $year;?>&instrument=<?php echo $instrument;?>&major=<?php echo $major; ?>&volunteer=<?php echo $volunteer;?>"> </iframe>
+	<?php
+	}
+	?>
+	</td>
 </tr>
 </table>
+
+<?php
+}
+?>
 <br>
 
 </td>

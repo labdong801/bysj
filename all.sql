@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- 主机: localhost
--- 生成日期: 2013 年 06 月 04 日 14:15
+-- 生成日期: 2013 年 06 月 08 日 10:15
 -- 服务器版本: 5.5.31
 -- PHP 版本: 5.3.10-1ubuntu3.6
 
@@ -37,24 +37,25 @@ CREATE TABLE IF NOT EXISTS `art_instrument_student_select` (
   `year` varchar(4) NOT NULL,
   `lock` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=12 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=13 ;
 
 --
 -- 转存表中的数据 `art_instrument_student_select`
 --
 
 INSERT INTO `art_instrument_student_select` (`id`, `student_number`, `first`, `second`, `third`, `finally`, `teacher`, `year`, `lock`) VALUES
-(1, '12104880201', 13, 14, 15, 0, '', '2012', 1),
-(2, '12104880202', 13, 14, 15, 0, '', '2012', 1),
-(3, '12104880203', 13, 15, 14, 0, '', '2012', 1),
-(4, '12104880204', 14, 13, 15, 0, '', '2012', 1),
-(5, '12104880205', 14, 13, 15, 0, '', '2012', 1),
-(6, '12104880206', 13, 15, 16, 0, '', '2012', 1),
-(7, '12104880207', 13, 14, 15, 0, '', '2012', 1),
+(1, '12104880201', 13, 14, 15, 0, '', '2012', 0),
+(2, '12104880202', 13, 14, 15, 0, '', '2012', 0),
+(3, '12104880203', 13, 15, 14, 0, '', '2012', 0),
+(4, '12104880204', 14, 13, 15, 0, '', '2012', 0),
+(5, '12104880205', 14, 13, 15, 0, '', '2012', 0),
+(6, '12104880206', 13, 15, 16, 0, '', '2012', 0),
+(7, '12104880207', 13, 14, 15, 0, '', '2012', 0),
 (8, '12104880209', 14, 15, 13, 0, '', '2012', 0),
 (9, '12104880210', 14, 15, 13, 0, '', '2012', 0),
-(10, '12104880212', 15, 13, 14, 0, '', '2012', 1),
-(11, '12104880214', 13, 14, 15, 0, '', '2012', 1);
+(10, '12104880212', 15, 13, 14, 0, '', '2012', 0),
+(11, '12104880214', 13, 14, 15, 0, '', '2012', 0),
+(12, '12104880217', 0, 0, 0, 0, '', '2012', 0);
 
 -- --------------------------------------------------------
 
@@ -76,23 +77,23 @@ CREATE TABLE IF NOT EXISTS `art_major` (
 --
 
 INSERT INTO `art_major` (`id`, `name`, `icon`, `detail`, `grade`) VALUES
-(1, '声乐', '\\images\\instrument\\shengyue.png', 'sadsafsafffffffffffffffffffasdasdasdasfasfasfasfasfasd', 3),
-(2, '钢琴', '\\images\\instrument\\gangqin.png', 'gangqingangqingangqin', 3),
-(3, '舞蹈', '\\images\\instrument\\wudao.png', 'wudaodasafasfasfasdasdasgfasda', 3),
-(4, '合唱指挥', '\\images\\instrument\\zhihui.png', 'zhihui', 3),
-(5, '二胡', '\\images\\instrument\\erhu.png', 'erhuerhuasdkakslcajkshjadlsad', 3),
-(6, '小提琴', '\\images\\instrument\\xiaotiqin.png', 'iasjdasjfklasjklajskldjasdads', 3),
-(7, '萨克斯/黑管', '\\images\\instrument\\shakesi.png', 'sadasfasfasfasfasfasdasdasd', 3),
-(8, '中国音乐理论', '\\images\\instrument\\zhongguo.png', '1241241252131231231241241241241241', 3),
-(9, '作曲技术理论', '\\images\\instrument\\zuoqu.png', 'sadasdasfasfasfasdas', 3),
-(10, '外国音乐理论', '\\images\\instrument\\waiguo.png', 'sajkasdhasjdkasdjlaksjdlasjdklasjdkasjdklasjkdajskdjalsdjas', 3),
+(1, '声乐', '\\images\\instrument\\shengyue.png', '声乐（vocal music），是指用人声演唱的音乐形式。声乐包括：美声唱法、民族唱法和通俗唱法，现在中国又出现了原生态唱法。通常声乐指美声唱法。', 3),
+(2, '钢琴', '\\images\\instrument\\gangqin.png', '钢琴（Piano）是源自西洋古典音乐中的一种键盘乐器，由88个琴键和金属弦音板组成，普遍用于独奏、重奏、伴奏等演出，作曲和排练音乐十分方便。', 3),
+(3, '舞蹈', '\\images\\instrument\\wudao.png', '舞蹈是八大艺术之一，是于三度空间中以身体为语言作“心智交流”现象之人体的运动表达艺术，一般有音乐伴奏，以有节奏的动作为主要表现手段的艺术形式。', 3),
+(4, '合唱指挥', '\\images\\instrument\\zhihui.png', '合唱指挥是合唱队等集体性的音乐表演时，站在乐队或合唱队前面手拿指挥棒、并结合肢体语言指示如何演奏或演唱的人。', 3),
+(5, '二胡', '\\images\\instrument\\erhu.png', '二胡又名“胡琴”，唐代已出现，称“奚琴"，是北方的民间乐器。一般认为今之胡琴由奚琴发展而来，现已成为我国独具魅力的拉弦乐器。它既适宜表现深沉、悲凄的内容，也能描写气势壮观的意境。', 3),
+(6, '小提琴', '\\images\\instrument\\xiaotiqin.png', '现代小提琴的出现已有300多年的历史，是自17世纪以来西方音乐中最为重要的乐器之一,被誉为乐器皇后，其制作本身是一门极   小提琴 为精致的艺术。', 3),
+(7, '萨克斯/黑管', '\\images\\instrument\\shakesi.png', '萨克斯是以发明者的名字命名的木管乐器,音色介于木管乐器和铜管乐器之间。', 3),
+(8, '中国音乐理论', '\\images\\instrument\\zhongguo.png', '中国音乐理论主要是以研究中国古典音乐为主，着重了解中国古典音乐文化。', 3),
+(9, '作曲技术理论', '\\images\\instrument\\zuoqu.png', '作曲技术理论是一门创作音乐的课程，重点是音乐作品的创作过程。', 3),
+(10, '外国音乐理论', '\\images\\instrument\\waiguo.png', '外国音乐理论主要是以西方音乐文化为主。', 3),
 (11, '声乐', '', '', 2),
 (12, '钢琴', '', '', 2),
-(13, '小提琴', '\\images\\instrument\\xiaotiqin.png', '小提琴小提琴小提琴小提琴小提琴小提琴小提琴', 1),
-(14, '古筝', '\\images\\instrument\\guzheng.png', '古筝古筝古筝古筝古筝', 1),
-(15, '长笛', '\\images\\instrument\\changdi.png', '长笛长笛长笛长笛长笛', 1),
-(16, '萨克斯/黑管', '\\images\\instrument\\shakesi.png', '萨克斯/黑管萨克斯/黑管萨克斯/黑管萨克斯/黑管萨克斯/黑管萨克斯/黑管萨克斯/黑管萨克斯/黑管萨克斯/黑管萨克斯/黑管', 1),
-(17, '二胡', '\\images\\instrument\\erhu.png', '二胡二胡二胡二胡二胡二胡二胡二胡二胡二胡二胡二胡二胡二胡', 1),
+(13, '小提琴', '\\images\\instrument\\xiaotiqin.png', '现代小提琴的出现已有300多年的历史，是自17世纪以来西方音乐中最为重要的乐器之一。', 1),
+(14, '古筝', '\\images\\instrument\\guzheng.png', '古筝是汉族筝乐器的名字，它是汉族的民族传统乐器，属于弹拨乐器。', 1),
+(15, '长笛', '\\images\\instrument\\changdi.png', '长笛是现代管弦乐和室乐中主要的高音旋律乐器，外型是一根开有数个音孔的圆柱型长管。', 1),
+(16, '萨克斯/黑管', '\\images\\instrument\\shakesi.png', '萨克斯是以发明者的名字命名的木管乐器,音色介于木管乐器和铜管乐器之间。', 1),
+(17, '二胡', '\\images\\instrument\\erhu.png', '二胡又名“胡琴”，唐代已出现，称“奚琴"，是北方的民间乐器。一般认为今之胡琴由奚琴发展而来，现已成为我国独具魅力的拉弦乐器。它既适宜表现深沉、悲凄的内容，也能描写气势壮观的意境。', 1),
 (18, '毕业设计', '', '', 4);
 
 -- --------------------------------------------------------
@@ -154,7 +155,7 @@ CREATE TABLE IF NOT EXISTS `art_set_date` (
 
 INSERT INTO `art_set_date` (`id`, `grade`, `topic_start`, `topic_end`, `student_start`, `student_end`, `teacher_start`, `teacher_end`) VALUES
 (10, 1, 0, 0, 1367337600, 1372607999, 1367337600, 1372607999),
-(11, 2, 0, 0, 1367769600, 1372521599, 1370448000, 1373126399),
+(11, 2, 0, 0, 1367769600, 1372521599, 1370793600, 1373126399),
 (12, 3, 0, 0, 1369065600, 1371830399, 1367424000, 1372521599),
 (13, 4, 1368547200, 1370015999, 1369238400, 1372348799, 1367424000, 1373299199);
 
@@ -192,7 +193,7 @@ CREATE TABLE IF NOT EXISTS `art_teacher_student` (
   `year` varchar(4) NOT NULL,
   `value` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=53 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=55 ;
 
 --
 -- 转存表中的数据 `art_teacher_student`
@@ -218,8 +219,8 @@ INSERT INTO `art_teacher_student` (`id`, `major_id`, `teacher_id`, `class`, `yea
 (17, 1, 'dj901', 23, '2012', 10),
 (18, 18, 'dj901', 20, '2012', 5),
 (19, 18, 'dj901', 23, '2012', 5),
-(20, 13, 'cgl903', 20, '2012', 20),
-(21, 13, 'cgl903', 23, '2012', 20),
+(20, 13, 'cgl903', 20, '2012', 0),
+(21, 13, 'cgl903', 23, '2012', 0),
 (22, 17, 'cgl903', 20, '2012', 10),
 (23, 17, 'cgl903', 23, '2012', 10),
 (24, 15, 'cgl903', 20, '2012', 5),
@@ -232,7 +233,7 @@ INSERT INTO `art_teacher_student` (`id`, `major_id`, `teacher_id`, `class`, `yea
 (31, 7, 'cgl903', 23, '2012', 20),
 (32, 18, 'cgl903', 20, '2012', 5),
 (33, 18, 'cgl903', 23, '2012', 5),
-(34, 13, 'cwj904', 20, '2012', 20),
+(34, 13, 'cwj904', 20, '2012', 0),
 (35, 14, 'cwj904', 20, '2012', 0),
 (36, 14, 'cwj904', 23, '2012', 30),
 (37, 12, 'cwj904', 20, '2012', 0),
@@ -250,7 +251,9 @@ INSERT INTO `art_teacher_student` (`id`, `major_id`, `teacher_id`, `class`, `yea
 (49, 18, 'yxx905', 20, '2012', 7),
 (50, 18, 'yxx905', 23, '2012', 4),
 (51, 4, 'yxx905', 20, '2012', 30),
-(52, 4, 'yxx905', 23, '2012', 30);
+(52, 4, 'yxx905', 23, '2012', 30),
+(53, 14, 'dj901', 20, '2012', 20),
+(54, 16, 'cgl903', 20, '2012', 20);
 
 -- --------------------------------------------------------
 

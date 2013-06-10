@@ -83,7 +83,7 @@ if($_SESSION['com_id']) //检查是否登录
 		{
 			$volunteer = "first";
 		}
-		else if($volunteer == 2)
+		else if(($volunteer >1 ) && ($volunteer <= 2) )
 		{
 			$volunteer = "second";
 			//将已经选好的锁定
@@ -94,8 +94,14 @@ if($_SESSION['com_id']) //检查是否登录
 			
 			//echo $sql;
 			mysql_query($sql);
+			//清除学生志愿
+			$sql = "UPDATE  `".$ART_TABLE."vocalmusic_student_select` 
+			LEFT JOIN ".$TABLE."student_sheet ON ".$ART_TABLE."vocalmusic_student_select.student_number = ".$TABLE."student_sheet.number
+			LEFT JOIN ".$TABLE."major ON ".$TABLE."student_sheet.profession = ".$TABLE."major.name 
+			SET  ".$instrument."_first =  '[".$teacher_id."]' WHERE  ".$instrument."_first = '".$teacher_id."' AND ".$ART_TABLE."vocalmusic_student_select.year = '".$year."' AND ".$TABLE."major.id='".$major."' ";
+			mysql_query($sql);
 		}
-		else
+		else  if(($volunteer >2 ) && ($volunteer <= 3) )
 		{
 			$volunteer = "third";
 			//将已经选好的锁定
@@ -103,6 +109,12 @@ if($_SESSION['com_id']) //检查是否登录
 			LEFT JOIN ".$TABLE."student_sheet ON ".$ART_TABLE."vocalmusic_student_select.student_number = ".$TABLE."student_sheet.number
 			LEFT JOIN ".$TABLE."major ON ".$TABLE."student_sheet.profession = ".$TABLE."major.name 
 			SET  `".$instrument."_lock` =  '1' WHERE  `".$instrument."_lock` = 0 AND ".$instrument."_finally = '".$teacher_id."' AND ".$ART_TABLE."vocalmusic_student_select.year = '".$year."' AND ".$TABLE."major.id='".$major."' AND `".$instrument."_second` = `".$instrument."_finally` ";
+			mysql_query($sql);
+			//清除学生志愿
+			$sql = "UPDATE  `".$ART_TABLE."vocalmusic_student_select` 
+			LEFT JOIN ".$TABLE."student_sheet ON ".$ART_TABLE."vocalmusic_student_select.student_number = ".$TABLE."student_sheet.number
+			LEFT JOIN ".$TABLE."major ON ".$TABLE."student_sheet.profession = ".$TABLE."major.name 
+			SET  ".$instrument."_second =  '[".$teacher_id."]' WHERE  ".$instrument."_second = '".$teacher_id."' AND ".$ART_TABLE."vocalmusic_student_select.year = '".$year."' AND ".$TABLE."major.id='".$major."' ";
 			mysql_query($sql);
 		}
 	}
