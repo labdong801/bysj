@@ -133,7 +133,7 @@ $teacher_id = $com_id;
 	$sql = "SELECT * FROM ".$ART_TABLE."major_student_select 
 			LEFT JOIN ".$TABLE."student_sheet ON  ".$ART_TABLE."major_student_select.student_number = ".$TABLE."student_sheet.number 
 			LEFT JOIN ".$TABLE."major ON ".$TABLE."student_sheet.profession = ".$TABLE."major.name  
-			WHERE teacher = '".$teacher_id."' AND ".$ART_TABLE."major_student_select.year = '".$year."'  AND ".$TABLE."major.id= '".$major."' ";
+			WHERE teacher = '".$teacher_id."' AND finally = '".$instrument."' AND ".$ART_TABLE."major_student_select.year = '".$year."'  AND ".$TABLE."major.id= '".$major."' ";
  	$select = mysql_num_rows(mysql_query($sql));
  	$sql = "SELECT * FROM  `".$ART_TABLE."teacher_student` WHERE major_id = '".$instrument."' AND teacher_id ='".$teacher_id."' AND class='".$major."' AND year = '".$year."'  ";
  	if(mysql_num_rows(mysql_query($sql)))
@@ -229,7 +229,7 @@ else
 	$volunteer = 3;
 
 
-if(($third <= 0)  ||  $pass )  //第三志愿选择完后或者时间已经过了
+if(($third <= 0  && $volunteer == 3)  ||  $pass )  //第三志愿选择完后或者时间已经过了
 {
 	?>
 	<table width="800" border="1" align="center" cellpadding="3">
@@ -240,17 +240,23 @@ if(($third <= 0)  ||  $pass )  //第三志愿选择完后或者时间已经过了
 		FROM  ".$ART_TABLE."major_student_select 
 		LEFT JOIN ".$TABLE."student_sheet ON ".$TABLE."student_sheet.number = ".$ART_TABLE."major_student_select.student_number 
 		LEFT JOIN ".$TABLE."major ON ".$TABLE."student_sheet.profession = ".$TABLE."major.name 
-		WHERE ".$ART_TABLE."major_student_select.year = '".$year."' AND teacher = '".$teacher_id."'";
+		WHERE ".$ART_TABLE."major_student_select.year = '".$year."' AND teacher = '".$teacher_id."' AND bysj_major.id ='".$major."'" ;
 	$query =mysql_query($sql);
 	if(mysql_num_rows($query))
 	{
 		echo "<tr align=center  bgColor=#5a6e8f  height=38>
-						<td width=150>学号</td><td>姓名</td><td width=150>班级</td><td>电话</td><td>短号</td>
+						<td width=150>学号</td><td>姓名</td><td width=150>班级</td><td>电话</td><td>短号</td><td width =40>操作</td>
 					</tr>";
 		while($row=mysql_fetch_array($query))
 		{
-			echo "<tr height=35><td>".$row['student_number']."</td><td>".$row['student_name']."</td><td>".$row['student_class']."</td><td>".$row['mobilephone']."</td><td>".$row['short_number']."</td></tr>";
+			echo "<tr height=35><td>".$row['student_number']."</td><td>".$row['student_name']."</td><td>".$row['student_class']."</td><td>".$row['mobilephone']."</td><td>".$row['short_number']."</td>" .
+					"<td align=center><p style='cursor:pointer;' class='delete' id='".$row['student_number']."'>[删除]</p></td>" .
+					"</tr>";
 		}
+	}
+	else
+	{
+		Show_Message("还没有选择学生");
 	}
 	?>
 	
@@ -296,6 +302,13 @@ else
 <script language=JavaScript >
 
 $(document).ready(function(){
-)};
+	$(".delete").click( function () { 
+		var id = $(this).attr("id")
+			$.post("./ajax/delete_volunteer3.php", { number: id} ,function(data){
+   				//alert("Data Loaded: " + data);
+   				window.location.href="./art_teacher_chose_grade3.php?select_year=<?php echo $year;?>&major_id=<?php echo $instrument;?>&class=<?php echo $major; ?>";
+   				});
+		});
+});
 
 </script>

@@ -94,19 +94,71 @@ if($_SESSION['com_id']) //检查是否登录
 		exit(0);
 
  	 
-	 $sql = "SELECT ".$TABLE."student_sheet.name , ".$ART_TABLE."major_student_select.student_number, ".$TABLE."student_sheet.class, ".$ART_TABLE."major_student_select.lock  FROM  `".$ART_TABLE."major_student_select` 
+	 $sql = "SELECT ".$TABLE."student_sheet.name , ".$ART_TABLE."major_student_select.student_number, ".$TABLE."student_sheet.class, ".$ART_TABLE."major_student_select.lock , ".$ART_TABLE."major_student_select.first, ".$ART_TABLE."major_student_select.second, ".$ART_TABLE."major_student_select.third FROM  `".$ART_TABLE."major_student_select` 
 	 		LEFT JOIN ".$TABLE."student_sheet ON ".$ART_TABLE."major_student_select.student_number = ".$TABLE."student_sheet.number  
 	 		LEFT JOIN ".$TABLE."major ON ".$TABLE."student_sheet.profession = ".$TABLE."major.name 
 	 		WHERE `".$volunteer."`='".$instrument."' AND `finally`='0' AND ".$ART_TABLE."major_student_select.year = '".$year."' AND  ".$TABLE."major.id='".$major."' ";
-
+	//echo $sql;
 	 $query = mysql_query($sql);
 	 if(mysql_num_rows($query))
 	 {
 	 	//echo $sql;
 	 	
 	 	while($row = mysql_fetch_array($query))
-	 		echo "<div id='".$row['student_number']."' class='chose'  style='padding-left:20px;padding-top:10px;padding-bottom:10px;cursor:pointer;list-style-type:none;' align=left><span> </span>".$row['name']."[".$row['class']."]</div>";
-
+	 	{ 
+	 		if($volunteer == "second")
+	 		 {
+	 		 	$sql_check = "SELECT * FROM  `".$ART_TABLE."teacher_student` WHERE major_id = '".$row['first']."' AND year = '".$year."' AND  class ='".$major."' ";
+	 		 	//echo $sql_check;
+	 		 	$query_check = mysql_query($sql_check);
+	 		 	$sum = 0; //上一志愿教师可以带的人数
+	 		 	$chose_sum = 0; //上一志愿已选择的人数
+	 		 	if(mysql_num_rows($query_check))
+	 		 		while($row_check = mysql_fetch_array($query_check))
+	 		 			$sum += $row_check['value'];
+	 		 	//echo $sum;
+	 		 	$sql_check = "SELECT * FROM  `".$ART_TABLE."major_student_select` 
+	 		 			LEFT JOIN ".$TABLE."student_sheet ON ".$ART_TABLE."major_student_select.student_number = ".$TABLE."student_sheet.number  
+	 					LEFT JOIN ".$TABLE."major ON ".$TABLE."student_sheet.profession = ".$TABLE."major.name
+	 		 			WHERE finally = '".$row['first']."'  AND ".$ART_TABLE."major_student_select.year = '".$year."' AND  ".$TABLE."major.id='".$major."' ";
+	 		 	$query_check = mysql_query($sql_check);
+	 		 	$chose_sum = mysql_num_rows($query_check);
+	 		 	//echo "-".$chose_sum;
+	 		 	//公式：上一志愿还剩多少个名额 = 上一志愿教师可以带的人数 - 上一志愿已选择的人数；
+	 		 	//如果 上一志愿还剩多少个名额 等于 0 （没有老师可以带了）， 即该学生上一志愿已经被放弃。
+	 		 	
+	 		 }
+	 		 if($volunteer == "third")
+	 		 {
+	 		 	$sql_check = "SELECT * FROM  `".$ART_TABLE."teacher_student` WHERE major_id = '".$row['second']."' AND year = '".$year."' AND  class ='".$major."' ";
+	 		 	//echo $sql_check;
+	 		 	$query_check = mysql_query($sql_check);
+	 		 	$sum = 0; //上一志愿教师可以带的人数
+	 		 	$chose_sum = 0; //上一志愿已选择的人数
+	 		 	if(mysql_num_rows($query_check))
+	 		 		while($row_check = mysql_fetch_array($query_check))
+	 		 			$sum += $row_check['value'];
+	 		 	//echo $sum;
+	 		 	$sql_check = "SELECT * FROM  `".$ART_TABLE."major_student_select` 
+	 		 			LEFT JOIN ".$TABLE."student_sheet ON ".$ART_TABLE."major_student_select.student_number = ".$TABLE."student_sheet.number  
+	 					LEFT JOIN ".$TABLE."major ON ".$TABLE."student_sheet.profession = ".$TABLE."major.name
+	 		 			WHERE finally = '".$row['second']."'  AND ".$ART_TABLE."major_student_select.year = '".$year."' AND  ".$TABLE."major.id='".$major."' ";
+	 		 	$query_check = mysql_query($sql_check);
+	 		 	$chose_sum = mysql_num_rows($query_check);
+	 		 	//echo "-".$chose_sum;
+	 		 	//公式：上一志愿还剩多少个名额 = 上一志愿教师可以带的人数 - 上一志愿已选择的人数；
+	 		 	//如果 上一志愿还剩多少个名额 等于 0 （没有老师可以带了）， 即该学生上一志愿已经被放弃。
+	 		 	
+	 		 }
+	 		 if($sum - $chose_sum > 0){
+	 		 	echo "<div id='".$row['student_number']."' class='lock'  style='background:#ccc;padding-left:20px;padding-top:10px;padding-bottom:10px;cursor:pointer;list-style-type:none;' align=left><span> </span>".$row['name']."[".$row['class']."]</div>";
+	 		 }
+	 		 else
+	 		 { 
+				echo "<div id='".$row['student_number']."' class='chose'  style='padding-left:20px;padding-top:10px;padding-bottom:10px;cursor:pointer;list-style-type:none;' align=left><span> </span>".$row['name']."[".$row['class']."]</div>";
+	 		 }
+	 	}
+	 	
 	 }
 	 else
 	 {
