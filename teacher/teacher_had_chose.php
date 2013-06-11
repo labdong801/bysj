@@ -93,7 +93,7 @@ if($_SESSION['com_id']) //检查是否登录
 			SET  `lock` =  '1' WHERE  `lock` = 0 AND teacher = '".$teacher_id."' AND ".$ART_TABLE."instrument_student_select.year = '".$year."' AND ".$TABLE."major.id='".$major."' AND `first` = `finally` ";
 			
 			//echo $sql;
-			mysql_query($sql);
+			//mysql_query($sql);  //不需要锁定 2013.6.11
 		}
 		else
 		{
@@ -103,7 +103,7 @@ if($_SESSION['com_id']) //检查是否登录
 			LEFT JOIN ".$TABLE."student_sheet ON ".$ART_TABLE."instrument_student_select.student_number = ".$TABLE."student_sheet.number
 			LEFT JOIN ".$TABLE."major ON ".$TABLE."student_sheet.profession = ".$TABLE."major.name 
 			SET  `lock` =  '1' WHERE  `lock` = 0 AND teacher = '".$teacher_id."' AND ".$ART_TABLE."instrument_student_select.year = '".$year."' AND ".$TABLE."major.id='".$major."' AND `second` = `finally` ";
-			mysql_query($sql);
+			//mysql_query($sql); //不需要锁定 2013.6.11
 		}
 	}
 
@@ -111,7 +111,7 @@ if($_SESSION['com_id']) //检查是否登录
 	 $sql = "SELECT ".$TABLE."student_sheet.name , ".$ART_TABLE."instrument_student_select.student_number, ".$TABLE."student_sheet.class, ".$ART_TABLE."instrument_student_select.lock  FROM  `".$ART_TABLE."instrument_student_select` 
 	 		LEFT JOIN ".$TABLE."student_sheet ON ".$ART_TABLE."instrument_student_select.student_number = ".$TABLE."student_sheet.number 
 	 		LEFT JOIN ".$TABLE."major ON ".$TABLE."student_sheet.profession = ".$TABLE."major.name 
-	 		WHERE `teacher`= '".$teacher_id."' AND ".$ART_TABLE."instrument_student_select.year = '".$year."' AND ".$TABLE."major.id='".$major."' ORDER BY  `lock` DESC  ";
+	 		WHERE `teacher`= '".$teacher_id."' AND finally = '".$instrument."' AND ".$ART_TABLE."instrument_student_select.year = '".$year."' AND ".$TABLE."major.id='".$major."' ORDER BY  `lock` DESC  ";
 	 		//echo $sql;
 	 $query = mysql_query($sql);
 	 if(mysql_num_rows($query))
