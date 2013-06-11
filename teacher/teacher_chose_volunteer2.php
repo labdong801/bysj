@@ -60,6 +60,15 @@ if($_SESSION['com_id']) //检查是否登录
 	else
 		exit(0);
 		
+	if($_GET['instrument'] == "piano")
+	{
+		$major_id = 12;
+	}
+	else if($_GET['instrument'] == "vocalmusic")
+	{
+		$major_id = 11;
+	}
+		
 	//需要提供年份
 	if($_GET['year'])
 		$year = $_GET['year'];
@@ -94,19 +103,73 @@ if($_SESSION['com_id']) //检查是否登录
 		exit(0);
 
  	 
-	 $sql = "SELECT ".$TABLE."student_sheet.name , ".$ART_TABLE."vocalmusic_student_select.student_number, ".$TABLE."student_sheet.class, ".$ART_TABLE."vocalmusic_student_select.".$instrument."_lock  FROM  `".$ART_TABLE."vocalmusic_student_select` 
+	 $sql = "SELECT ".$TABLE."student_sheet.name , ".$ART_TABLE."vocalmusic_student_select.student_number, ".$TABLE."student_sheet.class, ".$ART_TABLE."vocalmusic_student_select.".$instrument."_lock,".$ART_TABLE."vocalmusic_student_select.".$instrument."_first,".$ART_TABLE."vocalmusic_student_select.".$instrument."_second,".$ART_TABLE."vocalmusic_student_select.".$instrument."_third  FROM  `".$ART_TABLE."vocalmusic_student_select` 
 	 		LEFT JOIN ".$TABLE."student_sheet ON ".$ART_TABLE."vocalmusic_student_select.student_number = ".$TABLE."student_sheet.number  
 	 		LEFT JOIN ".$TABLE."major ON ".$TABLE."student_sheet.profession = ".$TABLE."major.name 
 	 		WHERE `".$volunteer."`='".$teacher_id."' AND `".$instrument."_finally`='0' AND ".$ART_TABLE."vocalmusic_student_select.year = '".$year."' AND  ".$TABLE."major.id='".$major."' ";
-	 		
+	 		//echo $sql;
 	 $query = mysql_query($sql);
 	 if(mysql_num_rows($query))
 	 {
 	 	//echo $sql;
 	 	
 	 	while($row = mysql_fetch_array($query))
-	 		echo "<div id='".$row['student_number']."' class='chose'  style='padding-left:20px;padding-top:10px;padding-bottom:10px;cursor:pointer;list-style-type:none;' align=left><span> </span>".$row['name']."[".$row['class']."]</div>";
-
+	 	{ 
+	 		if($volunteer == $instrument."_second")
+	 		 {
+	 		 	$sql_check = "SELECT * FROM  `".$ART_TABLE."teacher_student` WHERE major_id = '".$major_id."' AND teacher_id ='".$row[$instrument."_first"]."'  AND year = '".$year."' AND  class ='".$major."' ";
+	 		 	//echo $sql_check;
+	 		 	$query_check = mysql_query($sql_check);
+	 		 	$sum = 0; //上一志愿教师可以带的人数
+	 		 	$chose_sum = 0; //上一志愿已选择的人数
+	 		 	if(mysql_num_rows($query_check))
+	 		 		while($row_check = mysql_fetch_array($query_check))
+	 		 			$sum += $row_check['value'];
+	 		 	//echo $sum;
+	 		 	$sql_check = "SELECT * FROM  `".$ART_TABLE."vocalmusic_student_select` 
+	 		 			LEFT JOIN ".$TABLE."student_sheet ON ".$ART_TABLE."vocalmusic_student_select.student_number = ".$TABLE."student_sheet.number  
+	 					LEFT JOIN ".$TABLE."major ON ".$TABLE."student_sheet.profession = ".$TABLE."major.name
+	 		 			WHERE ".$instrument."_finally = '".$row[$instrument."_first"]."'  AND ".$ART_TABLE."vocalmusic_student_select.year = '".$year."' AND  ".$TABLE."major.id='".$major."' ";
+	 		 	//echo $sql_check;
+	 		 	$query_check = mysql_query($sql_check);
+	 		 	$chose_sum = mysql_num_rows($query_check);
+	 		 	//echo $chose_sum;
+	 		 	//公式：上一志愿还剩多少个名额 = 上一志愿教师可以带的人数 - 上一志愿已选择的人数；
+	 		 	//如果 上一志愿还剩多少个名额 等于 0 （没有老师可以带了）， 即该学生上一志愿已经被放弃。
+	 		 	
+	 		 }
+	 		 if($volunteer == $instrument."_third")
+	 		 {
+	 		 	$sql_check = "SELECT * FROM  `".$ART_TABLE."teacher_student` WHERE major_id = '".$major_id."' AND teacher_id ='".$row[$instrument."_second"]."'  AND year = '".$year."' AND  class ='".$major."' ";
+	 		 	//echo $sql_check;
+	 		 	$query_check = mysql_query($sql_check);
+	 		 	$sum = 0; //上一志愿教师可以带的人数
+	 		 	$chose_sum = 0; //上一志愿已选择的人数
+	 		 	if(mysql_num_rows($query_check))
+	 		 		while($row_check = mysql_fetch_array($query_check))
+	 		 			$sum += $row_check['value'];
+	 		 	//echo $sum;
+	 		 	$sql_check = "SELECT * FROM  `".$ART_TABLE."vocalmusic_student_select` 
+	 		 			LEFT JOIN ".$TABLE."student_sheet ON ".$ART_TABLE."vocalmusic_student_select.student_number = ".$TABLE."student_sheet.number  
+	 					LEFT JOIN ".$TABLE."major ON ".$TABLE."student_sheet.profession = ".$TABLE."major.name
+	 		 			WHERE ".$instrument."_finally = '".$row[$instrument."_second"]."'  AND ".$ART_TABLE."vocalmusic_student_select.year = '".$year."' AND  ".$TABLE."major.id='".$major."' ";
+	 		 	//echo $sql_check;
+	 		 	$query_check = mysql_query($sql_check);
+	 		 	$chose_sum = mysql_num_rows($query_check);
+	 		 	//echo $chose_sum;
+	 		 	//公式：上一志愿还剩多少个名额 = 上一志愿教师可以带的人数 - 上一志愿已选择的人数；
+	 		 	//如果 上一志愿还剩多少个名额 等于 0 （没有老师可以带了）， 即该学生上一志愿已经被放弃。
+	 		 	
+	 		 }
+	 		 if($sum - $chose_sum > 0)
+	 		 { 
+	 		 	echo "<div id='".$row['student_number']."' class='lock'  style='background:#ccc;padding-left:20px;padding-top:10px;padding-bottom:10px;cursor:pointer;list-style-type:none;' align=left><span> </span>".$row['name']."[".$row['class']."]</div>";
+	 		 }
+	 		 else
+	 		 { 
+	 			echo "<div id='".$row['student_number']."' class='chose'  style='padding-left:20px;padding-top:10px;padding-bottom:10px;cursor:pointer;list-style-type:none;' align=left><span> </span>".$row['name']."[".$row['class']."]</div>";
+	 		 }
+	 	}
 	 }
 	 else
 	 {

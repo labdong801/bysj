@@ -104,7 +104,7 @@ if($_SESSION['com_id']) //检查是否登录
 			LEFT JOIN ".$TABLE."student_sheet ON ".$ART_TABLE."vocalmusic_student_select.student_number = ".$TABLE."student_sheet.number
 			LEFT JOIN ".$TABLE."major ON ".$TABLE."student_sheet.profession = ".$TABLE."major.name 
 			SET  `".$instrument."_lock` =  '1' WHERE  `".$instrument."_lock` = 0 AND ".$instrument."_finally = '".$teacher_id."' AND ".$ART_TABLE."vocalmusic_student_select.year = '".$year."' AND ".$TABLE."major.id='".$major."' AND `".$instrument."_second` = `".$instrument."_finally` ";
-			mysql_query($sql);
+			//mysql_query($sql);
 			//清除学生志愿 //不需要锁定 2013.6.11
 		}
 	}

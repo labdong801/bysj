@@ -37,6 +37,11 @@ $teacher_id = $com_id;
  else
  	$instrument = "";
  	
+ if($instrument =="vocalmusic")
+		$instrument = 11;
+	if($instrument =="piano" )
+		$instrument = 12;
+ 	
  if($_GET['class'])
  	$major = $_GET['class'];
  else
@@ -135,6 +140,7 @@ $teacher_id = $com_id;
 <?php
 	//计算当前已经带了多少个学生和一共可以带多少个学生
  	$sql = "SELECT * FROM  `".$ART_TABLE."teacher_student` WHERE major_id = '".$instrument."' AND teacher_id ='".$teacher_id."' AND class='".$major."' AND year = '".$year."'  ";
+ 	//echo $sql;
  	if(mysql_num_rows(mysql_query($sql)))
  	{ 
  		$row = mysql_fetch_array(mysql_query($sql));
@@ -222,12 +228,6 @@ $sql = "SELECT * FROM  `".$ART_TABLE."vocalmusic_student_select`
 $first = mysql_num_rows(mysql_query($sql));
 
 
-$sql = "SELECT * FROM  `".$ART_TABLE."vocalmusic_student_select` 
-	 		LEFT JOIN ".$TABLE."student_sheet ON ".$ART_TABLE."vocalmusic_student_select.student_number = ".$TABLE."student_sheet.number  
-	 		LEFT JOIN ".$TABLE."major ON ".$TABLE."student_sheet.profession = bysj_major.name 
-	 		WHERE `".$instrument."_first` NOT LIKE '[%]'  AND ".$ART_TABLE."vocalmusic_student_select.year = '".$year."' AND  ".$TABLE."major.id='".$major."' ";
-	 		//echo $sql;
-$second_wait = mysql_num_rows(mysql_query($sql));
 
 
 $sql = "SELECT * FROM  `".$ART_TABLE."vocalmusic_student_select` 
@@ -237,11 +237,6 @@ $sql = "SELECT * FROM  `".$ART_TABLE."vocalmusic_student_select`
 	 		//echo $sql;
 $second = mysql_num_rows(mysql_query($sql));
 
-$sql = "SELECT * FROM  `".$ART_TABLE."vocalmusic_student_select` 
-	 		LEFT JOIN ".$TABLE."student_sheet ON ".$ART_TABLE."vocalmusic_student_select.student_number = ".$TABLE."student_sheet.number  
-	 		LEFT JOIN ".$TABLE."major ON ".$TABLE."student_sheet.profession = bysj_major.name 
-	 		WHERE `".$instrument."_second` NOT LIKE '[%]'  AND ".$ART_TABLE."vocalmusic_student_select.year = '".$year."' AND  ".$TABLE."major.id='".$major."' ";
-$third_wait = mysql_num_rows(mysql_query($sql));
 
 $sql = "SELECT * FROM  `".$ART_TABLE."vocalmusic_student_select` 
 	 		LEFT JOIN ".$TABLE."student_sheet ON ".$ART_TABLE."vocalmusic_student_select.student_number = ".$TABLE."student_sheet.number  
@@ -251,19 +246,15 @@ $third = mysql_num_rows(mysql_query($sql));
 
 if($first > 0)
 	$volunteer = 1;
-else if($second_wait > 0)
-	$volunteer = 1.5;
 else if($second > 0)
 	$volunteer = 2;
-else if($third_wait > 0)
-	$volunteer = 2.5;
 else
 	$volunteer = 3;
 	
 //echo $third;
-	//echo $volunteer;
+//	echo $volunteer;
 	
-if(($third <= 0)  ||  $pass )  //第三志愿选择完后或者时间已经过了
+if(($third <= 0  && $volunteer == 3)  ||  $pass )  //第三志愿选择完后或者时间已经过了
 { 
 	?>
 	<table width="800" border="1" align="center" cellpadding="3">
@@ -274,18 +265,25 @@ if(($third <= 0)  ||  $pass )  //第三志愿选择完后或者时间已经过了
     FROM  ".$ART_TABLE."vocalmusic_student_select 
     LEFT JOIN ".$TABLE."student_sheet ON ".$TABLE."student_sheet.number = ".$ART_TABLE."vocalmusic_student_select.student_number 
     LEFT JOIN ".$TABLE."major ON ".$TABLE."student_sheet.profession = ".$TABLE."major.name 
-    WHERE ".$ART_TABLE."vocalmusic_student_select.year = '".$year."' AND ".$instrument."_finally = '".$teacher_id."'";
+    WHERE ".$ART_TABLE."vocalmusic_student_select.year = '".$year."' AND ".$instrument."_finally = '".$teacher_id."' AND bysj_major.id ='".$major."'";
   $query =mysql_query($sql);
   if(mysql_num_rows($query))
   {
     echo "<tr align=center  bgColor=#5a6e8f  height=38>
-            <td width=150>学号</td><td>学生姓名</td><td width=150>班级</td><td>手机号码</td><td>短号</td>
+            <td width=150>学号</td><td>学生姓名</td><td width=150>班级</td><td>手机号码</td><td>短号</td><td width =40>删除</td>
           </tr>";
     while($row=mysql_fetch_array($query))
     {
-      echo "<tr height=35><td>".$row['student_number']."</td><td>".$row['student_name']."</td><td>".$row['student_class']."</td><td>".$row['mobilephone']."</td><td>".$row['short_number']."</td></tr>";
+    	
+      echo "<tr height=35><td>".$row['student_number']."</td><td>".$row['student_name']."</td><td>".$row['student_class']."</td><td>".$row['mobilephone']."</td><td>".$row['short_number']."</td>" .
+      		"<td align=center><p style='cursor:pointer;' class='delete' id='".$row['student_number']."'>[删除]</p></td>" .
+		"</tr>";
     }
   }
+  else
+	{
+		Show_Message("还没有选择学生");
+	}
   ?>
   
   </table>
@@ -344,6 +342,13 @@ else
 <script language=JavaScript >
 
 $(document).ready(function(){
-)};
+	$(".delete").click( function () { 
+		var id = $(this).attr("id")
+			$.post("./ajax/delete_volunteer2.php", { number: id,instrument:'<?php echo $instrument;?>'} ,function(data){
+   				//alert("Data Loaded: " + data);
+   				window.location.href="./art_teacher_chose_grade2.php?select_year=<?php echo $year;?>&major_id=<?php echo $instrument;?>&class=<?php echo $major; ?>";
+   				});
+		});
+});
 
 </script>
